@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170122221216) do
+ActiveRecord::Schema.define(version: 20170210220436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,91 @@ ActiveRecord::Schema.define(version: 20170122221216) do
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
+  end
+
+  create_table "authors", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "category_name"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "characteristics", force: :cascade do |t|
+    t.string   "characteristic_name"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  create_table "pictures", force: :cascade do |t|
+    t.string   "image_path"
+    t.string   "imageable_type"
+    t.integer  "imageable_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["imageable_type", "imageable_id"], name: "index_pictures_on_imageable_type_and_imageable_id", using: :btree
+  end
+
+  create_table "prices", force: :cascade do |t|
+    t.float    "price_value"
+    t.date     "date_start"
+    t.string   "priceable_type"
+    t.integer  "priceable_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["priceable_type", "priceable_id"], name: "index_prices_on_priceable_type_and_priceable_id", using: :btree
+  end
+
+  create_table "product_properties", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "characteristic_id"
+    t.string   "property_value"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["characteristic_id"], name: "index_product_properties_on_characteristic_id", using: :btree
+    t.index ["product_id"], name: "index_product_properties_on_product_id", using: :btree
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string   "title"
+    t.text     "description"
+    t.integer  "category_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["category_id"], name: "index_products_on_category_id", using: :btree
+  end
+
+  create_table "products_authors", id: false, force: :cascade do |t|
+    t.integer "product_id"
+    t.integer "author_id"
+    t.index ["author_id"], name: "index_products_authors_on_author_id", using: :btree
+    t.index ["product_id"], name: "index_products_authors_on_product_id", using: :btree
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "product_id"
+    t.integer  "rate"
+    t.string   "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_reviews_on_product_id", using: :btree
+    t.index ["user_id"], name: "index_reviews_on_user_id", using: :btree
+  end
+
+  create_table "stocks", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "stock_value"
+    t.date     "date_start"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["product_id"], name: "index_stocks_on_product_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -47,4 +132,10 @@ ActiveRecord::Schema.define(version: 20170122221216) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "product_properties", "characteristics"
+  add_foreign_key "product_properties", "products"
+  add_foreign_key "products", "categories"
+  add_foreign_key "reviews", "products"
+  add_foreign_key "reviews", "users"
+  add_foreign_key "stocks", "products"
 end
