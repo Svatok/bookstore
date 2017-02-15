@@ -1,4 +1,4 @@
 class Characteristic < ApplicationRecord
-  has_many :product_properties
-  has_many :products, through: :product_properties
+  belongs_to :product
+  belongs_to :property
 end

@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  before_action :categories
 
   def authenticate_active_admin_user!
    authenticate_user!
@@ -8,4 +9,10 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
    end
   end
+
+  private
+    def categories
+      @categories = Category.all
+    end
+
 end

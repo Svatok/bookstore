@@ -1,5 +1,6 @@
 class MainPagesController < ApplicationController
   def home
-    @lattest_books = ProductsController.new.lattest_books(3)
+    @lattest_products = Product.lattest_products(3)
+    @best_sellers = Product.best_sellers(4)
   end
 end

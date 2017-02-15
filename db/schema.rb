@@ -15,6 +15,16 @@ ActiveRecord::Schema.define(version: 20170210220436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "characteristics", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "property_id"
+    t.string   "value"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["product_id"], name: "index_Characteristics_on_product_id", using: :btree
+    t.index ["property_id"], name: "index_Characteristics_on_property_id", using: :btree
+  end
+
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
     t.text     "body"
@@ -37,16 +47,17 @@ ActiveRecord::Schema.define(version: 20170210220436) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "categories", force: :cascade do |t|
-    t.string   "category_name"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+  create_table "authors_products", id: false, force: :cascade do |t|
+    t.integer "author_id"
+    t.integer "product_id"
+    t.index ["author_id"], name: "index_authors_products_on_author_id", using: :btree
+    t.index ["product_id"], name: "index_authors_products_on_product_id", using: :btree
   end
 
-  create_table "characteristics", force: :cascade do |t|
-    t.string   "characteristic_name"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pictures", force: :cascade do |t|
@@ -59,23 +70,13 @@ ActiveRecord::Schema.define(version: 20170210220436) do
   end
 
   create_table "prices", force: :cascade do |t|
-    t.float    "price_value"
+    t.float    "value"
     t.date     "date_start"
     t.string   "priceable_type"
     t.integer  "priceable_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.index ["priceable_type", "priceable_id"], name: "index_prices_on_priceable_type_and_priceable_id", using: :btree
-  end
-
-  create_table "product_properties", force: :cascade do |t|
-    t.integer  "product_id"
-    t.integer  "characteristic_id"
-    t.string   "property_value"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.index ["characteristic_id"], name: "index_product_properties_on_characteristic_id", using: :btree
-    t.index ["product_id"], name: "index_product_properties_on_product_id", using: :btree
   end
 
   create_table "products", force: :cascade do |t|
@@ -87,11 +88,10 @@ ActiveRecord::Schema.define(version: 20170210220436) do
     t.index ["category_id"], name: "index_products_on_category_id", using: :btree
   end
 
-  create_table "products_authors", id: false, force: :cascade do |t|
-    t.integer "product_id"
-    t.integer "author_id"
-    t.index ["author_id"], name: "index_products_authors_on_author_id", using: :btree
-    t.index ["product_id"], name: "index_products_authors_on_product_id", using: :btree
+  create_table "properties", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -107,10 +107,10 @@ ActiveRecord::Schema.define(version: 20170210220436) do
 
   create_table "stocks", force: :cascade do |t|
     t.integer  "product_id"
-    t.integer  "stock_value"
+    t.integer  "value"
     t.date     "date_start"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_stocks_on_product_id", using: :btree
   end
 
@@ -132,8 +132,8 @@ ActiveRecord::Schema.define(version: 20170210220436) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  add_foreign_key "product_properties", "characteristics"
-  add_foreign_key "product_properties", "products"
+  add_foreign_key "Characteristics", "products"
+  add_foreign_key "Characteristics", "properties"
   add_foreign_key "products", "categories"
   add_foreign_key "reviews", "products"
   add_foreign_key "reviews", "users"
