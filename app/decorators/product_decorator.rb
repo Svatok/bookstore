@@ -1,4 +1,4 @@
-class ProductAuthorsDecorator < Draper::Decorator
+class ProductDecorator < Draper::Decorator
 
   def all_authors
     authors_names = ''

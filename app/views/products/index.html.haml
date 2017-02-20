@@ -1,0 +1,67 @@
+%main.container
+  %h1.general-title-margin Сatalog
+  .hidden-xs.clearfix
+    .pull-right
+      .dropdown
+        %a.dropdown-toggle.dropdown-btn.width-240{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
+          = params[:sort].nil? ? ProductsHelper::SORTING[:newest] : ProductsHelper::SORTING[params[:sort].to_sym]
+          %i.fa.fa-angle-down.dropdown-icon
+        %ul.dropdown-menu
+          - ProductsHelper::SORTING.each do |sort, title|
+            %li
+              %a{href: products_path(params.permit(:category).merge(:sort => sort))}= title
+    %ul.list-inline.pt-10.mb-25.mr-240
+      %li.mr-35
+        %a.filter-link{href: products_path(params.permit(:sort))}
+          All
+          %span.badge.general-badge= Product.in_stock.count
+      - @categories.each do |category|
+        %li.mr-35
+          %a.filter-link{href: products_path(params.permit(:sort).merge(:category => category))}
+            = category.name
+            %span.badge.general-badge= Product.with_category(category).count
+  .mb-40.visible-xs
+    %p.in-grey-600.small.mb-10 Filter by category
+    .dropdown.mb-20
+      %a.dropdown-toggle.dropdown-btn.width-100{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
+        = params[:category].nil? ? category_with_count : category_with_count(params[:category])
+        %i.fa.fa-angle-down.dropdown-icon
+      %ul.dropdown-menu
+        %li
+          %a{href: products_path}= category_with_count
+        - @categories.each do |category|
+          %li
+            %a{href: products_path(params.permit(:sort).merge(:category => category))}= category_with_count(category)
+    %p.in-grey-600.small.mb-10 Sort by
+    .dropdown
+      %a.dropdown-toggle.dropdown-btn.width-100{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
+        = params[:sort].nil? ? ProductsHelper::SORTING[:newest] : ProductsHelper::SORTING[params[:sort].to_sym]
+        %i.fa.fa-angle-down.dropdown-icon
+      %ul.dropdown-menu
+        - ProductsHelper::SORTING.each do |sort, title|
+          %li
+            %a{href: products_path(params.permit(:category).merge(:sort => sort))}= title
+  .mb-120
+    - (1..(1 + @products.count / 4)).each do |i|
+      .row.mb-25
+        - @products.each_with_index do |product, y|
+          - next if y < ((i - 1) * 4)
+          .col-xs-6.col-sm-3
+            .general-thumb-wrap
+              .thumbnail.general-thumbnail
+                - img_path = product.pictures.present? ? "#{product.pictures.first.image_path}" : "http://jonathantweedy.com/resources/thumbs/SmashingBook5ResponsiveWebDesign.jpg"
+                %img.img-shadow.general-thumbnail-img{src: "#{img_path}", alt: "design-book"}
+                .thumb-hover
+                  .general-thumb-link-wrap
+                    %a.thumb-hover-link{href: "#"}
+                      %i.fa.fa-eye.thumb-icon{'aria-hidden': "true"}
+                    %a.thumb-hover-link{href: "#"}
+                      %i.fa.fa-shopping-cart.thumb-icon
+            .general-thumb-info
+              %p.general-title= product.title
+              - price = product.prices.present? ? product.prices.actual.first.value : 0
+              %p.font-16.in-gold-500= number_to_currency(price,:unit=>'€')
+              %span.divider-sm
+              %p.in-grey-600.small= ProductDecorator.new(product).all_authors
+    .text-center
+      %button.btn.btn-primary View More

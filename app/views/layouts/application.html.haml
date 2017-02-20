@@ -12,21 +12,57 @@
   %body
     %header.navbar.navbar-default.mb-0
       .container
-        %a.navbar-brand Bookstore
+        .navbar-header
+          %button.navbar-toggle.pull-left.ml-15{type: "button", 'data-toggle': "collapse", 'data-target': "#navbar"}
+            %span.sr-only
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand Bookstore
+          %a.shop-link.pull-right.visible-xs{href: "#"}
+            %span.shop-icon
+              %span.shop-quantity 3
         %a.shop-link.pull-right.hidden-xs{href: "#"}
           %span.shop-icon
-            %span.shop-quantity 4
+            %span.shop-quantity 3
         #navbar.navbar-collapse.collapse.pl-30{'aria-expanded': "false"}
+          .visible-xs
+            %button.close{type: "button", 'aria-label': "Close"}
+              %span{'aria-hidden': "true"} &times;
+            %ul.nav.navbar-nav
+              %li
+                %a{href: root_path} Home
+              %li
+                %a{type: "button", 'data-toggle': "collapse", href: "#menu", 'aria-expanded': "false", 'aria-controls': "menu"} Shop
+                %ul#menu.collapse.list-unstyled.pl-30.mb-10{'aria-expanded': "false"}
+                  - @categories.each do |category|
+                    %li
+                      %a.collapse-link{href: products_path(:category => category)}= category.name
+              - if signed_in?
+                %li
+                  %a{type: "button", 'data-toggle': "collapse", href: "#menu_account", 'aria-expanded': "false", 'aria-controls': "menu"} My account
+                  %ul#menu_account.collapse.list-unstyled.pl-30.mb-10{'aria-expanded': "false"}
+                    %li
+                      %a.collapse-link{href: "#"} Orders
+                    %li
+                      %a.collapse-link{href: "#"} Settings
+                %li
+                  %a{href: destroy_user_session_path, method: :delete} Log out
+              - else
+                %li
+                  %a{href: new_user_session_path} Log in
+                %li
+                  %a{href: "#"} Sign up
           .hidden-xs
             %ul.nav.navbar-nav
               %li
-                %a{href: "#"} Home
+                %a{href: root_path} Home
               %li.dropdown
                 %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"} Shop
                 %ul.dropdown-menu
                   - @categories.each do |category|
                     %li
-                      %a{href: "#"}= category.name
+                      %a{href: products_path(:category => category)}= category.name
               - if signed_in?
                 %li.dropdown
                   %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"} My account
@@ -52,9 +88,9 @@
           .col-sm-9
             %ul.list-inline.general-align.mb-25
               %li
-                %a.nav-link{href: "#"} Home
+                %a.nav-link{href: root_path} Home
               %li
-                %a.nav-link{href: "#"} Shop
+                %a.nav-link{href: products_path} Shop
               - if signed_in?
                 %li
                   %a.nav-link{href: "#"} Orders

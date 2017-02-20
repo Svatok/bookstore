@@ -15,7 +15,7 @@
               .mb-60
                 %h1= product.title
                 %p.lead= product.description
-                %p.in-grey-600.small= ProductAuthorsDecorator.new(product).all_authors
+                %p.in-grey-600.small= ProductDecorator.new(product).all_authors
                 .general-align.pt-20
                   %button.btn.btn-primary Buy Now
     %a.left.carousel-control{href: "#slider", role: "button", 'data-slide': "prev"}
@@ -51,4 +51,4 @@
               %p.pull-right.font-16.in-gold-500= number_to_currency(price,:unit=>'€')
               %p.general-title.mr-55= product.title
             %span.divider-sm
-            %p.in-grey-600.small= ProductAuthorsDecorator.new(product).all_authors
+            %p.in-grey-600.small= ProductDecorator.new(product).all_authors
