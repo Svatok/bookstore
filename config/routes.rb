@@ -6,7 +6,9 @@ Rails.application.routes.draw do
     get "login", to: "devise/sessions#new"
   end
   ActiveAdmin.routes(self)
-  resources :products
+  resources :products do
+    get 'page/:page', action: :index, on: :collection
+  end
   root 'main_pages#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

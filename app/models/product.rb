@@ -17,4 +17,5 @@ class Product < ApplicationRecord
   scope :lattest_products, ->(products_count) { in_stock.order(created_at: :desc).limit(products_count) }
   scope :best_sellers, ->(products_count) { limit(products_count) }
   scope :with_category, ->(category) { in_stock.where(category: category) }
+  paginates_per 2
 end

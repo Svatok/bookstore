@@ -64,4 +64,4 @@
               %span.divider-sm
               %p.in-grey-600.small= ProductDecorator.new(product).all_authors
     .text-center
-      %button.btn.btn-primary View More
+      = link_to_next_page @products, 'View More', class: 'btn btn-primary'
