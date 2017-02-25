@@ -29,7 +29,7 @@
     %h2.h1 Welcome to our amazing Bookstore!
     .mb-res-50
       %p.in-grey-600 We pore through hundreds of new books each month and select the five best we can find to share with our members.
-    %button.btn.btn-default Get Started
+    = link_to 'Get Started', products_path, class: 'btn btn-default' 
   .mb-35
     %h3 Best Sellers
     .row
@@ -41,7 +41,7 @@
               %img.img-shadow.general-thumbnail-img{src: "#{img_path}", alt: "design-book"}
               .thumb-hover
                 .general-thumb-link-wrap
-                  %a.thumb-hover-link{href: "#"}
+                  %a.thumb-hover-link{href: product_path(product)}
                     %i.fa.fa-eye.thumb-icon{'aria-hidden': "true"}
                   %a.thumb-hover-link{href: "#"}
                     %i.fa.fa-shopping-cart.thumb-icon

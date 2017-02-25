@@ -3,6 +3,9 @@ class ProductsController < ApplicationController
 
   def index
     @products = SorteredProducts.new(params)
-#    @products = Product.all.page params[:page]
+  end
+
+  def show
+    @product = ProductDecorator.new(Product.find(params[:id]))
   end
 end

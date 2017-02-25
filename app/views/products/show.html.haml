@@ -1,0 +1,82 @@
+%main.container
+  %a.general-back-link{href: url_for(:back)}
+    %i.fa.fa-long-arrow-left.mr-15
+    Back to results
+  .row
+    .col-sm-6
+      .product-gallery
+        .mb-20#img_container
+          %img.img-responsive{src: @product.pictures.product_imgs.first.image_path}
+        .images.clearfix
+          - @product.pictures.product_imgs(3).each do |picture|
+            %a.img-link{href: "#"}
+              %img.width-full.height-preview{src: picture.image_path}
+    .col-sm-6
+      %h1.mt-res-0= @product.title
+      %p.in-grey-600.small= @product.all_authors
+      .row
+        .col-xs-12.col-md-4
+          %p.h1.in-gold-500.mt-10= number_to_currency(@product.price_value, unit: '€')
+        .col-xs-5.col-md-3
+          .input-group.general-position
+            %a.input-link{href: "#"}
+              %i.fa.fa-minus.line-height-40
+            %input.form-control.quantity-input{type: "text", value: 1}
+            %a.input-link{href: "#"}
+              %i.fa.fa-plus.line-height-40
+        .col-xs-7.col-md-5
+          %button.btn.btn-default.pull-right.general-position Add to Cart
+      .card
+        %p Description
+        %p.in-grey-600.small.line-height-2
+          = @product.description
+      .card
+        .clearfix
+          %p.general-item-info.pull-right= @product.property_value('Year of publication')
+
+          %p.break-word Year of publication
+      .card
+        .clearfix
+          %p.general-item-info.pull-right= @product.dimensions
+          %p.break-word Dimensions
+      .card
+        .clearfix
+          %p.general-item-info.pull-right= @product.property_value('Materials')
+          %p.break-word Materials
+  .mb-80
+    %h3.in-gold-500.mb-25 Reviews (3)
+    %ul.media-list
+      %li.media.card
+        .media-left
+          %a{href: "#"}
+            %img.img-circle.logo-size.media-object{src: "https://www.smashingmagazine.com/wp-content/uploads/2015/09/smashing-book-5-2-large.jpg"}
+        .media-body
+          %div
+            %p.general-message-date.hidden-xs 11/11/16
+            %h4.media-heading.max-240.general-message-name
+              %span.general-message-verified Verified Reviewer
+              Rita J. Lewis
+          .mb-15
+            %i.fa.fa-star.rate-star
+            %i.fa.fa-star.rate-star
+            %i.fa.fa-star.rate-star
+            %i.fa.fa-star.rate-star
+            %i.fa.fa-star.rate-star
+          %p Thank you BookStore, I was very pleased to receive my order for the Moleskine diary so soon after placing the order.
+      %li.media.card
+        .media-left
+          %a{href: "#"}
+            %span.img-circle.logo-size.logo-empty.media-object M
+        .media-body
+          %div
+            %p.general-message-date.hidden-xs 11/11/16
+            %h4.media-heading.max-240.general-message-name
+              %span.general-message-verified Verified Reviewer
+              Rita J. Lewis
+          .mb-15
+            %i.fa.fa-star.rate-star
+            %i.fa.fa-star.rate-star
+            %i.fa.fa-star.rate-star
+            %i.fa.fa-star.rate-star
+            %i.fa.fa-star.rate-star.rate-empty
+          %p Thank you BookStore, I was very pleased to receive my order for the Moleskine diary so soon after placing the order.

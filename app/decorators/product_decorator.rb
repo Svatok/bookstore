@@ -1,4 +1,5 @@
 class ProductDecorator < Draper::Decorator
+  delegate_all
 
   def all_authors
     authors_names = ''
@@ -8,6 +9,24 @@ class ProductDecorator < Draper::Decorator
       authors_names += author.first_name + ' ' + author.last_name
     end
     authors_names
+  end
+
+  def dimensions
+    dimensions = {}
+    object.characteristics.dimensions_value.each do |dimension|
+      dimensions[dimension.property.name] = dimension.value
+    end
+    "H: #{dimensions['Height']}\" x W: #{dimensions['Width']}\" x D: #{dimensions['Depth']}\""
+  end
+
+  def property_value(property_name)
+    characteristic = object.characteristics.property(property_name)
+    return unless characteristic.present?
+    characteristic.first.value
+  end
+
+  def price_value
+    object.prices.present? ? object.prices.actual.first.value : 0
   end
 
 end

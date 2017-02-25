@@ -3,7 +3,7 @@ class SorteredProducts < Rectify::Query
     @params = params
     @params[:sort] = 'newest' unless @params[:sort].present?
     @page = @params[:page].present? ? @params[:page].to_i : 1
-    @limit = 2
+    @limit = 8
     @products = Product.in_stock
   end
 
@@ -28,9 +28,14 @@ class SorteredProducts < Rectify::Query
     (@page - 1) * @limit
   end
 
-  def next_page
-    current_page + 1
+  def prev_page
+    current_page - 1 unless first_page? || out_of_range?
   end
+
+  def next_page
+    current_page + 1 unless last_page? || out_of_range?
+  end
+
 
   private
     def all
@@ -69,6 +74,18 @@ class SorteredProducts < Rectify::Query
       else
         @products
       end
+  end
+
+  def first_page?
+    current_page == 1
+  end
+
+  def last_page?
+    current_page == total_pages
+  end
+
+  def out_of_range?
+    current_page > total_pages
   end
 
 end

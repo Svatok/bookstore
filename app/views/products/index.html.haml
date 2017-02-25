@@ -53,7 +53,7 @@
                 %img.img-shadow.general-thumbnail-img{src: "#{img_path}", alt: "design-book"}
                 .thumb-hover
                   .general-thumb-link-wrap
-                    %a.thumb-hover-link{href: "#"}
+                    %a.thumb-hover-link{href: product_path(product)}
                       %i.fa.fa-eye.thumb-icon{'aria-hidden': "true"}
                     %a.thumb-hover-link{href: "#"}
                       %i.fa.fa-shopping-cart.thumb-icon
@@ -64,4 +64,5 @@
               %span.divider-sm
               %p.in-grey-600.small= ProductDecorator.new(product).all_authors
     .text-center
-      = link_to_next_page @products, 'View More', class: 'btn btn-primary'
+      = link_to_prev_page @products, 'Prev Page', class: 'btn btn-primary'
+      = link_to_next_page @products, 'Next Page', class: 'btn btn-primary'
