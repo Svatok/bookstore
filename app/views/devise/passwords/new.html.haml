@@ -1,0 +1,11 @@
+%main.container
+  .text-center
+    %h1.mb-30 Forgot your password?
+    %p.general-password-text We'll email you instructions on how to reset it
+  = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: 'general-form' }) do |f|
+    = devise_error_messages!
+    .form-group.mb-25
+      = f.email_field :email, autofocus: true, type: "email", placeholder: "Enter your email", class: 'form-control'
+    = f.submit "Email Instructions", class: 'btn btn-default center-block mb-20'
+    .text-center
+      %a.in-gold-500.mb-20{href: url_for(:back)} Cancel

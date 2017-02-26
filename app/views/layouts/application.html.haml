@@ -45,14 +45,14 @@
                     %li
                       %a.collapse-link{href: "#"} Orders
                     %li
-                      %a.collapse-link{href: "#"} Settings
+                      %a.collapse-link{href: edit_user_registration_path} Settings
                 %li
                   %a{href: destroy_user_session_path, method: :delete} Log out
               - else
                 %li
                   %a{href: new_user_session_path} Log in
                 %li
-                  %a{href: "#"} Sign up
+                  %a{href: new_user_registration_path} Sign up
           .hidden-xs
             %ul.nav.navbar-nav
               %li
@@ -70,7 +70,7 @@
                     %li
                       %a{href: "#"} Orders
                     %li
-                      %a{href: "#"} Settings
+                      %a{href: edit_user_registration_path} Settings
                     %li.divider{role: "separator"}
                     %li
                       %a{href: destroy_user_session_path, method: :delete} Log out
@@ -78,7 +78,7 @@
                 %li
                   %a{href: new_user_session_path} Log in
                 %li
-                  %a{href: "#"} Sign up
+                  %a{href: new_user_registration_path} Sign up
     = yield
     %p.notice= notice
     %p.alert= alert
