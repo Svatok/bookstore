@@ -29,4 +29,10 @@ class ProductDecorator < Draper::Decorator
     object.prices.present? ? object.prices.actual.first.value : 0
   end
 
+  def pictures_path_array(count = 1)
+    pictures = ['/pictures/products/SmashingBook5ResponsiveWebDesign.jpg']
+    return pictures unless object.pictures.product_imgs(count).present?
+    object.pictures.product_imgs.map(&:image_path)
+  end
+
 end

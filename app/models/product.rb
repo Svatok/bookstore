@@ -6,6 +6,7 @@ class Product < ApplicationRecord
   has_many :pictures, as: :imageable
   has_and_belongs_to_many :authors
   has_many :stocks
+  has_many :reviews
   scope :in_stock, ->{ joins( "INNER JOIN (SELECT a.* FROM stocks as a
                                 WHERE EXISTS (SELECT 1 FROM stocks as b
                                                 WHERE a.product_id = b.product_id

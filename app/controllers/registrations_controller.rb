@@ -1,10 +1,11 @@
 class RegistrationsController < Devise::RegistrationsController
 
   def edit
-    billing_address = @user.addresses.billing
-    @billing_address_form = UserAddressForm.new
     @countries = Country.all
-#    @billing_address_form = billing_address.present? ? AddressForm.from_model(billing_address) : AddressForm.new
+    billing_address = @user.addresses.billing
+    @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
+    shipping_address = @user.addresses.shipping
+    @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
     super
   end
 
@@ -12,10 +13,10 @@ class RegistrationsController < Devise::RegistrationsController
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
 
-    if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
-      resource_updated = @user.update_attributes(account_update_params)
+    resource_updated = if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+      @user.update_attributes(account_update_params)
     else
-      resource_updated = update_resource(resource, account_update_params)
+      update_resource(resource, account_update_params)
     end
     yield resource if block_given?
     if resource_updated
@@ -30,13 +31,6 @@ class RegistrationsController < Devise::RegistrationsController
       clean_up_passwords resource
       set_minimum_password_length
       respond_with resource
-    end
-    @billing_address_form = AddressForm.from_params(params)
-
-    if @billing_address_form.valid?
-      Address.create!(@billing_address_form.attributes)
-    else
-      render :edit
     end
   end
 end

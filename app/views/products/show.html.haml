@@ -6,11 +6,11 @@
     .col-sm-6
       .product-gallery
         .mb-20#img_container
-          %img.img-responsive{src: @product.pictures.product_imgs.first.image_path}
+          %img.img-responsive{src: @product.pictures_path_array.first}
         .images.clearfix
-          - @product.pictures.product_imgs(3).each do |picture|
+          - @product.pictures_path_array.each do |picture_path|
             %a.img-link{href: "#"}
-              %img.width-full.height-preview{src: picture.image_path}
+              %img.width-full.height-preview{src: picture_path}
     .col-sm-6
       %h1.mt-res-0= @product.title
       %p.in-grey-600.small= @product.all_authors
@@ -44,39 +44,57 @@
           %p.general-item-info.pull-right= @product.property_value('Materials')
           %p.break-word Materials
   .mb-80
-    %h3.in-gold-500.mb-25 Reviews (3)
+    %h3.in-gold-500.mb-25= "Reviews (#{@reviews.count})"
     %ul.media-list
-      %li.media.card
-        .media-left
-          %a{href: "#"}
-            %img.img-circle.logo-size.media-object{src: "https://www.smashingmagazine.com/wp-content/uploads/2015/09/smashing-book-5-2-large.jpg"}
-        .media-body
-          %div
-            %p.general-message-date.hidden-xs 11/11/16
-            %h4.media-heading.max-240.general-message-name
-              %span.general-message-verified Verified Reviewer
-              Rita J. Lewis
-          .mb-15
-            %i.fa.fa-star.rate-star
-            %i.fa.fa-star.rate-star
-            %i.fa.fa-star.rate-star
-            %i.fa.fa-star.rate-star
-            %i.fa.fa-star.rate-star
-          %p Thank you BookStore, I was very pleased to receive my order for the Moleskine diary so soon after placing the order.
-      %li.media.card
-        .media-left
-          %a{href: "#"}
-            %span.img-circle.logo-size.logo-empty.media-object M
-        .media-body
-          %div
-            %p.general-message-date.hidden-xs 11/11/16
-            %h4.media-heading.max-240.general-message-name
-              %span.general-message-verified Verified Reviewer
-              Rita J. Lewis
-          .mb-15
-            %i.fa.fa-star.rate-star
-            %i.fa.fa-star.rate-star
-            %i.fa.fa-star.rate-star
-            %i.fa.fa-star.rate-star
-            %i.fa.fa-star.rate-star.rate-empty
-          %p Thank you BookStore, I was very pleased to receive my order for the Moleskine diary so soon after placing the order.
+      - @reviews.each do |review|
+        %li.media.card
+          .media-left
+            = avatar_tag(review.user_id, review.reviewer_name, 'img-circle.logo-size.media-object')
+          .media-body
+            %div
+              %p.general-message-date.hidden-xs= review.date_of_create
+              %h4.media-heading.max-240.general-message-name
+              .in-gold-500.media-left
+                %span.general-message-verified= review.verification
+                = review.reviewer_name
+            .mb-15
+              - 5.times.collect do |i|
+                %i.fa.fa-star.rate-star{:class => ('rate-empty' if i >= review.rate)}
+            %p= review.review_text
+    = form_for(@review_form ) do |f|
+      .hidden-xs.hidden-sm
+        .row
+          .col-md-8
+            %h4.general-subtitle.mb-20 Write a Review
+      .row
+        .col-md-8.mb-40
+          .visible-xs.visible-sm
+            %h3.general-subtitle.mt-0 Write a Review
+          .form-group.mb-20{:class => ("has-error" if @review_form.errors.messages.include?(:rate) )}
+            .mb-10.in-grey-600 Score
+            .mb-20
+            .rating-stars
+              %ul#stars
+                %li.star{'title': 'Poor', 'data-value': '1'}
+                  %i.fa.fa-star.fa-fw
+                %li.star{'title': 'Fair', 'data-value': '2'}
+                  %i.fa.fa-star.fa-fw
+                %li.star{'title': 'Good', 'data-value': '3'}
+                  %i.fa.fa-star.fa-fw
+                %li.star{'title': 'Excellent', 'data-value': '4'}
+                  %i.fa.fa-star.fa-fw
+                %li.star{'title': 'WOW!!!', 'data-value': '5'}
+                  %i.fa.fa-star.fa-fw
+                = f.hidden_field :rate, id: 'rate_value'
+            = f.hidden_field :product_id, value: @product.id
+            = f.hidden_field :user_id, value: @user.id
+            %span.help-block= @review_form.errors.full_messages_for(:rate).first
+          .form-group.mb-20{:class => ("has-error" if @review_form.errors.messages.include?(:reviewer_name) )}
+            %label.control-label.font-weight-light.in-grey-600{for: :reviewer_name} Name
+            = f.text_field :reviewer_name, type: "text", class: 'form-control', value: full_name(@user)
+            %span.help-block= @review_form.errors.full_messages_for(:reviewer_name).first
+          .form-group{:class => ("has-error" if @review_form.errors.messages.include?(:review_text) )}
+            %label.control-label.font-weight-light.in-grey-600{for: :review_text} Review
+            = f.text_area :review_text, class: 'form-control'
+            %span.help-block= @review_form.errors.full_messages_for(:review_text).first
+          %button.btn.pull-right Post
