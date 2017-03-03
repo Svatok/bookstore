@@ -3,6 +3,7 @@ class ProductsController < ApplicationController
 
   def index
     @products = SorteredProducts.new(params)
+    @order_item = current_order.order_items.new
   end
 
   def show
@@ -10,5 +11,6 @@ class ProductsController < ApplicationController
     @product = ProductDecorator.new(Product.find(params[:id]))
     @reviews = @product.reviews.approved.decorate
     @review_form = ProductReviewForm.new
+    @order_item = current_order.order_items.new
   end
 end

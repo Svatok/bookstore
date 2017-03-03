@@ -1,0 +1,100 @@
+%main.container.general-main-wrap
+  %h1.general-title-margin Cart
+  .visible-xs
+    - @order_items.each  do |order_item|
+      .general-cart-item.divider-lg-bottom.mb-30
+        %a.close.general-cart-close{'aria-label': "Close", href: order_item_path(order_item.id), 'data-method': 'delete'}
+          %span{'aria-hidden': "true"} &times;
+        .general-img-wrap-table
+          %img.cart-img-shadow.width-full{src: order_item.product.pictures_path_array.first}
+        %p.general-title= order_item.product.title
+        %table.table
+          %tr
+            %td
+              %span.in-grey-600 Price
+            %td
+              %span.font-16.in-gold-500= number_to_currency(order_item.unit_price, unit: '€')
+          %tr
+            %td.vertical-middle
+              %span.in-grey-600 Quantity
+            %td
+              = form_for order_item, remote: true do |f|
+                .input-group
+                  %a.input-link{href: "#"}
+                    %i.fa.fa-minus.line-height-40
+                  = f.hidden_field :product_id, value: order_item.product.id
+                  = f.text_field :quantity, type: "text", class: 'form-control quantity-input', min: 1, value: "#{order_item.quantity}"
+                  %a.input-link{href: "#"}
+                    %i.fa.fa-plus.line-height-40
+          %tr
+            %td
+              %span.in-grey-600 SubTotal
+            %td
+              %span.font-16.in-gold-500= number_to_currency(order_item.subtotal, unit: '€')
+  .hidden-xs
+    %table.table.table-hover
+      %tr.no-hover
+        %th.col-pic.pl-0
+          %span.in-grey-600 Product
+        %th.col-title
+        %th.col-price
+          %span.in-grey-600 Price
+        %th.col-quantity
+          %span.in-grey-600 Quantity
+        %th.col-total
+          %span.in-grey-600 SubTotal
+        %th.col-close
+      - @order_items.each  do |order_item|
+        %tr
+          %td
+            .general-img-wrap-table
+              %img.cart-img-shadow.pull-left.width-full{src: order_item.product.pictures_path_array.first}
+          %td
+            %p.general-title= order_item.product.title
+          %td
+            %span.font-16.in-gold-500= number_to_currency(order_item.unit_price, unit: '€')
+          %td
+            = form_for order_item, remote: true do |f|
+              .input-group
+                %a.input-link{href: "#"}
+                  %i.fa.fa-minus.line-height-40
+                = f.hidden_field :product_id, value: order_item.product.id
+                = f.text_field :quantity, type: "text", class: 'form-control quantity-input', min: 1, value: "#{order_item.quantity}"
+                %a.input-link{href: "#"}
+                  %i.fa.fa-plus.line-height-40
+          %td
+            %span.font-16.in-gold-500= number_to_currency(order_item.subtotal, unit: '€')
+          %td
+            %a.close.general-cart-close{'aria-label': "Close", href: order_item_path(order_item.id), 'data-method': 'delete'}
+              %span{'aria-hidden': "true"} &times;
+  .general-order-wrap
+    .row
+      .col-sm-4
+        = form_for @coupon, url: order_items_path,  remote: true do |f|
+          .input-group.general-input-group
+            %label.font-weight-light Enter Your Coupon Code
+            = f.text_field :code, type: "text", class: 'form-control mb-30', placeholder: "Enter Your Coupon Code "
+            %div
+              %button.btn.btn-primary.mr-5.mb-15.visible-xs-inline-block Apply Coupon
+              %button.btn.btn-primary.mb-15.res-block.update-cart Update cart
+      .col-sm-8
+        .res-mr-200.text-center.general-text-right
+          %p.in-gold-500.font-18 Order Summary
+          %table.general-summary-table.general-summary-table-right.general-text-right
+            %tr
+              %td
+                %p.font-16 Subtotal:
+              %td
+                %p.font-16= number_to_currency(current_order.total_price, unit: '€')
+            %tr
+              %td
+                %p.font-16 Coupon:
+              %td
+                %p.font-16 €0.00
+            %tr
+              %td
+                %strong.font-18 Order Total:
+              %td
+                %strong.font-18= number_to_currency(current_order.total_price, unit: '€')
+          %button.btn.btn-default.mb-20.visible-xs-inline-block Checkout
+  %button.btn.btn-default.mb-20.hidden-xs.center-block Checkout

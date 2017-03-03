@@ -7,7 +7,10 @@ class Product < ApplicationRecord
   has_and_belongs_to_many :authors
   has_many :stocks
   has_many :reviews
-  scope :in_stock, ->{ joins( "INNER JOIN (SELECT a.* FROM stocks as a
+  has_many :order_items
+  scope :main, -> { where(product_type: 'product') }
+  scope :coupons, -> { where(product_type: 'coupon', status: 'active') }
+  scope :in_stock, ->{ main.joins( "INNER JOIN (SELECT a.* FROM stocks as a
                                 WHERE EXISTS (SELECT 1 FROM stocks as b
                                                 WHERE a.product_id = b.product_id
                                                   AND b.date_start <= '#{Date.today}'

@@ -2,7 +2,8 @@ document.addEventListener("turbolinks:load", function() {
   $(".input-link").on("click", function(e) {
     e.preventDefault();
     var $button = $(this);
-    var oldValue = $button.parent().find("input").val();
+    var parent_form_action = $button.parents('.edit_order_item').attr('action');
+    var oldValue = $button.parent().find(".form-control.quantity-input").val();
     if ($button.children().attr('class') == 'fa fa-plus line-height-40') {
   	  var newVal = parseFloat(oldValue) + 1;
   	} else {
@@ -12,8 +13,9 @@ document.addEventListener("turbolinks:load", function() {
         newVal = 0;
       }
     }
-
-    $button.parent().find("input").val(newVal);
+    $("form[action='" + parent_form_action + "']").each(function() {
+      $(this).find(".form-control.quantity-input").val(newVal);
+    });
   });
 
   $(".in-grey-600.small.line-height-2").shorten({

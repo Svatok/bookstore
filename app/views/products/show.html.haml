@@ -17,15 +17,17 @@
       .row
         .col-xs-12.col-md-4
           %p.h1.in-gold-500.mt-10= number_to_currency(@product.price_value, unit: '€')
-        .col-xs-5.col-md-3
-          .input-group.general-position
-            %a.input-link{href: "#"}
-              %i.fa.fa-minus.line-height-40
-            %input.form-control.quantity-input{type: "text", value: 1}
-            %a.input-link{href: "#"}
-              %i.fa.fa-plus.line-height-40
-        .col-xs-7.col-md-5
-          %button.btn.btn-default.pull-right.general-position Add to Cart
+        = form_for @order_item do |f|
+          .col-xs-5.col-md-3
+            .input-group.general-position
+              %a.input-link{href: "#"}
+                %i.fa.fa-minus.line-height-40
+              = f.hidden_field :product_id, value: @product.id
+              = f.text_field :quantity, type: "text", class: 'form-control quantity-input', min: 1, value: 1
+              %a.input-link{href: "#"}
+                %i.fa.fa-plus.line-height-40
+          .col-xs-7.col-md-5
+            = f.submit "Add to Cart", class: 'btn btn-default pull-right general-position'
       .card
         %p Description
         %p.in-grey-600.small.line-height-2
@@ -97,4 +99,4 @@
             %label.control-label.font-weight-light.in-grey-600{for: :review_text} Review
             = f.text_area :review_text, class: 'form-control'
             %span.help-block= @review_form.errors.full_messages_for(:review_text).first
-          %button.btn.pull-right Post
+          = f.submit "Post", class: 'btn pull-right'

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :addresses
   has_many :reviews
+  has_many :orders
   has_many :pictures, as: :imageable
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
