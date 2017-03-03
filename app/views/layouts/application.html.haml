@@ -21,7 +21,7 @@
           %a.navbar-brand Bookstore
           %a.shop-link.pull-right.visible-xs{href: cart_path}
             %span.shop-icon
-              %span.shop-quantity= current_order.order_items.count
+              %span.shop-quantity= current_order.order_items.only_products.count
         %a.shop-link.pull-right.hidden-xs{href: cart_path}
           %span.shop-icon
             %span.shop-quantity= current_order.order_items.only_products.count

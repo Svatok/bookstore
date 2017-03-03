@@ -246,6 +246,9 @@ GEM
     seed_dump (3.2.4)
       activerecord (>= 4)
       activesupport (>= 4)
+    simple_form (3.4.0)
+      actionpack (> 4, < 5.1)
+      activemodel (> 4, < 5.1)
     slop (3.6.0)
     spring (2.0.1)
       activesupport (>= 4.2)
@@ -312,6 +315,7 @@ DEPENDENCIES
   rectify
   sass-rails (~> 5.0)
   seed_dump
+  simple_form
   spring
   spring-watcher-listen (~> 2.0.0)
   thor (= 0.19.1)
