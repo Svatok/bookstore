@@ -66,3 +66,4 @@ gem 'rectify'
 gem 'kaminari'
 gem "letter_opener", :group => :development
 gem 'simple_form'
+gem 'aasm'

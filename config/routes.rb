@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'orders/show'
-
   get 'main_pages/home'
 
   devise_for :users, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { registrations: 'registrations' }
@@ -18,7 +16,12 @@ Rails.application.routes.draw do
   resource :product do
     resources :reviews
   end
-  resource :cart, only: [:show, :update]
+  resource :orders, only: [:show, :update]
+  get 'cart', to: :cart, controller: 'orders'
+  resource :checkouts, only: [:show, :update]
+#  get 'checkout/address', to: 'orders#address'#, controller: 'orders'
+
+#  resource :cart, only: [:show, :update]
   resources :order_items, only: [:create, :update, :destroy]
   root 'main_pages#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

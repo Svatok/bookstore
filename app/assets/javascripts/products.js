@@ -2,7 +2,7 @@ document.addEventListener("turbolinks:load", function() {
   $(".input-link").on("click", function(e) {
     e.preventDefault();
     var $button = $(this);
-    var oldValue = $button.parent().find("input").val();
+    var oldValue = $button.parent().find(".quantity-input").val();
     if ($button.children().attr('class') == 'fa fa-plus line-height-40') {
   	  var newVal = parseFloat(oldValue) + 1;
   	} else {
@@ -13,7 +13,7 @@ document.addEventListener("turbolinks:load", function() {
       }
     }
 
-    $button.parent().find("input").val(newVal);
+    $button.parent().find(".quantity-input").val(newVal);
   });
 
   $(".in-grey-600.small.line-height-2").shorten({
