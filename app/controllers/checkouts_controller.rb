@@ -4,14 +4,41 @@ class CheckoutsController < ApplicationController
 
   def show
     @partial = @order.state
-#    @order.next_state
-  return redirect_to root_path unless lookup_context.exists?(@partial, ["checkouts"], true)
+    return redirect_to root_path unless lookup_context.exists?(@partial, ["checkouts"], true)
+    send(@order.state + '_show')
   end
 
   def update
     @order = current_order
+    send(@order.state + '_update')
     @order.send(next_state + '_step')
     @order.save
+    redirect_to checkouts_path
+  end
+
+  def address_show
+    billing_address = @order.addresses.billing.present? ? @order.addresses.billing : current_user.addresses.billing
+    @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
+    shipping_address = @order.addresses.shipping.present? ? @order.addresses.shipping : current_user.addresses.shipping
+    @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
+  end
+
+  def address_update
+    form_with_errors = false
+    addresses_params['address_forms'].each do |address_type, address_params|
+      address_form = instance_variable_set("@#{address_type}_address_form", UserAddressForm.from_params(address_params))
+      if address_form.valid?
+        binding.pry
+        @address = @order.addresses.find_by(id: address_params['id'])
+        @address = @order.addresses.new unless @address.present?
+        @address.attributes = address_form.attributes.except('id')
+        binding.pry
+        @address.save
+      else
+        form_with_errors = true
+      end
+    end
+    return render checkouts_path if form_with_errors
     redirect_to checkouts_path
   end
 
@@ -34,5 +61,19 @@ class CheckoutsController < ApplicationController
     return 'complete' if @order.confirm?
     @order.aasm.states(permitted: true).map(&:name).first.to_s
   end
+
+  private
+
+  def addresses_params
+    params.permit(address_forms: [billing: [ :id, :address_type, :first_name,
+                                            :last_name, :address, :city, :zip,
+                                            :country_id, :phone],
+                                  shipping: [:id, :address_type, :first_name,
+                                              :last_name, :address, :city, :zip,
+                                              :country_id, :phone]
+                                  ]
+                    )
+  end
+
 
 end

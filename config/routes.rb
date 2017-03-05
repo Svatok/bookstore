@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     get "login", to: "devise/sessions#new"
   end
   resource :user do
-    resources :addresses
+    resources :addresses, only: [:create]
   end
   ActiveAdmin.routes(self)
   resources :products do

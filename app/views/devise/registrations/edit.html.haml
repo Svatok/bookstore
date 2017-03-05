@@ -7,75 +7,22 @@
       %a{href: "#privacy", 'aria-controls': "privacy", role: "tab", 'data-toggle': "tab"} Privacy
   .tab-content
     #address.tab-pane.fade.in.active.general-main-wrap{role: "tabpanel"}
-      .hidden-xs.hidden-sm
-        .row
-          .col-md-5
-            %h3.general-subtitle.mt-0 Billing Address
-          .col-md-5.col-md-offset-1
-            %h3.general-subtitle.mt-0 Shipping Address
-      .row
-        .col-md-5.mb-40
-          = form_for(@billing_address_form ) do |f|
-            .visible-xs.visible-sm
+      = form_tag user_addresses_path do |field|
+        .hidden-xs.hidden-sm
+          .row
+            .col-md-5
               %h3.general-subtitle.mt-0 Billing Address
-            = f.hidden_field :user_id, value: "#{current_user.id}"
-            = f.hidden_field :address_type, value: "billing"
-            .form-group{:class => ("has-error" if @billing_address_form.errors.messages.include?(:first_name) )}
-              %label.control-label.font-weight-light{for: :first_name} First Name
-              = f.text_field :first_name, type: "text", placeholder: "First Name", class: 'form-control'
-              %span.help-block= @billing_address_form.errors.full_messages_for(:first_name).first
-            .form-group{:class => ("has-error" if @billing_address_form.errors.messages.include?(:last_name) )}
-              %label.control-label.font-weight-light{for: :last_name} Last Name
-              = f.text_field :last_name, type: "text", placeholder: "Last Name", class: 'form-control'
-              %span.help-block= @billing_address_form.errors.full_messages_for(:last_name).first
-            .form-group
-              %label.control-label.font-weight-light{for: :address} Address
-              = f.text_field :address, type: "text", placeholder: "Address", class: 'form-control'
-            .form-group
-              %label.control-label.font-weight-light{for: :city} City
-              = f.text_field :city, type: "text", placeholder: "City", class: 'form-control'
-            .form-group
-              %label.control-label.font-weight-light{for: :zip} Zip
-              = f.text_field :zip, type: "text", placeholder: "Zip", class: 'form-control'
-            .form-group
-              %label.control-label.font-weight-light{for: "сountry"} Country
-              = f.select :country_id, options_for_select(Country.all.map{ |c| [c.name, c.id] }, selected_key = f.object.country_id), {}, { class: 'form-control', placeholder: "Select a country" }
-            .form-group.mb-60
-              %label.control-label.font-weight-light{for: :phone} Phone
-              = f.text_field :phone, type: "text", placeholder: "Example +355 66 123 4567", class: 'form-control'
-            .text-center.general-text-align
-              = f.submit "Save", class: 'btn'
-        .col-md-5.col-md-offset-1.mb-25
-          = form_for(@shipping_address_form ) do |f|
-            .visible-xs.visible-sm
+            .col-md-5.col-md-offset-1
               %h3.general-subtitle.mt-0 Shipping Address
-            = f.hidden_field :user_id, value: "#{current_user.id}"
-            = f.hidden_field :address_type, value: "shipping"
-            .form-group{:class => ("has-error" if @shipping_address_form.errors.messages.include?(:first_name) )}
-              %label.control-label.font-weight-light{for: :first_name} First Name
-              = f.text_field :first_name, type: "text", placeholder: "First Name", class: 'form-control'
-              %span.help-block= @shipping_address_form.errors.full_messages_for(:first_name).first
-            .form-group{:class => ("has-error" if @shipping_address_form.errors.messages.include?(:last_name) )}
-              %label.control-label.font-weight-light{for: :last_name} Last Name
-              = f.text_field :last_name, type: "text", placeholder: "Last Name", class: 'form-control'
-              %span.help-block= @shipping_address_form.errors.full_messages_for(:last_name).first
-            .form-group
-              %label.control-label.font-weight-light{for: :address} Address
-              = f.text_field :address, type: "text", placeholder: "Address", class: 'form-control'
-            .form-group
-              %label.control-label.font-weight-light{for: :city} City
-              = f.text_field :city, type: "text", placeholder: "City", class: 'form-control'
-            .form-group
-              %label.control-label.font-weight-light{for: :zip} Zip
-              = f.text_field :zip, type: "text", placeholder: "Zip", class: 'form-control'
-            .form-group
-              %label.control-label.font-weight-light{for: "сountry"} Country
-              = f.select :country_id, options_for_select(Country.all.map{ |c| [c.name, c.id] }, selected_key = f.object.country_id), {}, { class: 'form-control', placeholder: "Select a country" }
-            .form-group.mb-60
-              %label.control-label.font-weight-light{for: :phone} Phone
-              = f.text_field :phone, type: "text", placeholder: "Example +355 66 123 4567", class: 'form-control'
+        .row
+          .col-md-5.mb-40
+            = render 'addresses/forms', object: @billing_address_form, address_type: 'billing'
             .text-center.general-text-align
-              = f.submit "Save", class: 'btn'
+              %button.btn{name: "billing", value: "true"} Save
+          .col-md-5.col-md-offset-1.mb-25
+            = render 'addresses/forms', object: @shipping_address_form, address_type: 'shipping'
+            .text-center.general-text-align
+              %button.btn{name: "shipping", value: "true"} Save
     #privacy.tab-pane.fade{role: "tabpanel"}
       .row.mb-60
         = devise_error_messages!

@@ -1,0 +1,28 @@
+= fields_for "address_forms[#{address_type}]", object do |f|
+  .visible-xs.visible-sm
+    %h3.general-subtitle.mt-0= address_type.capitalize + " Address"
+  = f.hidden_field :id, value: "#{object.id}"
+  = f.hidden_field :address_type, value: "#{address_type}"
+  .form-group{:class => ("has-error" if object.errors.messages.include?(:first_name) )}
+    %label.control-label.font-weight-light{for: :first_name} First Name
+    = f.text_field :first_name, type: "text", placeholder: "First Name", class: 'form-control'
+    %span.help-block= object.errors.full_messages_for(:first_name).first
+  .form-group{:class => ("has-error" if object.errors.messages.include?(:last_name) )}
+    %label.control-label.font-weight-light{for: :last_name} Last Name
+    = f.text_field :last_name, type: "text", placeholder: "Last Name", class: 'form-control'
+    %span.help-block= object.errors.full_messages_for(:last_name).first
+  .form-group
+    %label.control-label.font-weight-light{for: :address} Address
+    = f.text_field :address, type: "text", placeholder: "Address", class: 'form-control'
+  .form-group
+    %label.control-label.font-weight-light{for: :city} City
+    = f.text_field :city, type: "text", placeholder: "City", class: 'form-control'
+  .form-group
+    %label.control-label.font-weight-light{for: :zip} Zip
+    = f.text_field :zip, type: "text", placeholder: "Zip", class: 'form-control'
+  .form-group
+    %label.control-label.font-weight-light{for: "сountry"} Country
+    = f.select :country_id, options_for_select(Country.all.map{ |c| [c.name, c.id] }), {}, { class: 'form-control', placeholder: "Select a country" }
+  .form-group.mb-60
+    %label.control-label.font-weight-light{for: :phone} Phone
+    = f.text_field :phone, type: "text", placeholder: "Example +355 66 123 4567", class: 'form-control'

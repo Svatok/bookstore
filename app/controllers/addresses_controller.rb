@@ -1,7 +1,23 @@
 class AddressesController < ApplicationController
 
   def create
-    adress_create_or_update(params)
+    form_with_errors = false
+    addresses_params['address_forms'].each do |address_type, address_params|
+      address_form = instance_variable_set("@#{address_type}_address_form", UserAddressForm.from_params(address_params))
+      next unless params[address_type] == 'true'
+      if address_form.valid?
+        @address = current_user.addresses.find_or_initialize_by(id: address_params['id'])
+        @address.attributes = address_form.attributes
+        @address.save
+      else
+        form_with_errors = true
+      end
+    end
+    return render :template => 'devise/registrations/edit',
+                      :locals => {
+                        :resource => current_user,
+                        :resource_name => 'user' } if form_with_errors
+    redirect_to edit_user_registration_path, notice: "Address ID has been updated"
   end
 
   def update
@@ -23,30 +39,16 @@ class AddressesController < ApplicationController
 
   private
 
-    def adress_create_or_update(params)
-      address_form = form_which_update(params[:user_address][:address_type])
-      if address_form.valid?
-        @address = params[:id].present? ? Address.find(params[:id]) : Address.new
-        @address.attributes = address_form.attributes
-        @address.save
-        redirect_to root_url, notice: "Address ID has been created"
-      else
-        render :template => 'devise/registrations/edit',
-                          :locals => {
-                            :resource => current_user,
-                            :resource_name => 'user' }
-      end
+    def addresses_params
+      params.permit(address_forms: [billing: [ :id, :address_type, :first_name,
+                                              :last_name, :address, :city, :zip,
+                                              :country_id, :phone],
+                                    shipping: [:id, :address_type, :first_name,
+                                                :last_name, :address, :city, :zip,
+                                                :country_id, :phone]
+                                    ]
+                      )
     end
 
-    def form_which_update(address_type)
-      if address_type == 'billing'
-        @billing_address_form = UserAddressForm.from_params(params)
-        @shipping_address_form = UserAddressForm.from_model(current_user.addresses.shipping.first)
-      else
-        @shipping_address_form = UserAddressForm.from_params(params)
-        @billing_address_form = UserAddressForm.from_model(current_user.addresses.billing.first)
-      end
-      instance_variable_get("@#{address_type}_address_form")
-    end
 
 end

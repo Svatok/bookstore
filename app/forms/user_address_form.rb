@@ -1,5 +1,6 @@
 class UserAddressForm < Rectify::Form
-  attribute :user_id, String
+  attribute :id, String
+#  attribute :addressable_id, String
   attribute :address_type, String
   attribute :first_name, String
   attribute :last_name,  String

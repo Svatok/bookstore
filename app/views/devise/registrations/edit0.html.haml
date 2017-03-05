@@ -1,0 +1,115 @@
+%main.container
+  %h1.general-title-margin Settings
+  %ul.nav.nav-tabs.mb-20{role: "tablist"}
+    %li.mb-10.active{role: "presentation"}
+      %a{href: "#address", 'aria-controls': "address", role: "tab", 'data-toggle': "tab"} Address
+    %li.mb-10{role: "presentation"}
+      %a{href: "#privacy", 'aria-controls': "privacy", role: "tab", 'data-toggle': "tab"} Privacy
+  .tab-content
+    #address.tab-pane.fade.in.active.general-main-wrap{role: "tabpanel"}
+      .hidden-xs.hidden-sm
+        .row
+          .col-md-5
+            %h3.general-subtitle.mt-0 Billing Address
+          .col-md-5.col-md-offset-1
+            %h3.general-subtitle.mt-0 Shipping Address
+      .row
+        .col-md-5.mb-40
+          = form_for(@billing_address_form ) do |f|
+            .visible-xs.visible-sm
+              %h3.general-subtitle.mt-0 Billing Address
+            = f.hidden_field :user_id, value: "#{current_user.id}"
+            = f.hidden_field :address_type, value: "billing"
+            .form-group{:class => ("has-error" if @billing_address_form.errors.messages.include?(:first_name) )}
+              %label.control-label.font-weight-light{for: :first_name} First Name
+              = f.text_field :first_name, type: "text", placeholder: "First Name", class: 'form-control'
+              %span.help-block= @billing_address_form.errors.full_messages_for(:first_name).first
+            .form-group{:class => ("has-error" if @billing_address_form.errors.messages.include?(:last_name) )}
+              %label.control-label.font-weight-light{for: :last_name} Last Name
+              = f.text_field :last_name, type: "text", placeholder: "Last Name", class: 'form-control'
+              %span.help-block= @billing_address_form.errors.full_messages_for(:last_name).first
+            .form-group
+              %label.control-label.font-weight-light{for: :address} Address
+              = f.text_field :address, type: "text", placeholder: "Address", class: 'form-control'
+            .form-group
+              %label.control-label.font-weight-light{for: :city} City
+              = f.text_field :city, type: "text", placeholder: "City", class: 'form-control'
+            .form-group
+              %label.control-label.font-weight-light{for: :zip} Zip
+              = f.text_field :zip, type: "text", placeholder: "Zip", class: 'form-control'
+            .form-group
+              %label.control-label.font-weight-light{for: "сountry"} Country
+              = f.select :country_id, options_for_select(Country.all.map{ |c| [c.name, c.id] }, selected_key = f.object.country_id), {}, { class: 'form-control', placeholder: "Select a country" }
+            .form-group.mb-60
+              %label.control-label.font-weight-light{for: :phone} Phone
+              = f.text_field :phone, type: "text", placeholder: "Example +355 66 123 4567", class: 'form-control'
+            .text-center.general-text-align
+              = f.submit "Save", class: 'btn'
+        .col-md-5.col-md-offset-1.mb-25
+          = form_for(@shipping_address_form ) do |f|
+            .visible-xs.visible-sm
+              %h3.general-subtitle.mt-0 Shipping Address
+            = f.hidden_field :user_id, value: "#{current_user.id}"
+            = f.hidden_field :address_type, value: "shipping"
+            .form-group{:class => ("has-error" if @shipping_address_form.errors.messages.include?(:first_name) )}
+              %label.control-label.font-weight-light{for: :first_name} First Name
+              = f.text_field :first_name, type: "text", placeholder: "First Name", class: 'form-control'
+              %span.help-block= @shipping_address_form.errors.full_messages_for(:first_name).first
+            .form-group{:class => ("has-error" if @shipping_address_form.errors.messages.include?(:last_name) )}
+              %label.control-label.font-weight-light{for: :last_name} Last Name
+              = f.text_field :last_name, type: "text", placeholder: "Last Name", class: 'form-control'
+              %span.help-block= @shipping_address_form.errors.full_messages_for(:last_name).first
+            .form-group
+              %label.control-label.font-weight-light{for: :address} Address
+              = f.text_field :address, type: "text", placeholder: "Address", class: 'form-control'
+            .form-group
+              %label.control-label.font-weight-light{for: :city} City
+              = f.text_field :city, type: "text", placeholder: "City", class: 'form-control'
+            .form-group
+              %label.control-label.font-weight-light{for: :zip} Zip
+              = f.text_field :zip, type: "text", placeholder: "Zip", class: 'form-control'
+            .form-group
+              %label.control-label.font-weight-light{for: "сountry"} Country
+              = f.select :country_id, options_for_select(Country.all.map{ |c| [c.name, c.id] }, selected_key = f.object.country_id), {}, { class: 'form-control', placeholder: "Select a country" }
+            .form-group.mb-60
+              %label.control-label.font-weight-light{for: :phone} Phone
+              = f.text_field :phone, type: "text", placeholder: "Example +355 66 123 4567", class: 'form-control'
+            .text-center.general-text-align
+              = f.submit "Save", class: 'btn'
+    #privacy.tab-pane.fade{role: "tabpanel"}
+      .row.mb-60
+        = devise_error_messages!
+        .col-sm-5
+          %p.in-gold-500.font-18.mb-25 Email
+          = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'general-form-md' }) do |f|
+            .form-group.mb-35
+              %label.control-label.font-weight-light{for: :email} Enter Email
+              = f.email_field :email, autofocus: true, type: "email", placeholder: "Enter your email", class: 'form-control'
+            .general-text-align
+              = f.submit "Save", class: 'btn btn-default mb-35'
+        .col-sm-5.col-sm-offset-1
+          %p.in-gold-500.font-18.mb-25 Password
+          = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'general-form-md pb-25' }) do |f|
+            .form-group.mb-30
+              %label.control-label.font-weight-light{for: :current_password} Old Password
+              = f.password_field :current_password, autocomplete: "off", type: "password", placeholder: "Old Password", class: 'form-control'
+            .form-group.mb-30
+              %label.control-label.font-weight-light{for: :password} New Password
+              = f.password_field :password, autocomplete: "off", type: "password", placeholder: "New Password", class: 'form-control'
+            .form-group.mb-40
+              %label.control-label.font-weight-light{for: :password_confirmation} Confirm Password
+              = f.password_field :password_confirmation, autocomplete: "off", type: "password", placeholder: "Confirm Password", class: 'form-control'
+            .general-text-align
+              = f.submit "Save", class: 'btn btn-default mb-10'
+        .col-sm-12
+          .divider-lg-bottom
+          %p.in-gold-500.font-18.mb-25.pt-20 Remove Account
+          %form
+            .general-settings-btn
+              = link_to "Please Remove My Account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, id: 'remove_button', class: 'btn disabled mb-20'
+            .form-group.checkbox.general-settings-checkbox
+              %label.font-weight-light.pl-0
+                %input#remove.checkbox-input{type: "checkbox", hidden: "true"}
+                %span.checkbox-icon
+                  %i.fa.fa-check
+                %span.checkbox-text I understand that all data will be lost

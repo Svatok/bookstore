@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :addresses
+  has_many :addresses, as: :addressable
   has_many :reviews
   has_many :orders
   has_many :pictures, as: :imageable
