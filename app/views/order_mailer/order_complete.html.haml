@@ -1,0 +1,38 @@
+%body
+  %table
+    %tr
+      %td{ colspan: "3" }= "Dear customer, #{@user.decorate.full_name}!"
+    %tr
+      %td{ align: "center", colspan: "3", style: "padding: 25px 0px; font-size: 17px; line-height: 24px; font-size: 18px; text-align: center" }
+        = link_to "Order #{@order.order_number}", order_url(@order.id)
+  %table{ border: "1", style: "border: 4px double black; width: 100%; text-align: center" }
+    %tr
+      %th Product
+      %th Price
+      %th Quantity
+      %th Subtotal
+    - @order_items.each do |order_item|
+      %tr
+        %td= order_item.product.title
+        %td= number_to_currency(order_item.unit_price, unit: '€')
+        %td= order_item.quantity
+        %td= number_to_currency(order_item.subtotal, unit: '€')
+  %p
+  %table{ style: "width: 300px" }
+    %tr
+      %td Order Summary
+      %td
+    %tr
+      %td Subtotal
+      %td= number_to_currency(@order.subtotal_price, unit: '€')
+    %tr
+      %td Coupon
+      %td= number_to_currency(@order.discount, unit: '€')
+    %tr
+      %td Shipping
+      %td= number_to_currency(@order.shipping_cost, unit: '€')
+    %tr
+      %td
+        %b Order Total:
+      %td
+        %b= number_to_currency(@order.total_price, unit: '€')

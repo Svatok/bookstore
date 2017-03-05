@@ -3,6 +3,7 @@ class Order < ApplicationRecord
 
   belongs_to :user
   has_many :order_items
+  has_many :payments
   has_many :addresses, as: :addressable
 
   before_save :update_total_price
@@ -57,7 +58,7 @@ class Order < ApplicationRecord
   end
 
   def set_prev_state!
-    update_attributes!(prev_state: aasm.from_state)
+    assign_attributes(prev_state: aasm.from_state)
   end
 
   def total_price
@@ -65,14 +66,25 @@ class Order < ApplicationRecord
   end
 
   def subtotal_price
-    total_price - coupon_sum
+    total_price - coupon_sum - shipping_cost
   end
 
   def coupon_sum
-    coupon = order_items.select{ |order_item| order_item.product.product_type == 'coupon' }
+    coupon = order_items.only_coupons
+    # coupon = order_items.select do |order_item|
+    #   next unless order_item.product.present?
+    #   order_item.product.product_type == 'coupon'
+    # end
     return 0 unless coupon.present?
     coupon.first.unit_price
   end
+
+  def shipping_cost
+    shipping = order_items.only_shippings
+    return 0 unless shipping.present?
+    shipping.first.unit_price
+  end
+
 
   private
 

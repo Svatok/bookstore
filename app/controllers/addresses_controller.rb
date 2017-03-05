@@ -6,8 +6,11 @@ class AddressesController < ApplicationController
       address_form = instance_variable_set("@#{address_type}_address_form", UserAddressForm.from_params(address_params))
       next unless params[address_type] == 'true'
       if address_form.valid?
-        @address = current_user.addresses.find_or_initialize_by(id: address_params['id'])
-        @address.attributes = address_form.attributes
+        @address = current_user.addresses.find_by(id: address_params['id'])
+        @address = current_user.addresses.new unless @address.present?
+        @address.attributes = address_form.attributes.except('id')
+        # @address = current_user.addresses.find_or_initialize_by(id: address_params['id'])
+        # @address.attributes = address_form.attributes
         @address.save
       else
         form_with_errors = true

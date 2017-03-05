@@ -1,47 +1,33 @@
 %h3.general-subtitle Shipping Method
+- if @current_shipping.errors[:product_id].present?
+  .alert.alert-error.alert-danger
+    %a.close{ 'data-dismiss': "alert"} ×
+    = @current_shipping.errors['product_id'].first
 .visible-xs
-  .general-cart-item.divider-lg-bottom
-    %table.table
-      %tr
-        %td.col-half
-          %span.in-grey-600 Method
-        %td.col-half
-          .form-group.radio.mt-0.mb-0
-            %label.font-16.font-weight-light.pl-0
-              %input.radio-input{type: "radio", hidden: "true"}
-              %span.radio-icon
-              %span.radio-text Delivery Next Day!
-      %tr
-        %td
-          %span.in-grey-600 Days
-        %td
-          %span.font-16.font-weight-light 3 to 7 days
-      %tr
-        %td
-          %span.in-grey-600 Price
-        %td
-          %span.font-16.in-gold-500 €5.00
-  .general-cart-item.divider-lg-bottom.mb-30
-    %table.table
-      %tr
-        %td.col-half
-          %span.in-grey-600 Method
-        %td.col-half
-          .form-group.radio.mt-0.mb-0
-            %label.font-16.font-weight-light.pl-0
-              %input.radio-input{type: "radio", hidden: "true"}
-              %span.radio-icon
-              %span.radio-text Delivery Next Day!
-      %tr
-        %td
-          %span.in-grey-600 Days
-        %td
-          %span.font-16.font-weight-light 3 to 7 days
-      %tr
-        %td
-          %span.in-grey-600 Price
-        %td
-          %span.font-16.in-gold-500 €5.00
+  = fields_for 'shippings_v_xs', @shippings do |f|
+    - @shippings.each do |shipping|
+      .general-cart-item.divider-lg-bottom
+        %table.table
+          %tr
+            %td.col-half
+              %span.in-grey-600 Method
+            %td.col-half
+              .form-group.radio.mt-0.mb-0
+                %label.font-16.font-weight-light.pl-0
+                  = f.radio_button :product, "#{shipping.id}", checked: shipping.id == @current_shipping.product_id, type: "radio", hidden: true, class: "radio-input"
+                  %span.radio-icon
+                  %span.radio-text= shipping.title
+          %tr
+            %td
+              %span.in-grey-600 Days
+            %td
+              %span.font-16.font-weight-light= shipping.description
+          %tr
+            %td
+              %span.in-grey-600 Price
+            %td
+              %span.font-16.in-gold-500= number_to_currency(shipping.price_value,:unit=>'€')
+    .mb-30
 .hidden-xs.mb-res-50
   %table.table.table-hover
     %thead
@@ -53,25 +39,16 @@
         %th
           %span.in-grey-600 Price
     %tbody
-      %tr
-        %td
-          .form-group.radio.mt-0.mb-0
-            %label.font-16.font-weight-light.pl-0
-              %input.radio-input{type: "radio", hidden: "true"}
-              %span.radio-icon
-              %span.radio-text Delivery Next Day!
-        %td
-          %span 3 to 7 days
-        %td
-          %span.font-16.in-gold-500 €28.50
-      %tr
-        %td
-          .form-group.radio.mt-0.mb-0
-            %label.font-16.font-weight-light.pl-0
-              %input.radio-input{type: "radio", hidden: "true"}
-              %span.radio-icon
-              %span.radio-text Delivery Next Day!
-        %td
-          %span 3 to 7 days
-        %td
-          %span.font-16.in-gold-500 €28.50
+      = fields_for 'shippings_h_xs', @shippings do |f|
+        - @shippings.each do |shipping|
+          %tr
+            %td
+              .form-group.radio.mt-0.mb-0
+                %label.font-16.font-weight-light.pl-0
+                  = f.radio_button :product, "#{shipping.id}", checked: shipping.id == @current_shipping.product_id, type: "radio", hidden: true, class: "radio-input"
+                  %span.radio-icon
+                  %span.radio-text= shipping.title
+            %td
+              %span= shipping.description
+            %td
+              %span.font-16.in-gold-500= number_to_currency(shipping.price_value,:unit=>'€')

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170304212614) do
+ActiveRecord::Schema.define(version: 20170305155243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,11 +38,11 @@ ActiveRecord::Schema.define(version: 20170304212614) do
     t.integer  "country_id"
     t.string   "phone"
     t.string   "address_type"
+    t.string   "addressable_type"
     t.integer  "addressable_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.string   "addressable_type"
-    t.index ["addressable_id"], name: "index_addresses_on_addressable_id", using: :btree
+    t.index ["addressable_type", "addressable_id"], name: "index_addresses_on_addressable_type_and_addressable_id", using: :btree
     t.index ["country_id"], name: "index_addresses_on_country_id", using: :btree
   end
 
@@ -67,14 +67,14 @@ ActiveRecord::Schema.define(version: 20170304212614) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "characteristics", id: :integer, default: -> { "nextval('\"Characteristics_id_seq\"'::regclass)" }, force: :cascade do |t|
+  create_table "characteristics", force: :cascade do |t|
     t.integer  "product_id"
     t.integer  "property_id"
     t.string   "value"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["product_id"], name: "index_Characteristics_on_product_id", using: :btree
-    t.index ["property_id"], name: "index_Characteristics_on_property_id", using: :btree
+    t.index ["product_id"], name: "index_characteristics_on_product_id", using: :btree
+    t.index ["property_id"], name: "index_characteristics_on_property_id", using: :btree
   end
 
   create_table "countries", force: :cascade do |t|
@@ -98,11 +98,24 @@ ActiveRecord::Schema.define(version: 20170304212614) do
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
     t.float    "total_price"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.string   "state"
     t.string   "prev_state"
+    t.string   "order_number"
+    t.date     "placed_date"
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.string   "card_number"
+    t.string   "name_on_card"
+    t.string   "mm_yy"
+    t.integer  "cvv"
+    t.integer  "order_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["order_id"], name: "index_payments_on_order_id", using: :btree
   end
 
   create_table "pictures", force: :cascade do |t|
@@ -186,12 +199,12 @@ ActiveRecord::Schema.define(version: 20170304212614) do
   end
 
   add_foreign_key "addresses", "countries"
-  add_foreign_key "addresses", "users", column: "addressable_id"
   add_foreign_key "characteristics", "products"
   add_foreign_key "characteristics", "properties"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
+  add_foreign_key "payments", "orders"
   add_foreign_key "products", "categories"
   add_foreign_key "reviews", "products"
   add_foreign_key "reviews", "users"

@@ -8,11 +8,11 @@
 .row
   .col-md-5.mb-40
     = render 'addresses/forms', object: @billing_address_form, address_type: 'billing'
-  .col-md-5.col-md-offset-1.mb-60
+  .col-md-5.col-md-offset-1.mb-60.shipping-form
     = render 'addresses/forms', object: @shipping_address_form, address_type: 'shipping'
     .form-group.checkbox
       %label.font-weight-light.pl-0
-        %input.checkbox-input{type: "checkbox", hidden: "true"}
+        %input.checkbox-input.billing-use{type: "checkbox", hidden: "true", name: 'use_billing'}
         %span.checkbox-icon
           %i.fa.fa-check
         %span.checkbox-text Use Billing Adress

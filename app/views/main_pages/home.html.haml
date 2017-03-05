@@ -10,14 +10,15 @@
             .col-sm-5
               .general-img-wrap
                 - img_path = product.pictures.present? ? "#{product.pictures.first.image_path}" : "http://jonathantweedy.com/resources/thumbs/SmashingBook5ResponsiveWebDesign.jpg"
-                %img.img-shadow.general-thumbnail-img.width-full{src: "#{img_path}", alt: "design-book"}
+                %a{href: product_path(product)}
+                  %img.img-shadow.general-thumbnail-img.width-full{src: "#{img_path}", alt: "design-book"}
             .col-sm-7
               .mb-60
                 %h1= product.title
                 %p.lead= product.description
                 %p.in-grey-600.small= ProductDecorator.new(product).all_authors
                 .general-align.pt-20
-                  %button.btn.btn-primary Buy Now
+                  %a.btn.btn-primary{href: order_items_path('order_item[product_id]': product.id, 'order_item[quantity]': 1)} Buy Now
     %a.left.carousel-control{href: "#slider", role: "button", 'data-slide': "prev"}
       %span.icon-prev{'aria-hidden': "true"}
       %span.sr-only Previous
@@ -29,7 +30,7 @@
     %h2.h1 Welcome to our amazing Bookstore!
     .mb-res-50
       %p.in-grey-600 We pore through hundreds of new books each month and select the five best we can find to share with our members.
-    = link_to 'Get Started', products_path, class: 'btn btn-default' 
+    = link_to 'Get Started', products_path, class: 'btn btn-default'
   .mb-35
     %h3 Best Sellers
     .row
@@ -43,7 +44,7 @@
                 .general-thumb-link-wrap
                   %a.thumb-hover-link{href: product_path(product)}
                     %i.fa.fa-eye.thumb-icon{'aria-hidden': "true"}
-                  %a.thumb-hover-link{href: "#"}
+                  %a.thumb-hover-link{href: order_items_path('order_item[product_id]': product.id, 'order_item[quantity]': 1)}
                     %i.fa.fa-shopping-cart.thumb-icon
           .mb-35
             .clearfix

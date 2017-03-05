@@ -9,10 +9,13 @@ class CheckoutsController < ApplicationController
   end
 
   def update
-    @order = current_order
+    @form_with_errors = false
+    @order = current_order.decorate
+    @partial = @order.state
     send(@order.state + '_update')
     @order.send(next_state + '_step')
     @order.save
+    return render :show if @form_with_errors
     redirect_to checkouts_path
   end
 
@@ -24,22 +27,83 @@ class CheckoutsController < ApplicationController
   end
 
   def address_update
-    form_with_errors = false
     addresses_params['address_forms'].each do |address_type, address_params|
       address_form = instance_variable_set("@#{address_type}_address_form", UserAddressForm.from_params(address_params))
+      address_form = @billing_address_form if params['use_billing'] == 'on'
       if address_form.valid?
-        binding.pry
         @address = @order.addresses.find_by(id: address_params['id'])
         @address = @order.addresses.new unless @address.present?
         @address.attributes = address_form.attributes.except('id')
-        binding.pry
         @address.save
       else
-        form_with_errors = true
+        @form_with_errors = true
       end
     end
-    return render checkouts_path if form_with_errors
-    redirect_to checkouts_path
+  end
+
+  def delivery_show
+    @shippings = Product.shippings.decorate
+    shipping = @order.order_items.only_shippings
+    @current_shipping = shipping.present? ? shipping.first : @order.order_items.new
+
+    # @current_shipping = @order.order_items.only_shippings.first
+    # @current_shipping = @order.order_items.new unless @current_shipping.present?
+  end
+
+  def delivery_update
+    @shippings = Product.shippings.decorate
+    shipping = @order.order_items.only_shippings
+    @current_shipping = shipping.present? ? shipping.first : @order.order_items.new
+    # @current_shipping = @order.order_items.only_shippings.first
+    # @current_shipping = @order.order_items.new unless @current_shipping.present?
+    shipping = params['shippings_' + params['form_visible']]
+    unless shipping.present?
+      @current_shipping.errors.add(:product_id, "Choose delivery!")
+      return @form_with_errors = true
+    end
+    @current_shipping.attributes = { product_id: shipping['product'], quantity: 1 }
+    @current_shipping.save
+  end
+
+  def payment_show
+    payment = @order.payments
+    @payment_form = payment.present? ? PaymentForm.from_model(payment.first) : PaymentForm.new
+  end
+
+  def payment_update
+    @payment_form = PaymentForm.from_params(payment_params)
+    if @payment_form.valid?
+      @payment = @order.payments.present? ? @order.payments.first : @order.payments.new
+      @payment.attributes = @payment_form.attributes
+      @payment.save
+    else
+      @form_with_errors = true
+    end
+  end
+
+  def confirm_show
+    @billing_address = @order.addresses.billing.first.decorate
+    @shipping_address = @order.addresses.shipping.first.decorate
+    @shipping = @order.order_items.only_shippings.first
+    @payment = @order.payments.first.decorate
+    @order_items = @order.order_items.only_products.decorate
+  end
+
+  def confirm_update
+    @order.order_number = "R%.8d" % @order.id
+    @order.placed_date = Date.today
+    OrderMailer.order_complete(@order, current_user).deliver
+  end
+
+  def complete_show
+    @shipping_address = @order.addresses.shipping.first.decorate
+    @shipping = @order.order_items.only_shippings.first
+    @payment = @order.payments.first.decorate
+    @order_items = @order.order_items.only_products.decorate
+  end
+
+  def complete_update
+    session.delete(:order_id)
   end
 
   def initialize_order
@@ -57,7 +121,7 @@ class CheckoutsController < ApplicationController
   end
 
   def next_state
-    return @order.prev_state if @order.prev_state == 'confirm'
+    return @order.prev_state if @order.prev_state == 'confirm' && @order.state != 'complete'
     return 'complete' if @order.confirm?
     @order.aasm.states(permitted: true).map(&:name).first.to_s
   end
@@ -73,6 +137,10 @@ class CheckoutsController < ApplicationController
                                               :country_id, :phone]
                                   ]
                     )
+  end
+
+  def payment_params
+    params.permit(payment: [:card_number, :name_on_card, :mm_yy, :cvv])
   end
 
 

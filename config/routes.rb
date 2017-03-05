@@ -16,13 +16,15 @@ Rails.application.routes.draw do
   resource :product do
     resources :reviews
   end
-  resource :orders, only: [:show, :update]
+  resources :orders, only: [:index, :show, :update]
   get 'cart', to: :cart, controller: 'orders'
+  put 'update_cart', to: :update_cart, controller: 'orders'
   resource :checkouts, only: [:show, :update]
 #  get 'checkout/address', to: 'orders#address'#, controller: 'orders'
 
 #  resource :cart, only: [:show, :update]
   resources :order_items, only: [:create, :update, :destroy]
+  get 'order_items', action: :create, controller: 'order_items'
   root 'main_pages#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

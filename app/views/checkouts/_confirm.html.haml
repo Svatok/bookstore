@@ -1,91 +1,24 @@
 .row.mb-20
   .col-sm-3
-    %h3.general-subtitle Shipping Address
-    %p.general-address
-      John Doe
-      %a.general-edit{href: checkouts_path(params.permit(:edit).merge(:edit => 'address'))} edit
-      %br
-      44 Fifth Ave v231
-      %br
-      New York NY 1001
-      %br
-      United States
-      %br
-      Phone +16507599755
+    = render 'short_address', object: @shipping_address
   .col-sm-3
-    %h3.general-subtitle Billing Address
-    %p.general-address
-      John Doe
-      %a.general-edit{href: checkouts_path(params.permit(:edit).merge(:edit => 'address'))} edit
-      %br
-      44 Fifth Ave v231
-      %br
-      New York NY 1001
-      %br
-      United States
-      %br
-      Phone +16507599755
+    = render 'short_address', object: @billing_address
   .col-sm-3
     %h3.general-subtitle Shipments
     %p.general-address
-      Delivery Next Day!
+      = @shipping.product.title
       %a.general-edit{href: checkouts_path(params.permit(:edit).merge(:edit => 'delivery'))} edit
       %br
-      By train
+      = @shipping.product.description
   .col-sm-3
     %h3.general-subtitle Payment Information
     %p.general-address
-      ** ** ** 8756
+      = @payment.four_numbers_of_card
       %a.general-edit{href: checkouts_path(params.permit(:edit).merge(:edit => 'payment'))} edit
       %br
-      12/2018
+      = @payment.mm_yy
 .visible-xs
-  .general-cart-item.divider-lg
-    .general-img-wrap-table
-      %img.cart-img-shadow.width-full{src: "http://jonathantweedy.com/resources/thumbs/SmashingBook5ResponsiveWebDesign.jpg", alt: "design-book"}
-    %p.general-title Android Programming for Beginners
-    %P.in-grey-600.font-weight-light A recipe-based book to help you efficiently create amazing PHP-based applications with Laravel 5.x
-    %table.table
-      %tr
-        %td
-          %span.in-grey-600 Price
-        %td
-          %span.font-16.in-gold-500 €28.50
-      %tr
-        %td.vertical-middle
-          %span.in-grey-600 Quantity
-        %td
-          %span 1
-      %tr
-        %td
-          %span.in-grey-600 SubTotal
-        %td
-          %span.font-16.in-gold-500 €32.90
-  .general-cart-item.divider-lg.mb-55
-    .general-img-wrap-table
-      %img.cart-img-shadow.width-full{src: "http://jonathantweedy.com/resources/thumbs/SmashingBook5ResponsiveWebDesign.jpg", alt: "design-book"}
-    %p.general-title Android Programming for Beginners
-    %table.table
-      %tr
-        %td
-          %span.in-grey-600 Price
-        %td
-          %span.font-16.in-gold-500 €28.50
-      %tr
-        %td.vertical-middle
-          %span.in-grey-600 Quantity
-        %td
-          .input-group
-            %a.input-link{href: "#"}
-              %i.fa.fa-minus.line-height-40
-            %input.form-control.quantity-input{type: "text"}
-            %a.input-link{href: "#"}
-              %i.fa.fa-plus.line-height-40
-      %tr
-        %td
-          %span.in-grey-600 SubTotal
-        %td
-          %span.font-16.in-gold-500 €32.90
+  = render 'order_items/order_items_v_xs'
 .hidden-xs.divider-lg.pt-20
   %table.table.table-hover
     %thead
@@ -100,16 +33,4 @@
         %th
           %span.in-grey-600 Total
     %tbody
-      %tr
-        %td
-          .general-img-wrap-table
-            %img.cart-img-shadow.pull-left.width-full{src: "http://jonathantweedy.com/resources/thumbs/SmashingBook5ResponsiveWebDesign.jpg", alt: "design-book"}
-        %td
-          %p.general-title Android Programming for Beginners
-          %p.in-grey-600.font-weight-light Maximize the potential of Bootstrap with a collection of real-world site projects for better, faster, more responsive web applications
-        %td
-          %span.font-16.in-gold-500 €28.50
-        %td
-          %span.ml-30 1
-        %td
-          %span.font-16.in-gold-500 €32.90
+      = render 'order_items/order_items_h_xs'

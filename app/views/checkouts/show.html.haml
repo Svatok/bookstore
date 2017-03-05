@@ -26,4 +26,5 @@
       %p.in-gold-500.font-18 Order Summary
       %table.general-summary-table{:class => ("general-summary-table-right general-text-right" if @order.complete? || @order.confirm?)}
         = render 'orders/order_total_panel'
-      %button.btn.center-block.mb-20=  @order.complete? ? 'Back to Store' : 'Save and Continue'
+      %button.btn.center-block.mb-20.visible-xs{name: "form_visible", value: "v_xs"}=  @order.complete? ? 'Back to Store' : 'Save and Continue'
+      %button.btn.center-block.mb-20.hidden-xs{name: "form_visible", value: "h_xs"}=  @order.complete? ? 'Back to Store' : 'Save and Continue'

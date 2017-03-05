@@ -3,7 +3,7 @@
   %head
     %meta{charset: "UTF-8"}
     %meta{name: "viewport", content: "width=device-width"}
-    %title Application
+    %title Bookstore
     = csrf_meta_tags
     %link{href: "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600", rel: "stylesheet"}
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => "reload"
@@ -18,7 +18,7 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.navbar-brand Bookstore
+          %a.navbar-brand{href: root_path} Bookstore
           %a.shop-link.pull-right.visible-xs{href: cart_path}
             %span.shop-icon
               %span.shop-quantity= current_order.order_items.only_products.count
@@ -43,7 +43,7 @@
                   %a{type: "button", 'data-toggle': "collapse", href: "#menu_account", 'aria-expanded': "false", 'aria-controls': "menu"} My account
                   %ul#menu_account.collapse.list-unstyled.pl-30.mb-10{'aria-expanded': "false"}
                     %li
-                      %a.collapse-link{href: "#"} Orders
+                      %a.collapse-link{href: orders_path} Orders
                     %li
                       %a.collapse-link{href: edit_user_registration_path} Settings
                 %li
@@ -68,7 +68,7 @@
                   %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"} My account
                   %ul.dropdown-menu
                     %li
-                      %a{href: "#"} Orders
+                      %a{href: orders_path} Orders
                     %li
                       %a{href: edit_user_registration_path} Settings
                     %li.divider{role: "separator"}

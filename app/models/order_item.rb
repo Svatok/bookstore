@@ -8,13 +8,15 @@ class OrderItem < ApplicationRecord
   before_save :finalize, :set_inactive_for_coupon
   before_destroy :set_active_for_coupon
   scope :only_products, -> { joins(:product).merge(Product.main) }
+  scope :only_shippings, -> { joins(:product).merge(Product.shippings) }
+  scope :only_coupons, -> { joins(:product).merge(Product.coupons) }
 
   def unit_price
-     if persisted?
-       self[:unit_price]
-     else
+    #  if persisted?
+    #    self[:unit_price]
+    #  else
        product.prices.actual.first.value
-     end
+    #  end
    end
 
    def total_price

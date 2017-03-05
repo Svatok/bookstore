@@ -1,13 +1,14 @@
 %main.container.general-main-wrap
   %h1.general-title-margin Cart
   .visible-xs
-    = form_tag orders_path,  method: :put do |field|
+    = form_tag update_cart_path,  method: :put do |field|
       - @order_items.each  do |order_item|
         .general-cart-item.divider-lg-bottom.mb-30
           %a.close.general-cart-close{'aria-label': "Close", href: order_item_path(order_item.id), 'data-method': 'delete'}
             %span{'aria-hidden': "true"} &times;
           .general-img-wrap-table
-            %img.cart-img-shadow.width-full{src: order_item.product.pictures_path_array.first}
+            %a{href: product_path(order_item.product_id)}
+              %img.cart-img-shadow.width-full{src: order_item.product.pictures_path_array.first}
           %p.general-title= order_item.product.title
           %table.table
             %tr
@@ -63,7 +64,7 @@
               %a.btn.btn-default.mb-20.visible-xs-inline-block{href: checkouts_path} Checkout
       %a.btn.btn-default.mb-20.hidden-xs.center-block.checkout-btn{href: checkouts_path} Checkout
   .hidden-xs
-    = form_tag orders_path,  method: :put do |field|
+    = form_tag update_cart_path,  method: :put do |field|
       %table.table.table-hover
         %tr.no-hover
           %th.col-pic.pl-0
@@ -80,7 +81,8 @@
           %tr
             %td
               .general-img-wrap-table
-                %img.cart-img-shadow.pull-left.width-full{src: order_item.product.pictures_path_array.first}
+                %a{href: product_path(order_item.product_id)}
+                  %img.cart-img-shadow.pull-left.width-full{src: order_item.product.pictures_path_array.first}
             %td
               %p.general-title= order_item.product.title
             %td

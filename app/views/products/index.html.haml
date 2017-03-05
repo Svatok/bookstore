@@ -55,7 +55,7 @@
                   .general-thumb-link-wrap
                     %a.thumb-hover-link{href: product_path(product)}
                       %i.fa.fa-eye.thumb-icon{'aria-hidden': "true"}
-                    %a.thumb-hover-link{href: "#"}
+                    %a.thumb-hover-link{href: order_items_path('order_item[product_id]': product.id, 'order_item[quantity]': 1)}
                       %i.fa.fa-shopping-cart.thumb-icon
             .general-thumb-info
               %p.general-title= product.title
