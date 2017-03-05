@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :pictures, as: :imageable
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  before_create :set_default_role
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
 
@@ -28,6 +29,12 @@ class User < ApplicationRecord
     else
       render "edit"
     end
+  end
+
+  private
+
+  def set_default_role
+    self.role ||= 'none'
   end
 
 end
