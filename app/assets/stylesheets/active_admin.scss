@@ -11,7 +11,21 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
 
+// Active Bootstrap
+@import "bootstrap";
+@import 'products';
+@import 'admin/products';
+//@import "active_bootstrap_skin";
+
 // Overriding any non-variable SASS must be done after the fact.
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+.breadcrumb{
+  background-color: transparent;
+}
+.row-bordered:after {
+  content: "";
+  display: block;
+  border-bottom: 1px solid #ccc;
+}

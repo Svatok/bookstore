@@ -64,6 +64,8 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    active_bootstrap_skin (0.1.4)
+      bootstrap-sass (~> 3.3.6)
     activejob (5.0.1)
       activesupport (= 5.0.1)
       globalid (>= 0.3.6)
@@ -99,6 +101,10 @@ GEM
     builder (3.2.3)
     byebug (9.0.6)
     cancancan (1.16.0)
+    carrierwave (1.0.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
     coderay (1.1.1)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -295,11 +301,13 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  active_bootstrap_skin
   activeadmin!
   activemodel-serializers-xml!
   bootstrap-sass (~> 3.3.6)
   byebug
   cancancan
+  carrierwave (~> 1.0)
   coffee-rails (~> 4.2)
   devise
   draper!

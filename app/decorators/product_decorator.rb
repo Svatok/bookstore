@@ -26,13 +26,21 @@ class ProductDecorator < Draper::Decorator
   end
 
   def price_value
-    object.prices.present? ? object.prices.actual.first.value : 0
+    object.prices.present? ? object.prices.actual.first.value : 0.0
+  end
+
+  def stock_value
+    object.stocks.present? ? object.stocks.actual.first.value : 0
   end
 
   def pictures_path_array(count = 1)
-    pictures = ['/pictures/products/SmashingBook5ResponsiveWebDesign.jpg']
+    pictures = object.product_type == 'product' ? ['/pictures/products/SmashingBook5ResponsiveWebDesign.jpg'] : ['']
     return pictures unless object.pictures.product_imgs(count).present?
-    object.pictures.product_imgs.map(&:image_path)
+    object.pictures.product_imgs(count).map(&:image_path)
+  end
+
+  def product_pictures(count = 15)
+    object.pictures.present? ? object.pictures.product_imgs(count) : Picture.no_image
   end
 
 end

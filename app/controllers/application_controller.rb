@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
 
   private
     def categories
-      @categories = Category.all
+      @categories = Category.all.order(default_sort: :desc)
     end
 
   def configure_permitted_parameters

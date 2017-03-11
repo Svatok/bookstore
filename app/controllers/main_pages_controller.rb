@@ -1,6 +1,8 @@
 class MainPagesController < ApplicationController
   def home
-    @lattest_products = Product.lattest_products(3)
-    @best_sellers = Product.best_sellers(4)
+    category_sort = params[:category].present? ? params[:category] : @categories.default_sort.first
+    @products = Product.with_category(category_sort)
+    @lattest_products = @products.lattest_products(3)
+    @best_sellers = @products.best_sellers.limit(4)
   end
 end

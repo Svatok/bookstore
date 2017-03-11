@@ -31,13 +31,13 @@
               %span{'aria-hidden': "true"} &times;
             %ul.nav.navbar-nav
               %li
-                %a{href: root_path} Home
-              %li
-                %a{type: "button", 'data-toggle': "collapse", href: "#menu", 'aria-expanded': "false", 'aria-controls': "menu"} Shop
+                %a{type: "button", 'data-toggle': "collapse", href: "#menu", 'aria-expanded': "false", 'aria-controls': "menu"} Home
                 %ul#menu.collapse.list-unstyled.pl-30.mb-10{'aria-expanded': "false"}
                   - @categories.each do |category|
                     %li
-                      %a.collapse-link{href: products_path(:category => category)}= category.name
+                      %a.collapse-link{href: root_path(:category => category)}= category.name
+              %li
+                %a{href: products_path} Shop
               - if signed_in?
                 %li
                   %a{type: "button", 'data-toggle': "collapse", href: "#menu_account", 'aria-expanded': "false", 'aria-controls': "menu"} My account
@@ -56,13 +56,13 @@
           .hidden-xs
             %ul.nav.navbar-nav
               %li
-                %a{href: root_path} Home
-              %li.dropdown
-                %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"} Shop
+                %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"} Home
                 %ul.dropdown-menu
                   - @categories.each do |category|
                     %li
-                      %a{href: products_path(:category => category)}= category.name
+                      %a{href: root_path(:category => category)}= category.name
+              %li.dropdown
+                %a{href: products_path} Shop
               - if signed_in?
                 %li.dropdown
                   %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"} My account

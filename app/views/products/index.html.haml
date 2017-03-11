@@ -42,10 +42,9 @@
           %li
             %a{href: products_path(params.permit(:category).merge(:sort => sort))}= title
   .mb-120
-    - (1..(1 + @products.count / 4)).each do |i|
+    - @products.each_slice(4) do |products_row|
       .row.mb-25
-        - @products.each_with_index do |product, y|
-          - next if y < ((i - 1) * 4)
+        - products_row.each do |product|
           .col-xs-6.col-sm-3
             .general-thumb-wrap
               .thumbnail.general-thumbnail

@@ -1,0 +1,65 @@
+= form_tag admin_product_path(@product), { :multipart => true, :'data-ajax' => false, method: :put } do |form|
+  .row
+    - if @product_form.errors.full_messages.any?
+      %h2= pluralize(@product_form.errors.count, "error") + 'prohibited this user from being saved:'
+      %ul
+        - @product_form.errors.full_messages.each do |msg|
+          %li= msg
+      %p.small
+  .row
+    = fields_for "product", @product_form do |f|
+      .row.mb-50
+        .col-sm-6
+          .product-gallery
+            .images.clearfix
+              - @product.pictures.each do |picture|
+                %figure.pull-left.figure_margin
+                  %a.img-link{href: "#"}
+                    %img.width-full.height-preview{src: picture.image_path}
+                  %figcaption
+                    %a{href: admin_picture_path(picture.id), 'data-method': 'delete'} Remove
+          = f.file_field :picture, :multiple => true, name: "product_attachments[picture][]"
+        .col-sm-6
+          .row-bordered
+            %h3.mt-res-0 Title:
+            = f.text_field :title, type: "text", class: 'form-control', placeholder: "Title...", value: @product.title
+            %p.in-grey-600.small
+          .card.row-bordered
+            %h4 Authors:
+            = f.select :authors, options_for_select(Author.all.map{ |a| [a.first_name + '' + a.last_name, a.id] }), {}, {class: 'form-control hidden', placeholder: "Select author", name: "authors_base" }
+            - @product.authors.each do |author|
+              %p.in-grey-600.small
+                = author.first_name + ' ' +author.last_name
+                %a{href: admin_product_path(@product,params.permit(:author).merge(author: author.id)), 'data-method': 'delete'} Remove
+            .input_fields_wrap
+              %button.add_field_button Add Author
+            %p.small
+          .card.row-bordered
+            %p.h3.in-gold-500.mt-10 Price
+            = f.text_field :price, type: "text", class: 'form-control', placeholder: "Price...", value: @product.price_value
+            %p.h3.in-gold-500.mt-10 Stock
+            = f.text_field :stock, type: "text", class: 'form-control', placeholder: "Stock...", value: @product.stock_value
+            %p.in-grey-600.small
+          .card.row-bordered
+            %h4 Description:
+            %p.in-grey-600.small
+              = f.text_area :description, type: "text", class: 'form-control', placeholder: "Description...", value: @product.description
+            %p.in-grey-600.small
+          %div
+            %h4 Characteristics:
+            = f.select :properties, options_for_select(Property.all.map{ |p| [p.name, p.id] }), {}, {class: 'form-control hidden', placeholder: "Select property", name: "properties_base" }
+            - @product.characteristics.each do |characteristic|
+              = fields_for characteristic do |с|
+                .card
+                  .clearfix
+                    %p.general-item-info.pull-right
+                      = f.text_field :value, type: "text", class: 'form-control', placeholder: "Value...", value: characteristic.value, name: "product[characteristics[#{characteristic.id}]][value]"
+                    = f.hidden_field :id, value: "#{characteristic.property_id}", name: "product[characteristics[#{characteristic.id}]][property_id]"
+                    %p.break-word
+                      = characteristic.property.name.capitalize + ':'
+                      %a{href: admin_characteristic_path(characteristic.id), 'data-method': 'delete'} Remove
+            .input_fields_wrap
+              %button.add_field_button Add Characteristic
+      .row
+        %h1
+        %button.center-block.mb-20 Save Product

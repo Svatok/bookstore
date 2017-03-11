@@ -3,7 +3,7 @@ class SorteredProducts < Rectify::Query
     @params = params
     @params[:sort] = 'newest' unless @params[:sort].present?
     @page = @params[:page].present? ? @params[:page].to_i : 1
-    @limit = 8
+    @limit = 12
     @products = Product.in_stock
   end
 
@@ -16,7 +16,7 @@ class SorteredProducts < Rectify::Query
   end
 
   def total_pages
-    total = all.count
+    total = all.to_a.count
     (total.to_f / @limit).ceil
   end
 
@@ -44,7 +44,7 @@ class SorteredProducts < Rectify::Query
       when 'newest'
         @products = @products.order(created_at: :desc)
       when 'popular'
-        @products = @products.order(created_at: :desc)
+        @products = @products.best_sellers
       when 'price_asc'
         @products = @products.joins("INNER JOIN (SELECT a.* FROM prices as a
                                       WHERE EXISTS (SELECT 1 FROM prices as b
