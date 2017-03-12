@@ -81,12 +81,11 @@
                   %a{href: new_user_session_path} Log in
                 %li
                   %a{href: new_user_registration_path} Sign up
-    - flash.each do |key, value|
-      %div{class="flash_class(key)"}
-        = value
+    - flash.each do |name, msg|
+      %div{class: "#{flash_class(name)}"}
+        %a.close{"data-dismiss" => "alert"} ×
+        %div{id: "flash_#{name}"}= msg
     = yield
-    %p.notice= notice
-    %p.alert= alert
     %footer.navbar.navbar-inverse.mb-0
       .container
         .row

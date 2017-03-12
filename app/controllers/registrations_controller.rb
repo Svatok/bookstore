@@ -51,7 +51,8 @@ class RegistrationsController < Devise::RegistrationsController
         # @user.skip_password_validation = true
         @user.skip_reconfirmation!
         bypass_sign_in resource, scope: resource_name
-        redirect_to root_path, notice: 'Your profile was successfully updated.'
+        flash[:success] = 'Your profile was successfully updated.'
+        redirect_to root_path
       else
         @show_errors = true
       end

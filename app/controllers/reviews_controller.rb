@@ -8,7 +8,8 @@ class ReviewsController < ApplicationController
     @order_item = current_order.order_items.new
     if @review_form.valid?
       Review.create(@review_form.attributes)
-      redirect_to product_path(@product), notice: 'Thanks for Review. It will be published as soon as Admin will approve it.'
+      flash[:success] = 'Thanks for Review. It will be published as soon as Admin will approve it.'
+      redirect_to product_path(@product)
     else
       render :template => 'products/show'
     end

@@ -42,7 +42,7 @@ class AddressesController < ApplicationController
         @address = params[:id].present? ? Address.find(params[:id]) : Address.new
         @address.attributes = address_form.attributes
         @address.save
-        redirect_to root_url, notice: "Address ID has been created"
+        redirect_to root_url, flash[:success] = "Address has been updated."
       else
         render :template => 'devise/registrations/edit',
                           :locals => {

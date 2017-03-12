@@ -8,9 +8,11 @@ class OrderItemsController < ApplicationController
     if @order_item.save
       @order.save
       session[:order_id] = @order.id
-      redirect_back(fallback_location: root_path, notice: "Product has been added!")
+      flash[:success] = "Product has been added!"
+      redirect_back(fallback_location: root_path)
     else
-      redirect_back(fallback_location: root_path, notice: "Product has not been added :(")
+      flash[:error] = "Product has not been added :("
+      redirect_back(fallback_location: root_path )
     end
   end
 
