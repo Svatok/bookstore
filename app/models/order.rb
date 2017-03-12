@@ -2,11 +2,16 @@ class Order < ApplicationRecord
   include AASM
 
   belongs_to :user
-  has_many :order_items
-  has_many :payments
-  has_many :addresses, as: :addressable
+  has_many :order_items, dependent: :destroy
+  has_many :payments, dependent: :destroy
+  has_many :addresses, as: :addressable, dependent: :destroy
 
   before_save :update_total_price
+
+  scope :not_placed, -> { where("state in ('cart', 'address', 'delivert', 'payment', 'confirm', 'complete')") }
+  scope :processing, -> { where("state in ('in_waiting', 'in_progress', 'in_delivery')") }
+  scope :delivered, -> { where("state = 'delivered'") }
+  scope :canceled, -> { where("state = 'canceled'") }
 
   aasm column: :state do
     state :cart, :initial => true
@@ -53,7 +58,7 @@ class Order < ApplicationRecord
 
     event :canceled_step do
       transitions :from => [:cart, :address, :delivery, :payment, :confirm, :complete,
-                            :in_waiting, :in_progress, :in_delivery], :to => :canceled
+                            :in_waiting, :in_progress, :in_delivery, :delivered], :to => :canceled
     end
   end
 

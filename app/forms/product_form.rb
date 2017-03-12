@@ -1,6 +1,9 @@
 class ProductForm < Rectify::Form
   attribute :title, String
   attribute :description, String
+  attribute :category, Integer
+  attribute :status, String
+  attribute :product_type, String
   attribute :price, Float
   attribute :stock, Integer
   attribute :product_attachments, Array
@@ -9,9 +12,12 @@ class ProductForm < Rectify::Form
   attribute :characteristics, Array
 
   validates :title, presence: true, length: { minimum: 2 }
-  validates :description, presence: true, length: { minimum: 10 }
-  validates :price, presence: true, numericality: { greater_than: 0.0 }
-  validates :stock, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :description, presence: true, length: { minimum: 10 }, if: :is_product?
+  validates :category, presence: true, if: :is_product?
+  validates :status, presence: true
+  validates :product_type, presence: true
+  validates :price, presence: true, numericality: { greater_than: 0.0 }, if: :is_product?
+  validates :stock, presence: true, numericality: { greater_than_or_equal_to: 0 }, if: :is_product?
   validate :validate_characteristics
 
   def validate_characteristics
@@ -31,15 +37,20 @@ class ProductForm < Rectify::Form
   end
 
   def persist!
-    @product = Product.find_by_id(id)
-    @product.update_attributes(title: title, description: description)
+    @product = Product.find_by_id(id).present? ? Product.find_by_id(id) : Product.new
+    @product.update_attributes(title: title, description: description, category_id: category, status: status, product_type: product_type)
+    @product.save
     current_price = @product.prices.present? ? @product.prices.actual.first.value : 0.0
     @product.prices.create(value: price, date_start: Date.today.to_s) unless current_price == price.to_f
     current_stock = @product.stocks.present? ? @product.stocks.actual.first.value : 0
     @product.stocks.create(value: stock, date_start: Date.today.to_s) unless current_stock == stock.to_i
     add_authors
     add_characteristics
-    @product.save
+    add_pictures
+  end
+
+  def is_product?
+    product_type == 'product'
   end
 
   def add_authors
@@ -60,5 +71,13 @@ class ProductForm < Rectify::Form
       characteristic.save
     end
   end
+
+  def add_pictures
+    return unless product_attachments.present?
+    product_attachments.each do |picture,value|
+      @product.pictures.create(image_path: picture)
+    end
+  end
+
 
 end

@@ -1,13 +1,13 @@
 class Product < ApplicationRecord
   belongs_to :category
-  has_many :characteristics
+  has_many :characteristics, dependent: :destroy
   has_many :properties, through: :characteristics
-  has_many :prices, as: :priceable
-  has_many :pictures, as: :imageable
+  has_many :prices, as: :priceable, dependent: :destroy
+  has_many :pictures, as: :imageable, dependent: :destroy
   has_and_belongs_to_many :authors
-  has_many :stocks
-  has_many :reviews
-  has_many :order_items
+  has_many :stocks, dependent: :destroy
+  has_many :reviews, dependent: :destroy
+  has_many :order_items, dependent: :destroy
   has_many :orders, through: :order_items
   scope :main, -> { where(product_type: 'product') }
   scope :coupons, -> { where(product_type: 'coupon') }
@@ -32,15 +32,5 @@ class Product < ApplicationRecord
   scope :select_product_type, ->status {
     where status: status
   }
-
-  # ransacker :status,
-  #         :formatter => ->(v) {
-  #           binding.pry
-  #              where("products.status = '#{v}'").map(&:id)
-  #             } do |parent|
-  #     parent.table[:id]
-  # end
-
-
 
 end

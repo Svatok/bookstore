@@ -13,7 +13,7 @@ ActiveAdmin.register Product do
   index :as => ActiveAdmin::Views::IndexAsTable do
     selectable_column
     column :image do |product|
-      image_tag(product.pictures_path_array.first, width: '50')
+      image_tag(product.product_pictures(1).first.image_path, width: '50')
     end
     column 'Category', :sortable => 'categories.name' do |product|
       product.category if product.category.present?
@@ -47,6 +47,21 @@ ActiveAdmin.register Product do
       resource_class.includes(:category).includes(:prices) # prevents N+1 queries to your database
     end
 
+    def new
+      @product_form = ProductForm.new
+      @product = Product.new.decorate
+    end
+
+    def create
+      @product_form = ProductForm.from_params(params)
+      @product = Product.new.decorate
+      if @product_form.save
+        redirect_to admin_products_path
+      else
+        render :new
+      end
+    end
+
     def show
       @product = Product.find(params[:id]).decorate
     end
@@ -59,56 +74,25 @@ ActiveAdmin.register Product do
     def update
       @product_form = ProductForm.from_params(params)
       @product = Product.find(params[:id]).decorate
-      if @product_form.save?
-        # @product_form.save
-        add_pictures
-#        product_update
+      if @product_form.save
         redirect_back(fallback_location: root_path)
       else
         render :edit
       end
     end
 
-    private
-
-    def product_update
-      @product.update_attributes(product_params)
-      @product.prices.create(value: params['product']['price'], date_start: Date.today.to_s) unless @product.price_value == params['product']['price'].to_f
-      @product.stocks.create(value: params['product']['stock'], date_start: Date.today.to_s) unless @product.stock_value == params['product']['stock'].to_i
-      add_pictures
-      add_authors
-      add_characteristics
+    def destroy
+      return delete_author if params['author'].present?
+      super
     end
 
-    def add_pictures
-      return unless params['product_attachments'].present?
-      params['product_attachments']['picture'].each do |picture|
-        @product.pictures.create(image_path: picture)
-      end
+    def delete_author
+      @product = Product.find(params[:id])
+      @author = Author.find_by_id(params['author'])
+      @product.authors.delete(@author)
+      redirect_back(fallback_location: root_path)
     end
 
-    def add_authors
-      return unless params['product']['authors'].present?
-      params['product']['authors'].each do |author_id|
-        author = Author.find_by_id(author_id)
-        next if @product.authors.include?(author)
-        @product.authors << author
-      end
-    end
-
-    def add_characteristics
-      return unless params['product']['characteristics'].present?
-      params['product']['characteristics'].each do |id, value|
-        next if value['value'] == ''
-        characteristic = @product.characteristics.find_or_initialize_by(property_id: value['property_id'])
-        characteristic.value = value['value']
-        characteristic.save
-      end
-    end
-
-    def product_params
-      params.require(:product).permit(:title, :description)
-    end
   end
 
 # See permitted parameters documentation:

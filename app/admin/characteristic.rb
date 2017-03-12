@@ -1,6 +1,16 @@
 ActiveAdmin.register Characteristic do
 
   permit_params :value
+
+  menu false
+
+  controller do
+    def destroy
+      super do
+        redirect_back(fallback_location: root_path) and return
+      end
+    end
+  end
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
