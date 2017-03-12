@@ -8,7 +8,7 @@ class SorteredProducts < Rectify::Query
   end
 
   def query
-    all.limit(@limit).offset(offset)
+    all.limit(@limit).offset(offset).decorate
   end
 
   def current_page

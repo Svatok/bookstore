@@ -10,7 +10,7 @@
     = javascript_include_tag "application", "data-turbolinks-track" => "reload"
 
   %body
-    %header.navbar.navbar-default.mb-0
+    %header.navbar.navbar-default
       .container
         .navbar-header
           %button.navbar-toggle.pull-left.ml-15{type: "button", 'data-toggle': "collapse", 'data-target': "#navbar"}
@@ -18,13 +18,15 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.navbar-brand{href: root_path} Bookstore
+          %a.navbar-brand{href: root_path} BookStore
           %a.shop-link.pull-right.visible-xs{href: cart_path}
-            %span.shop-icon
-              %span.shop-quantity= current_order.order_items.only_products.count
+            %span.shop-icon<
+              - unless current_order.order_items.empty?
+                %span.shop-quantity= current_order.order_items.only_products.count
         %a.shop-link.pull-right.hidden-xs{href: cart_path}
-          %span.shop-icon
-            %span.shop-quantity= current_order.order_items.only_products.count
+          %span.shop-icon<
+            - if current_order.order_items.present?
+              %span.shop-quantity= current_order.order_items.only_products.count
         #navbar.navbar-collapse.collapse.pl-30{'aria-expanded': "false"}
           .visible-xs
             %button.close{type: "button", 'aria-label': "Close"}
@@ -93,7 +95,7 @@
                 %a.nav-link{href: products_path} Shop
               - if signed_in?
                 %li
-                  %a.nav-link{href: "#"} Orders
+                  %a.nav-link{href: orders_path} Orders
                 %li
                   %a.nav-link{href: edit_user_registration_path} Settings
           .col-sm-3

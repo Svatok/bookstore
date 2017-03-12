@@ -1,6 +1,8 @@
 class CheckoutsController < ApplicationController
   before_action :authenticate_user!
-  before_action :initialize_order, :edit_order_data, :only => :show
+  before_action :initialize_order, :edit_order_data, only: :show
+  before_filter :ensure_signup_complete, only: [:show, :update]
+
 
   def show
     @partial = @order.state
@@ -13,9 +15,9 @@ class CheckoutsController < ApplicationController
     @order = current_order.decorate
     @partial = @order.state
     send(@order.state + '_update')
+    return render :show if @form_with_errors
     @order.send(next_state + '_step')
     @order.save
-    return render :show if @form_with_errors
     redirect_to checkouts_path
   end
 
@@ -29,7 +31,10 @@ class CheckoutsController < ApplicationController
   def address_update
     addresses_params['address_forms'].each do |address_type, address_params|
       address_form = instance_variable_set("@#{address_type}_address_form", UserAddressForm.from_params(address_params))
-      address_form = @billing_address_form if params['use_billing'] == 'on'
+      if params['use_billing'] == 'on' && address_type == 'shipping'
+        address_form = @billing_address_form
+        address_form.address_type = address_type
+      end
       if address_form.valid?
         @address = @order.addresses.find_by(id: address_params['id'])
         @address = @order.addresses.new unless @address.present?
@@ -108,7 +113,7 @@ class CheckoutsController < ApplicationController
 
   def initialize_order
     @order = current_order.decorate
-    return unless @order.cart?
+    return if !@order.cart? || @order.total_price <= 0
     @order[:user_id] = current_user.id
     @order.address_step
     @order.save

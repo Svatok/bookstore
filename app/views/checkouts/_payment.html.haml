@@ -19,6 +19,5 @@
       .col-sm-3
         .form-group.relative{:class => ("has-error" if @payment_form.errors.messages.include?(:cvv) )}
           %label.control-label.font-weight-light{for: :cvv} CVV
-          = f.text_field :cvv, type: "number", placeholder: "CVV", class: 'form-control'
+          = f.password_field :cvv, type: "password", placeholder: "CVV", class: 'form-control'
           %span.help-block= @payment_form.errors.full_messages_for(:cvv).first
-          %i.fa.fa-question-circle.general-form-help.font-18

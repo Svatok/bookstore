@@ -6,11 +6,11 @@
     .col-sm-6
       .product-gallery
         .mb-20#img_container
-          %img.img-responsive{src: @product.pictures_path_array.first}
+          %img.img-responsive{src: @product.product_pictures(1).first.image_path}
         .images.clearfix
-          - @product.pictures_path_array.each do |picture_path|
+          - @product.product_pictures.each do |picture|
             %a.img-link{href: "#"}
-              %img.width-full.height-preview{src: picture_path}
+              %img.width-full.height-preview{src: picture.image_path}
     .col-sm-6
       %h1.mt-res-0= @product.title
       %p.in-grey-600.small= @product.all_authors

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   TEMP_EMAIL_PREFIX = 'change@me'
   TEMP_EMAIL_REGEX = /\Achange@me/
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   has_many :addresses, as: :addressable, dependent: :destroy
   has_many :reviews, dependent: :destroy
   has_many :orders, dependent: :destroy
@@ -11,13 +12,23 @@ class User < ApplicationRecord
   before_create :set_default_role
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
-
-  validates_format_of :email, :without => TEMP_EMAIL_REGEX, on: :update
-
+  validates_format_of :email, without: TEMP_EMAIL_REGEX, on: :update
+  validates :email, uniqueness: { case_sensitive: false },
+                    format: { with: VALID_EMAIL_REGEX },
+                    length: { maximum: 63 },
+                    presence: true
+  validates :password, length: { minimum: 8 },
+                       format: { with: /\A(?=.*\d)(?=.*[A-Z])(?=.*[a-z])\w+{,8}\z/ },
+                       presence: true, if: :password_required?
   # devise :omniauthable, :omniauth_providers => [:facebook]
 
   def role?(r)
     role.include? r.to_s
+  end
+
+  def password_required?
+    return false if skip_password_validation
+    !persisted? || !password.nil? || !password_confirmation.nil?
   end
 
   def update

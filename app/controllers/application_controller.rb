@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :categories
-  before_filter :ensure_signup_complete, only: [:new, :create, :update, :destroy]
   helper_method :current_order
 
   def authenticate_active_admin_user!

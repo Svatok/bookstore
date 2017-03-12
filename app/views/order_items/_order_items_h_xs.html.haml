@@ -3,7 +3,7 @@
     %td
       .general-img-wrap-table
         %a{href: product_path(order_item.product_id)}
-          %img.cart-img-shadow.pull-left.width-full{src: order_item.product.pictures_path_array.first}
+          %img.cart-img-shadow.pull-left.width-full{src: order_item.product.product_pictures(1).first.image_path}
     %td
       %p.general-title= order_item.product.title
       %p.in-grey-600.font-weight-light= order_item.product.description

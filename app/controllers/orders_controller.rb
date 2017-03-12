@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
   helper OrdersHelper
 
-  before_action :coupon_add, only: [:update]
+  before_action :coupon_add, only: [:update_cart]
   before_action :authenticate_user!, only: [:address]
 
   def index
@@ -62,7 +62,7 @@ class OrdersController < ApplicationController
     def coupon_add
       code = params[:coupon][:code]
       return unless code.present?
-      coupon = Product.coupons.find_by(title: code)
+      coupon = Product.coupons.find_by(title: code, status: 'active')
       return unless coupon.present?
       previous_coupon_delete
       current_order.order_items.create(product_id: coupon.id, quantity: 1)

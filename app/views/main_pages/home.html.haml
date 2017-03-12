@@ -9,9 +9,8 @@
           .row
             .col-sm-5
               .general-img-wrap
-                - img_path = product.pictures.present? ? "#{product.pictures.first.image_path}" : "http://jonathantweedy.com/resources/thumbs/SmashingBook5ResponsiveWebDesign.jpg"
                 %a{href: product_path(product)}
-                  %img.img-shadow.general-thumbnail-img.width-full{src: "#{img_path}", alt: "design-book"}
+                  %img.img-shadow.general-thumbnail-img.width-full{src: "#{product.product_pictures(1).first.image_path}"}
             .col-sm-7
               .mb-60
                 %h1= product.title
@@ -38,8 +37,7 @@
         .col-sm-6.col-md-3
           .general-thumb-wrap
             .thumbnail.general-thumbnail
-              - img_path = product.pictures.present? ? "#{product.pictures.first.image_path}" : "http://jonathantweedy.com/resources/thumbs/SmashingBook5ResponsiveWebDesign.jpg"
-              %img.img-shadow.general-thumbnail-img{src: "#{img_path}", alt: "design-book"}
+              %img.img-shadow.general-thumbnail-img{src: "#{product.product_pictures(1).first.image_path}"}
               .thumb-hover
                 .general-thumb-link-wrap
                   %a.thumb-hover-link{href: product_path(product)}
@@ -48,8 +46,7 @@
                     %i.fa.fa-shopping-cart.thumb-icon
           .mb-35
             .clearfix
-              - price = product.prices.present? ? product.prices.actual.first.value : 0
-              %p.pull-right.font-16.in-gold-500= number_to_currency(price,:unit=>'€')
+              %p.pull-right.font-16.in-gold-500= number_to_currency(product.price_value, :unit=>'€')
               %p.general-title.mr-55= product.title
             %span.divider-sm
             %p.in-grey-600.small= ProductDecorator.new(product).all_authors
