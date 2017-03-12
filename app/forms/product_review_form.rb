@@ -1,5 +1,5 @@
 class ProductReviewForm < Rectify::Form
-  TEXT_REGEX = %r[[a-z]|[0-9]|[!#$%&'*+-\/=?^_`{|}~]]i
+  TEXT_REGEX = %r[[\p{L}]|[0-9]|[!#$%&'*+-\/=?^_`{|}~]]i
   attribute :user_id, Integer
   attribute :product_id, Integer
   attribute :rate, Integer

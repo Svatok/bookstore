@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  before_action :set_locale
   before_action :categories
   helper_method :current_order
 
@@ -24,6 +25,14 @@ class ApplicationController < ActionController::Base
     if current_user && !current_user.email_verified?
       redirect_to finish_signup_path(current_user)
     end
+  end
+
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
+
+  def default_url_options(*)
+    { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
   end
 
   private

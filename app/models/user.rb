@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :orders, dependent: :destroy
   has_many :pictures, as: :imageable, dependent: :destroy
   has_many :identities, dependent: :destroy
+
+  attr_accessor :skip_password_validation
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   before_create :set_default_role

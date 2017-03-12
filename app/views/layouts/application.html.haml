@@ -3,7 +3,7 @@
   %head
     %meta{charset: "UTF-8"}
     %meta{name: "viewport", content: "width=device-width"}
-    %title Bookstore
+    %title BookStore
     = csrf_meta_tags
     %link{href: "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600", rel: "stylesheet"}
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => "reload"
@@ -81,6 +81,9 @@
                   %a{href: new_user_session_path} Log in
                 %li
                   %a{href: new_user_registration_path} Sign up
+    - flash.each do |key, value|
+      %div{class="flash_class(key)"}
+        = value
     = yield
     %p.notice= notice
     %p.alert= alert

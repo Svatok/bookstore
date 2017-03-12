@@ -6,10 +6,17 @@ class RegistrationsController < Devise::RegistrationsController
     @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
     shipping_address = @user.addresses.shipping
     @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
+#binding.pry
     super
   end
 
   def update
+    @countries = Country.all
+    billing_address = @user.addresses.billing
+    @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
+    shipping_address = @user.addresses.shipping
+    @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
+
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
 
@@ -41,6 +48,7 @@ class RegistrationsController < Devise::RegistrationsController
       @user = User.find(params[:id])
       binding.pry
       if @user.update_attributes(email: params[:user][:email])
+        # @user.skip_password_validation = true
         @user.skip_reconfirmation!
         bypass_sign_in resource, scope: resource_name
         redirect_to root_path, notice: 'Your profile was successfully updated.'

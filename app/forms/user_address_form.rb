@@ -10,10 +10,10 @@ class UserAddressForm < Rectify::Form
   attribute :phone, String
 
   validates_presence_of :first_name, :last_name, :address_type, :address, :city, :zip, :country_id, :phone
-  validates :first_name, format: { with: /[a-z]/i }, length: { maximum: 50 }
-  validates :last_name, format: { with: /[a-z]/i }, length: { maximum: 50 }
+  validates :first_name, format: { with: /[\p{L}]/i }, length: { maximum: 50 }
+  validates :last_name, format: { with: /[\p{L}]/i }, length: { maximum: 50 }
   validates :address, format: { with: /[a-z0-9,\s-]/i }, length: { maximum: 50 }
-  validates :city, format: { with: /[a-z]/i }, length: { maximum: 50 }
+  validates :city, format: { with: /[\p{L}]/i }, length: { maximum: 50 }
   validates :zip, format: { with: /[0-9-]/i }, length: { maximum: 10 }
   validates :phone, format: { with: /\A\+\d{9,15}\z/ }, length: { maximum: 15 }
   validate :check_phone_code
