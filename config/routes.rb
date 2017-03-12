@@ -2,13 +2,15 @@ Rails.application.routes.draw do
 
   get 'main_pages/home'
 
-  devise_for :users, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { registrations: 'registrations', omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_for :users, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { registrations: 'registrations', omniauth_callbacks: 'omniauth_callbacks' }
   devise_scope :user do
     get "login", to: "devise/sessions#new"
+    match '/users/:id/finish_signup' => 'registrations#finish_signup', via: [:get, :patch], :as => :finish_signup
   end
   resource :user do
     resources :addresses, only: [:create]
   end
+
   ActiveAdmin.routes(self)
   resources :products do
     get 'page/:page', action: :index, on: :collection

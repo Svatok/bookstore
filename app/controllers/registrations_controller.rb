@@ -33,4 +33,32 @@ class RegistrationsController < Devise::RegistrationsController
       respond_with resource
     end
   end
+
+  def finish_signup
+    # authorize! :update, @user
+    binding.pry
+    if request.patch? && params[:user] #&& params[:user][:email]
+      @user = User.find(params[:id])
+      binding.pry
+      if @user.update_attributes(email: params[:user][:email])
+        @user.skip_reconfirmation!
+        bypass_sign_in resource, scope: resource_name
+        redirect_to root_path, notice: 'Your profile was successfully updated.'
+      else
+        @show_errors = true
+      end
+    end
+  end
+
+  private
+    def set_user
+      @user = User.find(params[:id])
+    end
+
+    def user_params
+      accessible = [ :name, :email ] # extend with your own params
+      accessible << [ :password, :password_confirmation ] unless params[:user][:password].blank?
+      params.require(:user).permit(accessible)
+    end
+
 end

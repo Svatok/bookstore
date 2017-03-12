@@ -249,6 +249,14 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :facebook, "792322967612416", "0a965b9b9c5a3a09071dd0bb464e239f"
+  config.omniauth :google_oauth2, '1033453008481-fqvea6u67q0seqqmqgucs6ibeqkutq9k.apps.googleusercontent.com', 'xNgDzaYXi4rCKg4iz_0iBJ8w'
+  config.omniauth :instagram, '2535e430954e4cdf8b26c7db3eb08565', '404769ba8189451f89861f0eff1b6a33'
+  config.omniauth :twitter, 'lFtsrYqu4b3YCNWA29THwFqtd', '7b2rictnhxDSRLGXpVwnPzHYpHcHTNMwGLId0mjaqVRCg1LzEj'
+
+#   config.omniauth :google_oauth2, ENV['GOOGLE_OAUTH2_APP_ID'], ENV['GOOGLE_OAUTH2_APP_SECRET'], scope: "email,profile,offline", prompt: "consent"
+#   config.omniauth :instagram, ENV['INSTAGRAM_APP_ID'], ENV['INSTAGRAM_APP_SECRET']
+# #  config.omniauth :facebook, ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_APP_SECRET'], scope: "email"
+#   config.omniauth :twitter, ENV['TWITTER_APP_ID'], ENV['TWITTER_APP_SECRET']
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
