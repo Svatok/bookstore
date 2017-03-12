@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   get 'main_pages/home'
 
-  devise_for :users, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { registrations: 'registrations' }
+  devise_for :users, path_names: { sign_in: 'login', sign_out: 'logout' }, controllers: { registrations: 'registrations', omniauth_callbacks: "users/omniauth_callbacks" }
   devise_scope :user do
     get "login", to: "devise/sessions#new"
   end
