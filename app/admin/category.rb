@@ -1,6 +1,6 @@
 ActiveAdmin.register Category, as: "Product Categories" do
 
-  permit_params :name
+  permit_params :name, :default_sort
 
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters

@@ -7,5 +7,8 @@ module ProductsHelper
               title_desc: 'Title: Z - A'
             }
 
+  def current_sort(sort)
+    sort.present? ? SORTING[sort.to_sym] : SORTING[:newest]
+  end
 
 end

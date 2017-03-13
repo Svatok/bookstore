@@ -1,0 +1,4 @@
+- flash.each do |name, msg|
+  %div{class: "#{flash_class(name)}"}
+    %a.close{"data-dismiss" => "alert"} ×
+    %div{id: "flash_#{name}"}= msg

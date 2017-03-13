@@ -1,0 +1,31 @@
+%footer.navbar.navbar-inverse.mb-0
+  .container
+    .row
+      .col-sm-9
+        %ul.list-inline.general-align.mb-25
+          %li
+            %a.nav-link{href: root_path} Home
+          %li
+            %a.nav-link{href: products_path} Shop
+          - if signed_in?
+            %li
+              %a.nav-link{href: orders_path} Orders
+            %li
+              %a.nav-link{href: edit_user_registration_path} Settings
+      .col-sm-3
+        %p.general-nav-mail support@bookstore.com
+        %p.general-nav-number (555)-555-5555
+        %ul.list-inline.general-align
+          %li
+            %a.nav-link{href: user_facebook_omniauth_authorize_path}
+              %i.fa.fa-facebook{'aria-hidden': "true"}
+          %li
+            %a.nav-link{href: user_twitter_omniauth_authorize_path}
+              %i.fa.fa-twitter{'aria-hidden': "true"}
+          %li
+            %a.nav-link{href: user_google_oauth2_omniauth_authorize_path}
+              %i.fa.fa-google-plus{'aria-hidden': "true"}
+          %li
+            %a.nav-link{href: user_instagram_omniauth_authorize_path}
+              %i.fa.fa-instagram{'aria-hidden': "true"}
+%script{src: "https://use.fontawesome.com/67602d7308.js"}

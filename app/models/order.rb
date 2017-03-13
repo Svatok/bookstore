@@ -25,40 +25,40 @@ class Order < ApplicationRecord
     end
 
     event :delivery_step do
-      transitions :from => [:address, :confirm], :to => :delivery
+      transitions from: [:address, :confirm], to: :delivery
     end
 
     event :payment_step do
-      transitions :from => [:delivery, :confirm], :to => :payment
+      transitions from: [:delivery, :confirm], to: :payment
     end
 
     event :confirm_step do
-      transitions :from => [:address, :delivery, :payment], :to => :confirm
+      transitions from: [:address, :delivery, :payment], to: :confirm
     end
 
     event :complete_step do
-      transitions :from => :confirm, :to => :complete
+      transitions from: :confirm, to: :complete
     end
 
     event :in_waiting_step do
-      transitions :from => :complete, :to => :in_waiting
+      transitions from: :complete, to: :in_waiting
     end
 
     event :in_progress_step do
-      transitions :from => :in_waiting, :to => :in_progress
+      transitions from: :in_waiting, to: :in_progress
     end
 
     event :in_delivery_step do
-      transitions :from => :in_progress, :to => :in_delivery
+      transitions from: :in_progress, to: :in_delivery
     end
 
     event :delivered_step do
-      transitions :from => :in_delivery, :to => :delivered
+      transitions from: :in_delivery, to: :delivered
     end
 
     event :canceled_step do
-      transitions :from => [:cart, :address, :delivery, :payment, :confirm, :complete,
-                            :in_waiting, :in_progress, :in_delivery, :delivered], :to => :canceled
+      transitions from: [:cart, :address, :delivery, :payment, :confirm, :complete,
+                            :in_waiting, :in_progress, :in_delivery, :delivered], to: :canceled
     end
   end
 
@@ -76,10 +76,6 @@ class Order < ApplicationRecord
 
   def coupon_sum
     coupon = order_items.only_coupons
-    # coupon = order_items.select do |order_item|
-    #   next unless order_item.product.present?
-    #   order_item.product.product_type == 'coupon'
-    # end
     return 0 unless coupon.present?
     coupon.first.unit_price
   end
@@ -89,7 +85,6 @@ class Order < ApplicationRecord
     return 0 unless shipping.present?
     shipping.first.unit_price
   end
-
 
   private
 

@@ -22,7 +22,6 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 8 },
                        format: { with: /\A(?=.*\d)(?=.*[A-Z])(?=.*[a-z])\w+{,8}\z/ },
                        presence: true, if: :password_required?
-  # devise :omniauthable, :omniauth_providers => [:facebook]
 
   def role?(r)
     role.include? r.to_s
@@ -34,7 +33,6 @@ class User < ApplicationRecord
   end
 
   def update
-    # required for settings form to submit when password is left blank
     if params[:user][:current_password].blank?
       params[:user].delete("password")
       params[:user].delete("password_confirmation")
@@ -43,7 +41,6 @@ class User < ApplicationRecord
     @user = User.find(current_user.id)
     if @user.update_attributes(params[:user])
       set_flash_message :notice, :updated
-      # Sign in the user bypassing validation in case his password changed
       sign_in @user, :bypass => true
       redirect_to after_update_path_for(@user)
     else
@@ -54,25 +51,21 @@ class User < ApplicationRecord
   def self.find_for_oauth(auth, signed_in_resource = nil)
     identity = Identity.find_for_oauth(auth)
     user = signed_in_resource ? signed_in_resource : identity.user
-    binding.pry
     if user.nil?
       email = auth.info.email
       user = User.where(:email => email).first if email.present?
-      binding.pry
       if user.nil?
         user = User.new(
           email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
           password: Devise.friendly_token[0,20]
         )
-        binding.pry
+        user.skip_password_validation = true
         user.skip_confirmation!
         user.save!
         user.pictures.create(remote_image_path_url: auth.info.image.gsub('http://', 'https://')) if auth.info.image.present?
         user.addresses.create(user.address_params(auth.info.name)) if auth.info.name.present?
-binding.pry
       end
     end
-
     if identity.user != user
       identity.user = user
       identity.save!
@@ -90,25 +83,6 @@ binding.pry
     last_name = name.last.present? ? name.last : ''
     {first_name: first_name, last_name: last_name, address_type: 'billing'}
   end
-  # def self.from_omniauth(auth)
-  #   where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-  #     user.email = auth.info.email
-  #     user.password = Devise.friendly_token[0,20]
-  #     user.skip_confirmation!
-  #     user.save
-  #     user.pictures.create(remote_image_path_url: auth.info.image.gsub('http://', 'https://'))
-  #     name = auth.info.name.split(' ')
-  #     user.addresses.create(first_name: name.first, last_name: name.last, address_type: 'billing')
-  #   end
-  # end
-  #
-  # def self.new_with_session(params, session)
-  #   super.tap do |user|
-  #     if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
-  #       user.email = data["email"] if user.email.blank?
-  #     end
-  #   end
-  # end
 
   private
 

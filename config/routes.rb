@@ -4,6 +4,7 @@ Rails.application.routes.draw do
                     controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
   scope "(:locale)", locale: /en/ do
+
     get 'main_pages/home'
 
     devise_for :users, path_names: { sign_in: 'login', sign_out: 'logout' }, skip: :omniauth_callbacks,
@@ -17,24 +18,24 @@ Rails.application.routes.draw do
     end
 
     ActiveAdmin.routes(self)
+
     resources :products do
       get 'page/:page', action: :index, on: :collection
     end
     resource :product do
       resources :reviews
     end
+
     resources :orders, only: [:index, :show, :update]
     get 'cart', to: :cart, controller: 'orders'
     put 'update_cart', to: :update_cart, controller: 'orders'
     resource :checkouts, only: [:show, :update]
-  #  get 'checkout/address', to: 'orders#address'#, controller: 'orders'
-
-  #  resource :cart, only: [:show, :update]
     resources :order_items, only: [:create, :update, :destroy]
     get 'order_items', action: :create, controller: 'order_items'
+
     get '/:locale' => 'main_pages#home'
     root 'main_pages#home'
+
   end
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -6,7 +6,7 @@ module OrdersHelper
             }
 
   def current_sort(sort)
-    sort.present? ? SORTING[:in_waiting] : SORTING[sort.to_sym]
+    sort.present? ? SORTING[sort.to_sym] : SORTING[:in_waiting]
   end
 
 end

@@ -46,27 +46,9 @@ class SorteredProducts < Rectify::Query
       when 'popular'
         @products = @products.best_sellers
       when 'price_asc'
-        @products = @products.joins("INNER JOIN (SELECT a.* FROM prices as a
-                                      WHERE EXISTS (SELECT 1 FROM prices as b
-                                                      WHERE a.priceable_id = b.priceable_id
-                                                        AND a.priceable_type = b.priceable_type
-                                                        AND b.priceable_type = 'Product'
-                                                        AND b.date_start <= '#{Date.today}'
-                                                      HAVING MAX(b.date_start) = a.date_start)
-                                    ) as p
-                                    ON products.id = p.priceable_id")
-                        .order('p.value ASC')
+        @products = @products.joins(sort_price_sql).order('p.value ASC')
       when 'price_desc'
-        @products = @products.joins("INNER JOIN (SELECT a.* FROM prices as a
-                                      WHERE EXISTS (SELECT 1 FROM prices as b
-                                                      WHERE a.priceable_id = b.priceable_id
-                                                        AND a.priceable_type = b.priceable_type
-                                                        AND b.priceable_type = 'Product'
-                                                        AND b.date_start <= '#{Date.today}'
-                                                      HAVING MAX(b.date_start) = a.date_start)
-                                    ) as p
-                                    ON products.id = p.priceable_id")
-                        .order('p.value DESC')
+        @products = @products.joins(sort_price_sql).order('p.value DESC')
       when 'title_asc'
         @products = @products.order(title: :asc)
       when 'title_desc'
@@ -88,4 +70,17 @@ class SorteredProducts < Rectify::Query
     current_page > total_pages
   end
 
+  private
+
+  def sort_price_sql
+    "INNER JOIN (SELECT a.* FROM prices as a
+                                  WHERE EXISTS (SELECT 1 FROM prices as b
+                                                  WHERE a.priceable_id = b.priceable_id
+                                                    AND a.priceable_type = b.priceable_type
+                                                    AND b.priceable_type = 'Product'
+                                                    AND b.date_start <= '#{Date.today}'
+                                                  HAVING MAX(b.date_start) = a.date_start)
+                                ) as p
+                                ON products.id = p.priceable_id"
+  end
 end

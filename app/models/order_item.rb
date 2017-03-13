@@ -12,12 +12,8 @@ class OrderItem < ApplicationRecord
   scope :only_coupons, -> { joins(:product).merge(Product.coupons) }
 
   def unit_price
-    #  if persisted?
-    #    self[:unit_price]
-    #  else
-       product.prices.actual.first.value
-    #  end
-   end
+    product.prices.actual.first.value
+  end
 
    def total_price
      unit_price * quantity

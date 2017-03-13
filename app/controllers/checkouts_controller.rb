@@ -50,17 +50,12 @@ class CheckoutsController < ApplicationController
     @shippings = Product.shippings.decorate
     shipping = @order.order_items.only_shippings
     @current_shipping = shipping.present? ? shipping.first : @order.order_items.new
-
-    # @current_shipping = @order.order_items.only_shippings.first
-    # @current_shipping = @order.order_items.new unless @current_shipping.present?
   end
 
   def delivery_update
     @shippings = Product.shippings.decorate
     shipping = @order.order_items.only_shippings
     @current_shipping = shipping.present? ? shipping.first : @order.order_items.new
-    # @current_shipping = @order.order_items.only_shippings.first
-    # @current_shipping = @order.order_items.new unless @current_shipping.present?
     shipping = params['shippings_' + params['form_visible']]
     unless shipping.present?
       @current_shipping.errors.add(:product_id, "Choose delivery!")
@@ -147,6 +142,5 @@ class CheckoutsController < ApplicationController
   def payment_params
     params.permit(payment: [:card_number, :name_on_card, :mm_yy, :cvv])
   end
-
 
 end

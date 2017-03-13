@@ -64,8 +64,6 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active_bootstrap_skin (0.1.4)
-      bootstrap-sass (~> 3.3.6)
     activejob (5.0.1)
       activesupport (= 5.0.1)
       globalid (>= 0.3.6)
@@ -371,7 +369,6 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
-  active_bootstrap_skin
   activeadmin!
   activemodel-serializers-xml!
   bootstrap-sass (~> 3.3.6)

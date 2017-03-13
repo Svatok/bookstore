@@ -9,8 +9,6 @@ class AddressesController < ApplicationController
         @address = current_user.addresses.find_by(id: address_params['id'])
         @address = current_user.addresses.new unless @address.present?
         @address.attributes = address_form.attributes.except('id')
-        # @address = current_user.addresses.find_or_initialize_by(id: address_params['id'])
-        # @address.attributes = address_form.attributes
         @address.save
       else
         form_with_errors = true
@@ -52,6 +50,5 @@ class AddressesController < ApplicationController
                                     ]
                       )
     end
-
 
 end
