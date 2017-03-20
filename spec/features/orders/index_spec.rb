@@ -20,8 +20,6 @@ RSpec.feature 'Orders page' do
       expect(page).to have_content 'My Orders'
     end
     scenario 'must present order items' do
-      # puts current_url
-      # require 'pry'; binding.pry
       expect(page).to have_selector(".general-order-number", count: 3)
       user.orders.each do |order|
         expect(page).to have_content(order.order_number)

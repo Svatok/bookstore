@@ -36,8 +36,6 @@ RSpec.feature 'Home page:' do
     end
     scenario 'add bestseller to cart change total price of order' do
       first(".fa-shopping-cart", visible: :all).click
-      # puts current_url
-      # require 'pry'; binding.pry
       expect(page).to have_content('Product has been added!')
     end
     scenario 'show product' do

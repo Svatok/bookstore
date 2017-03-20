@@ -22,10 +22,6 @@ class AddressesController < ApplicationController
     redirect_to edit_user_registration_path
   end
 
-  # def update
-  #   adress_create_or_update(params)
-  # end
-
   def resource_name
     :user
   end

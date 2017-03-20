@@ -20,30 +20,11 @@ class OrdersController < ApplicationController
     @order_items = @order.order_items.only_products.decorate
   end
 
-  # def update
-  #   params[:order_items] = [] if params[:coupon_only].present?
-  #   @order = current_order
-  #   params[:order_items].each do |order_item_id, order_item_params|
-  #     @order_item = @order.order_items.find(order_item_id)
-  #     next unless @order_item.present?
-  #     @order_item.update_attributes(quantity: order_item_params[:quantity])
-  #     @order.save
-  #   end
-  #   redirect_back(fallback_location: root_path)
-  # end
-
   def cart
     @order = current_order.decorate
     @coupon = CouponForm.new
     @order_items = current_order.order_items.only_products.decorate
   end
-
-  # def address
-  #   @order = current_order.decorate
-  #   @order.update_attributes(user_id: current_user) unless @order.user_id == current_user
-  #   @coupon = CouponForm.new
-  #   @order_items = current_order.order_items.only_products.decorate
-  # end
 
   def update_cart
     params[:order_items] = [] if params[:coupon_only].present?

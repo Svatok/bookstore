@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  price_value: 1.5
-  date_start: 2017-02-10
-
-two:
-  price_value: 1.5
-  date_start: 2017-02-10

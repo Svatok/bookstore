@@ -3,10 +3,6 @@ FactoryGirl.define do
     after(:create, &:confirm)
     email { FFaker::Internet.email }
     password 'TestPassword2017'
-    # after(:create) do |user|
-    #   user.confirmed_at = Time.now
-    #   user.save
-    # end
 
     trait :with_billing_address do
       after(:create) do |user|
@@ -32,6 +28,5 @@ FactoryGirl.define do
     end
 
     factory :user_with_addresses, traits: [:with_billing_address, :with_shipping_address]
-
   end
 end

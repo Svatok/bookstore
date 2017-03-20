@@ -103,13 +103,8 @@ RSpec.configure do |config|
 
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
-  # arbitrary gems may also be filtered via:
-  # config.filter_gems_from_backtrace("gem name")
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::Test::ControllerHelpers, type: :controller
-  # config.mock_with :rspec do |mocks|
-  #   mocks.allow_message_expectations_on_nil = true
-  # end
   config.include Rectify::RSpec::Helpers
 end
 
@@ -129,43 +124,8 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
-# Capybara.app_host = "http://localhost:3000"
-# Capybara.server_host = "localhost"
-# Capybara.server_port = "3000"
-# Capybara.default_driver = :firefox
-# Capybara.register_driver :firefox do |app|
-#   options = {
-#   :js_errors => true,
-#   :timeout => 360,
-#   :debug => false,
-#   :inspector => false,
-#   }
-#   Capybara::Selenium::Driver.new(app, :browser => :firefox)
-# end
-# Capybara.register_driver :selenium do |app|
-#   # profile = Selenium::WebDriver::Firefox::Profile.new
-#   # profile['general.useragent.override'] = useragent
-#   # desired_caps = Selenium::WebDriver::Remote::Capabilities.firefox(
-#   #   {
-#   #     marionette: true,
-#   #     firefox_options: { profile: profile.as_json.values.first }
-#   #   }
-#   # )
-#   Capybara::Selenium::Driver.new(app, :browser => :firefox)
-# end
-# Capybara.default_driver = :selenium
-
-# Capybara.register_driver :poltergeist do |app|
-#   Capybara::Poltergeist::Driver.new(app, debug: false, js_errors: true, timeout: 60, port: 3000)
-# end
-# Capybara.default_driver = :poltergeist
 Capybara.register_driver :poltergeist_debug do |app|
- Capybara::Poltergeist::Driver.new(app, :inspector => true)
+  Capybara::Poltergeist::Driver.new(app, :inspector => true)
 end
 Capybara.default_driver = :poltergeist
 Capybara.javascript_driver = :poltergeist
-# Capybara.default_max_wait_time = 5
-# Capybara.wait_on_first_by_default = true
-# Capybara.server_port = 3001
-# Capybara.server_host = '0.0.0.0'
-# Capybara.app_host = 'http://localhost:3001'

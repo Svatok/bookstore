@@ -66,7 +66,6 @@ group :test do
   gem 'shoulda-matchers'
   gem 'database_cleaner'
   gem 'poltergeist'
-  # gem 'selenium-webdriver'
   gem 'selenium-webdriver', '2.53.4'
   gem 'rack_session_access'
 end

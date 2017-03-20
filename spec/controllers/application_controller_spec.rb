@@ -8,7 +8,6 @@ describe ApplicationController, type: :controller do
       expect(controller.current_order).to eq(order)
     end
     it 'create new order' do
-      # require 'pry'; binding.pry
       expect(controller.current_order).to be_present
     end
   end

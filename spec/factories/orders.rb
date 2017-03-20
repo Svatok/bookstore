@@ -1,13 +1,6 @@
 FactoryGirl.define do
   factory :order do
 
-    # trait :with_coupon do
-    #   after(:create) do |order|
-    #     create(:coupon, order: order)
-    #     order.save
-    #   end
-    # end
-
     trait :with_items do
       after(:create) do |order|
         create_list(:order_item, 2, order: order)

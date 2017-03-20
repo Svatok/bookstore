@@ -19,18 +19,4 @@ FactoryGirl.define do
     factory :shipping_address, traits: [:shipping]
     factory :billing_address, traits: [:billing]
   end
-
-  # factory :address_with_type, parent: :address do
-  #
-  #   trait :shipping do
-  #     address_type :shipping
-  #   end
-  #
-  #   trait :billing do
-  #     address_type :billing
-  #   end
-  # end
-  #
-  #
-  #
 end
