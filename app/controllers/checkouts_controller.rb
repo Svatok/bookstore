@@ -1,7 +1,7 @@
 class CheckoutsController < ApplicationController
   before_action :authenticate_user!
   before_action :initialize_order, :edit_order_data, only: :show
-  before_filter :ensure_signup_complete, only: [:show, :update]
+  before_action :ensure_signup_complete, only: [:show, :update]
 
 
   def show

@@ -18,12 +18,13 @@ class AddressesController < ApplicationController
                       :locals => {
                         :resource => current_user,
                         :resource_name => 'user' } if form_with_errors
-    redirect_to edit_user_registration_path, flash[:success] = "Address has been updated."
+    flash[:success] = "Address has been updated."
+    redirect_to edit_user_registration_path
   end
 
-  def update
-    adress_create_or_update(params)
-  end
+  # def update
+  #   adress_create_or_update(params)
+  # end
 
   def resource_name
     :user
