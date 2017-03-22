@@ -17,25 +17,6 @@ class CheckoutsController < ApplicationController
     end
   end
 
-  def delivery_show
-    @shippings = Product.shippings.decorate
-    shipping = @order.order_items.only_shippings
-    @current_shipping = shipping.present? ? shipping.first : @order.order_items.new
-  end
-
-  def delivery_update
-    @shippings = Product.shippings.decorate
-    shipping = @order.order_items.only_shippings
-    @current_shipping = shipping.present? ? shipping.first : @order.order_items.new
-    shipping = params['shippings_' + params['form_visible']]
-    unless shipping.present?
-      @current_shipping.errors.add(:product_id, "Choose delivery!")
-      return @form_with_errors = true
-    end
-    @current_shipping.attributes = { product_id: shipping['product'], quantity: 1 }
-    @current_shipping.save
-  end
-
   def payment_show
     payment = @order.payments
     @payment_form = payment.present? ? PaymentForm.from_model(payment.first) : PaymentForm.new
