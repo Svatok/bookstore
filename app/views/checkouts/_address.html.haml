@@ -7,9 +7,9 @@
       %h3.general-subtitle Shipping Address
 .row
   .col-md-5.mb-40
-    = render 'addresses/forms', object: @billing_address_form, address_type: 'billing'
+    = render 'addresses/forms', object: presenter.address_form('billing')
   .col-md-5.col-md-offset-1.mb-60.shipping-form
-    = render 'addresses/forms', object: @shipping_address_form, address_type: 'shipping'
+    = render 'addresses/forms', object: presenter.address_form('shipping')
     .form-group.checkbox
       %label.font-weight-light.pl-0
         %input.checkbox-input.billing-use{type: "checkbox", hidden: "true", name: 'use_billing'}

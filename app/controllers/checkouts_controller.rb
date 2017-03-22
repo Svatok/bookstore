@@ -1,50 +1,28 @@
 class CheckoutsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :initialize_order, :edit_order_data, only: :show
-  before_action :ensure_signup_complete, only: [:show, :update]
+  include Rectify::ControllerHelpers
 
+  before_action :authenticate_user!, :prepare_checkout, :ensure_signup_complete
 
   def show
-    @partial = @order.state
-    return redirect_to root_path unless lookup_context.exists?(@partial, ["checkouts"], true)
-    send(@order.state + '_show')
   end
 
   def update
-    @form_with_errors = false
-    @order = current_order.decorate
-    @partial = @order.state
-    send(@order.state + '_update')
-    return render :show if @form_with_errors
-    @order.send(next_state + '_step')
-    @order.save
-    redirect_to checkouts_path
-  end
-
-  def address_show
-    billing_address = @order.addresses.billing.present? ? @order.addresses.billing : current_user.addresses.billing
-    @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
-    shipping_address = @order.addresses.shipping.present? ? @order.addresses.shipping : current_user.addresses.shipping
-    @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
-  end
-
-  def address_update
-    addresses_params['address_forms'].each do |address_type, address_params|
-      address_form = instance_variable_set("@#{address_type}_address_form", UserAddressForm.from_params(address_params))
-      if params['use_billing'] == 'on' && address_type == 'shipping'
-        address_form = @billing_address_form
-        address_form.address_type = address_type
+    options = { object: current_order, params: params }
+    "Set#{@order.state.capitalize}".constantize.call(options) do
+      on(:ok) do
+        # send(@order.state + '_update!')
+        redirect_to checkouts_path
       end
-      if address_form.valid?
-        @address = @order.addresses.find_by(id: address_params['id'])
-        @address = @order.addresses.new unless @address.present?
-        @address.attributes = address_form.attributes.except('id')
-        @address.save
-      else
-        @form_with_errors = true
-      end
+      on(:invalid) { |forms| expose(objects: forms) and render :show }
     end
   end
+
+  # def address_show
+  #   billing_address = @order.addresses.billing.present? ? @order.addresses.billing : current_user.addresses.billing
+  #   @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
+  #   shipping_address = @order.addresses.shipping.present? ? @order.addresses.shipping : current_user.addresses.shipping
+  #   @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
+  # end
 
   def delivery_show
     @shippings = Product.shippings.decorate
@@ -106,37 +84,23 @@ class CheckoutsController < ApplicationController
     session.delete(:order_id)
   end
 
-  def initialize_order
-    @order = current_order.decorate
-    return if !@order.cart? || @order.total_price <= 0
-    @order[:user_id] = current_user.id
-    @order.address_step
-    @order.save
-  end
+  private
 
-  def edit_order_data
-    @order_states = @order.aasm.states.map(&:name)
-    @order.send(params['edit'] + '_step') if params['edit'].present? && @order_states.include?(params['edit'].to_sym)
-    @order.save
+  def prepare_checkout
+    options = { object: current_order, params: params }
+    PrepareCheckout.call(options) do
+      on(:ok) do |order, view_partial|
+        expose(order: order, view_partial: view_partial)
+        present "#{order.state.capitalize}Presenter".constantize.new(objects: order.send(order.state.pluralize))
+      end
+      on(:invalid) { redirect_to root_path }
+    end
   end
 
   def next_state
     return @order.prev_state if @order.prev_state == 'confirm' && @order.state != 'complete'
     return 'complete' if @order.confirm?
     @order.aasm.states(permitted: true).map(&:name).first.to_s
-  end
-
-  private
-
-  def addresses_params
-    params.permit(address_forms: [billing: [ :id, :address_type, :first_name,
-                                            :last_name, :address, :city, :zip,
-                                            :country_id, :phone],
-                                  shipping: [:id, :address_type, :first_name,
-                                              :last_name, :address, :city, :zip,
-                                              :country_id, :phone]
-                                  ]
-                    )
   end
 
   def payment_params

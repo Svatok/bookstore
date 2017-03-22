@@ -14,7 +14,7 @@ class Order < ApplicationRecord
   scope :canceled, -> { where("state = 'canceled'") }
 
   aasm column: :state do
-    state :cart, :initial => true
+    state :cart, initial: true
     state :address, :delivery, :payment, :confirm, :complete, :in_waiting,
           :in_progress, :in_delivery, :delivered, :canceled
 
@@ -57,8 +57,10 @@ class Order < ApplicationRecord
     end
 
     event :canceled_step do
-      transitions from: [:cart, :address, :delivery, :payment, :confirm, :complete,
-                            :in_waiting, :in_progress, :in_delivery, :delivered], to: :canceled
+      transitions from: [
+        :cart, :address, :delivery, :payment, :confirm, :complete,
+        :in_waiting, :in_progress, :in_delivery, :delivered
+      ], to: :canceled
     end
   end
 
@@ -84,6 +86,10 @@ class Order < ApplicationRecord
     shipping = order_items.only_shippings
     return 0 unless shipping.present?
     shipping.first.unit_price
+  end
+
+  def deliveries
+    order_items.only_shippings
   end
 
   private

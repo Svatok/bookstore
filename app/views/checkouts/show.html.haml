@@ -21,7 +21,7 @@
       %span.step-number 5
       %span.step-text.hidden-xs Complete
   = form_tag checkouts_path, class: 'res-mb-100', method: :put do |field|
-    = render @partial
+    = render @view_partial
     %div{:class => ( (@order.complete? || @order.confirm?) ? "text-center general-text-right" : 'general-text-align mb-60') }
       %p.in-gold-500.font-18 Order Summary
       %table.general-summary-table{:class => ("general-summary-table-right general-text-right" if @order.complete? || @order.confirm?)}

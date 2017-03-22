@@ -1,9 +1,9 @@
-= fields_for "address_forms[#{address_type}]", object do |f|
+= fields_for "address_forms[#{object.address_type}]", object do |f|
   .visible-xs.visible-sm
-    %h3.general-subtitle.mt-0= address_type.capitalize + " Address"
+    %h3.general-subtitle.mt-0= object.address_type.capitalize + " Address"
   .form-group
-    = f.hidden_field :id, value: "#{object.id}"
-    = f.hidden_field :address_type, value: "#{address_type}"
+    -# = f.hidden_field :id, value: "#{object.id}"
+    = f.hidden_field :address_type, value: "#{object.address_type}"
   .form-group{:class => ("has-error" if object.errors.messages.include?(:first_name) )}
     %label.control-label.font-weight-light{for: :first_name} First Name
     = f.text_field :first_name, type: "text", placeholder: "First Name", class: 'form-control'
