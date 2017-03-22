@@ -7,7 +7,7 @@
       %a{href: "#privacy", 'aria-controls': "privacy", role: "tab", 'data-toggle': "tab"} Privacy
   .tab-content
     #address.tab-pane.fade.in.active.general-main-wrap{role: "tabpanel"}
-      = form_tag user_addresses_path do |field|
+      = form_tag registration_path(resource_name), method: :put do |field|
         .hidden-xs.hidden-sm
           .row
             .col-md-5
@@ -16,13 +16,13 @@
               %h3.general-subtitle.mt-0 Shipping Address
         .row
           .col-md-5.mb-40
-            = render 'addresses/forms', object: @billing_address_form, address_type: 'billing'
+            = render 'addresses/forms', object: presenter.address_form('billing')
             .text-center.general-text-align
-              %button.btn{name: "billing", value: "true"} Save
+              %button.btn{name: "only_address_type", value: "billing"} Save
           .col-md-5.col-md-offset-1.mb-25
-            = render 'addresses/forms', object: @shipping_address_form, address_type: 'shipping'
+            = render 'addresses/forms', object: presenter.address_form('shipping')
             .text-center.general-text-align
-              %button.btn{name: "shipping", value: "true"} Save
+              %button.btn{name: "only_address_type", value: "shipping"} Save
     #privacy.tab-pane.fade{role: "tabpanel"}
       .row.mb-60
         = devise_error_messages!
