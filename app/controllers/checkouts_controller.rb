@@ -7,7 +7,6 @@ class CheckoutsController < ApplicationController
   end
 
   def update
-    options = { object: current_order, params: params }
     "Set#{@order.state.capitalize}".constantize.call(options) do
       on(:ok) do
         # send(@order.state + '_update!')
@@ -45,7 +44,6 @@ class CheckoutsController < ApplicationController
   private
 
   def prepare_checkout
-    options = { object: current_order, params: params }
     PrepareCheckout.call(options) do
       on(:ok) do |order, view_partial|
         expose(order: order, view_partial: view_partial)
@@ -55,6 +53,10 @@ class CheckoutsController < ApplicationController
     end
   end
 
+  def options
+    { object: current_order, params: params }
+  end
+  
   def next_state
     return @order.prev_state if @order.prev_state == 'confirm' && @order.state != 'complete'
     return 'complete' if @order.confirm?
