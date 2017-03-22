@@ -3,8 +3,7 @@ class AddressPresenter < Rectify::Presenter
   attribute :new_address, UserAddressForm, :default => UserAddressForm.new
 
   def address_form(address_type)
-    return form_with_errors(address_type) if forms_has_errors?
-    form_without_errors(address_type)
+    forms_has_errors? ? form_with_errors(address_type) : form_without_errors(address_type) 
   end
   
   private
