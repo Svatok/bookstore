@@ -1,11 +1,11 @@
 %h3.general-subtitle Shipping Method
-- if @current_shipping.errors[:product_id].present?
+- if presenter.current_order_shipping.errors[:product_id].present?
   .alert.alert-error.alert-danger
     %a.close{ 'data-dismiss': "alert"} ×
-    = @current_shipping.errors['product_id'].first
+    = presenter.current_order_shipping.errors['product_id'].first
 .visible-xs
-  = fields_for 'shippings_v_xs', @shippings do |f|
-    - @shippings.each do |shipping|
+  = fields_for 'shippings_v_xs', presenter.available_shippings do |f|
+    - presenter.available_shippings.each do |shipping|
       .general-cart-item.divider-lg-bottom
         %table.table
           %tr
@@ -14,7 +14,8 @@
             %td.col-half
               .form-group.radio.mt-0.mb-0
                 %label.font-16.font-weight-light.pl-0
-                  = f.radio_button :product, "#{shipping.id}", checked: shipping.id == @current_shipping.product_id, type: "radio", hidden: true, class: "radio-input"
+                  = f.radio_button :product, "#{shipping.id}", checked: shipping.id == presenter.current_order_shipping.product_id, 
+                    type: "radio", hidden: true, class: "radio-input"
                   %span.radio-icon
                   %span.radio-text= shipping.title
           %tr
@@ -39,13 +40,14 @@
         %th
           %span.in-grey-600 Price
     %tbody
-      = fields_for 'shippings_h_xs', @shippings do |f|
-        - @shippings.each do |shipping|
+      = fields_for 'shippings_h_xs', presenter.available_shippings do |f|
+        - presenter.available_shippings.each do |shipping|
           %tr
             %td
               .form-group.radio.mt-0.mb-0
                 %label.font-16.font-weight-light.pl-0
-                  = f.radio_button :product, "#{shipping.id}", checked: shipping.id == @current_shipping.product_id, type: "radio", hidden: true, class: "radio-input"
+                  = f.radio_button :product, "#{shipping.id}", checked: shipping.id == presenter.current_order_shipping.product_id,
+                    type: "radio", hidden: true, class: "radio-input"
                   %span.radio-icon
                   %span.radio-text= shipping.title
             %td
