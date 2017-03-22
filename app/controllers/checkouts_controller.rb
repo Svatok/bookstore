@@ -13,23 +13,7 @@ class CheckoutsController < ApplicationController
         # send(@order.state + '_update!')
         redirect_to checkouts_path
       end
-      on(:invalid) { |forms| expose(objects: forms) and render :show }
-    end
-  end
-
-  def payment_show
-    payment = @order.payments
-    @payment_form = payment.present? ? PaymentForm.from_model(payment.first) : PaymentForm.new
-  end
-
-  def payment_update
-    @payment_form = PaymentForm.from_params(payment_params)
-    if @payment_form.valid?
-      @payment = @order.payments.present? ? @order.payments.first : @order.payments.new
-      @payment.attributes = @payment_form.attributes
-      @payment.save
-    else
-      @form_with_errors = true
+      on(:invalid) { |forms| expose(object: object_with_errors) and render :show }
     end
   end
 
@@ -65,7 +49,7 @@ class CheckoutsController < ApplicationController
     PrepareCheckout.call(options) do
       on(:ok) do |order, view_partial|
         expose(order: order, view_partial: view_partial)
-        present "#{order.state.capitalize}Presenter".constantize.new(objects: order.send(order.state.pluralize))
+        present "#{order.state.capitalize}Presenter".constantize.new(object: order)
       end
       on(:invalid) { redirect_to root_path }
     end
@@ -75,10 +59,6 @@ class CheckoutsController < ApplicationController
     return @order.prev_state if @order.prev_state == 'confirm' && @order.state != 'complete'
     return 'complete' if @order.confirm?
     @order.aasm.states(permitted: true).map(&:name).first.to_s
-  end
-
-  def payment_params
-    params.permit(payment: [:card_number, :name_on_card, :mm_yy, :cvv])
   end
 
 end
