@@ -11,17 +11,13 @@ class RegistrationsController < Devise::RegistrationsController
   end
   
   def finish_signup
-    if request.patch? && params[:user]
-      @user = User.find(params[:id])
-      if @user.update_attributes(email: params[:user][:email])
-        @user.skip_reconfirmation!
-        bypass_sign_in resource, scope: resource_name
-        flash[:success] = 'Your profile was successfully updated.'
-        redirect_to root_path
-      else
-        @show_errors = true
-      end
-    end
+    return @show_errors = true unless request.patch? && params[:user]
+    @user = User.find(params[:id])
+    return flash[:error] = 'Email not updated.' unless @user.update_attributes(email: params[:user][:email])
+    @user.skip_reconfirmation!
+    bypass_sign_in resource, scope: resource_name
+    flash[:success] = 'Your profile was successfully updated.'
+    redirect_to root_path
   end
   
   protected
@@ -39,5 +35,4 @@ class RegistrationsController < Devise::RegistrationsController
     @countries = Country.all
     present AddressPresenter.new(objects: @user.addresses)
   end
-  
 end
