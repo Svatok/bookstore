@@ -1,5 +1,5 @@
 class DeliveryPresenter < Rectify::Presenter
-  attribute :objects
+  attribute :object
   attribute :new_order_shipping, OrderItem, :default => current_order.order_items.new
 
   def available_shippings
@@ -7,6 +7,6 @@ class DeliveryPresenter < Rectify::Presenter
   end
   
   def current_order_shipping
-    objects.first || new_order_shipping
+    object.payments.presenr? ? object.payments.first : new_order_shipping
   end 
 end
