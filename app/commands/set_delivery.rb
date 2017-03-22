@@ -2,13 +2,15 @@ class SetDelivery < Rectify::Command
   def initialize(options)
     @params = options[:params]
     @object = options[:object]
+    @order_shippings = {}
   end
   
   def call
     order_shipping = current_order_shipping || @object.order_items.new(quantity: 1)
     return order_shipping.product = selected_shipping and broadcast(:ok) if selected_shipping.present?
     order_shipping.errors.add(:product_id, "Choose delivery!")
-    broadcast(:invalid, order_shipping)
+    @order_shippings[order_shipping.id.to_sym] = order_shipping
+    broadcast(:invalid, @order_shippings)
   end
 
   private
