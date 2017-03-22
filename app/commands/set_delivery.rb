@@ -9,7 +9,7 @@ class SetDelivery < Rectify::Command
     order_shipping = current_order_shipping || @object.order_items.new(quantity: 1)
     return order_shipping.product = selected_shipping and broadcast(:ok) if selected_shipping.present?
     order_shipping.errors.add(:product_id, "Choose delivery!")
-    @order_shippings[order_shipping.id.to_sym] = order_shipping
+    @order_shippings[:main] = order_shipping
     broadcast(:invalid, @order_shippings)
   end
 
