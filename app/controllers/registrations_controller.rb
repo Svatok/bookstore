@@ -2,19 +2,19 @@ class RegistrationsController < Devise::RegistrationsController
 
   def edit
     @countries = Country.all
-    billing_address = @user.addresses.billing
-    @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
-    shipping_address = @user.addresses.shipping
-    @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
+    present AddressPresenter.new(objects: @user.addresses)
     super
   end
 
   def update
     @countries = Country.all
-    billing_address = @user.addresses.billing
-    @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
-    shipping_address = @user.addresses.shipping
-    @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
+    present AddressPresenter.new(objects: @user.addresses)
+    
+    SetAddress.call({ object: current_user, params: params }) do
+      on(:ok) { flash[:success] = "Address has been updated." and redirect_to :edit }
+      on(:invalid) { |forms| expose(objects: forms) and render :edit }
+    end
+    
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
     resource_updated = if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
