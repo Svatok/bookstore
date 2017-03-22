@@ -17,13 +17,6 @@ class CheckoutsController < ApplicationController
     end
   end
 
-  # def address_show
-  #   billing_address = @order.addresses.billing.present? ? @order.addresses.billing : current_user.addresses.billing
-  #   @billing_address_form = billing_address.present? ? UserAddressForm.from_model(billing_address.first) : UserAddressForm.new
-  #   shipping_address = @order.addresses.shipping.present? ? @order.addresses.shipping : current_user.addresses.shipping
-  #   @shipping_address_form = shipping_address.present? ? UserAddressForm.from_model(shipping_address.first) : UserAddressForm.new
-  # end
-
   def delivery_show
     @shippings = Product.shippings.decorate
     shipping = @order.order_items.only_shippings
