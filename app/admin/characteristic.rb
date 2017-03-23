@@ -11,5 +11,4 @@ ActiveAdmin.register Characteristic do
       end
     end
   end
-
 end
