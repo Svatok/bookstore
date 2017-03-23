@@ -42,5 +42,4 @@ ActiveAdmin.register Order do
       end
     end
   end
-
 end
