@@ -52,9 +52,9 @@ class OrdersController < ApplicationController
       coupon_item.destroy
     end
 
-    def order_items_params
-      params.permit(:order_items => [:quantity])
-    end
+#     def order_items_params
+#       params.permit(:order_items => [:quantity])
+#     end
 
     def sort_params
       params.permit(:sort)
