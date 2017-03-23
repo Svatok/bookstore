@@ -8,5 +8,4 @@ class OrderMailer < ApplicationMailer
     @user = user
     mail(to: @user.email, subject: 'Order ' + @order.order_number + ' created!')
   end
-
 end
