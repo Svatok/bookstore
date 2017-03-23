@@ -18,7 +18,7 @@
       %br
       = presenter.payment.mm_yy
 .visible-xs
-  = render 'order_items/order_items_v_xs'
+  = render 'order_items/order_items_v_xs', objects: presenter.order_items
 .hidden-xs.divider-lg.pt-20
   %table.table.table-hover
     %thead
@@ -33,4 +33,4 @@
         %th
           %span.in-grey-600 Total
     %tbody
-      = render 'order_items/order_items_h_xs'
+      = render 'order_items/order_items_h_xs', objects: presenter.order_items
