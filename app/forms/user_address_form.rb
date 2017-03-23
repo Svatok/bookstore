@@ -23,5 +23,4 @@ class UserAddressForm < Rectify::Form
     return if phone =~ /\A\+#{country.phone_number}/
     errors.add(:phone, 'country code is invalid.')
   end
-
 end
