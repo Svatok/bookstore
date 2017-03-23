@@ -13,11 +13,7 @@ class OrdersController < ApplicationController
 
   def show
     @order = Order.find_by_id(params[:id]).decorate
-    @shipping_address = @order.addresses.shipping.first.decorate
-    @billing_address = @order.addresses.billing.first.decorate
-    @shipping = @order.order_items.only_shippings.first
-    @payment = @order.payments.first.decorate
-    @order_items = @order.order_items.only_products.decorate
+    present "#{presenter.capitalize}Presenter".constantize.new(object: @order)
   end
 
   def cart
