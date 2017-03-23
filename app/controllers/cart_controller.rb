@@ -1,5 +1,4 @@
 class CartController < ApplicationController
-  before_action :coupon_add, only: [:update]
 
   def show
     @order = current_order.decorate
