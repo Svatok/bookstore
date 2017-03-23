@@ -9,7 +9,6 @@ ActiveAdmin.register Product do
   filter :select_product_type, label: 'Product status', as: :select, collection: ['active', 'inactive']
   filter :with_category, label: 'Category', as: :select, collection: Category.select(:name, :id).to_a
 
-
   index :as => ActiveAdmin::Views::IndexAsTable do
     selectable_column
     column :image do |product|
@@ -94,6 +93,4 @@ ActiveAdmin.register Product do
     end
 
   end
-
-
 end
