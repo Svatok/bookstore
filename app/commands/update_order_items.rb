@@ -2,14 +2,64 @@ class UpdateOrderItems < Rectify::Command
   def initialize(options)
     @order = options[:object]
     @params = options[:params]
+    set_order_items
   end
 
   def call
-    view_partial = @order.state
-    return broadcast(:invalid) unless lookup_context.exists?(view_partial, ["checkouts"], true)
-    initialize_new_order if new_valid_order?
-    @order.send(@params['edit'] + '_step!') if editing_data?
-    broadcast(:ok, @order.decorate, view_partial, presenter)
+    coupon_add if @params[:coupon][:code].present?
+    return if @params[:coupon_only].present?
+    @params[:delete].present? delete_order_items : change_order_items
+    session[:order_id] = @order.id unless session_present?
+    broadcast(:ok)
+  end
+  
+  private
+  
+  def set_order_items
+    return @order_items = @params[:order_items] if @params[:order_items].present?
+    @params[:order_item][:quantity] = all_quantity_in_cart(@params[:order_item][:product_id]).to_s
+    @order_items[@params[:order_item][:product_id]] = @params[:order_item]
+  end
+  
+  def all_quantity_in_cart(product_id)
+    quantity_in_cart = in_cart?(product_id) ? @order.order_items.find_by(product_id: product_id).quantity : 0
+    all_quantity = params[product_id][:quantity].to_i + quantity_in_cart
+  end
+
+  def in_cart?(product_id)
+    @order.order_items.find_by(product_id: product_id).present?
+  end
+  
+  def delete_order_items
+    order_item = @order.order_items.find(@order_items.first[:product_id])
+    return unless order_item.present?
+    order_item.destroy
+  end
+  
+  def change_order_items
+    @order_items.each do |product_id, order_item_params|
+      order_item = @order.order_items.find_or_initialize_by(product_id: product_id)
+      unless order_item.update_attributes(quantity: order_item_params[:quantity])
+        broadcast(:invalid) 
+      end
+    end
+  end
+
+  def coupon_add
+    coupon = Product.coupons.find_by(title: @params[:coupon][:code], status: 'active')
+    return unless coupon.present?
+    previous_coupon_delete
+    @order.order_items.create(product_id: coupon.id, quantity: 1)
+  end
+
+  def previous_coupon_delete
+    coupon = @order.order_items.only_coupons
+    return unless coupon.present?
+    @order.order_items.find(coupon.first.id).destroy
+  end
+  
+  def session_present?
+    session[:order_id] == @order.id
   end
 end
   
