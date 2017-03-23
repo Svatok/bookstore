@@ -2,6 +2,7 @@ class CheckoutsController < ApplicationController
   include Rectify::ControllerHelpers
 
   before_action :authenticate_user!, :prepare_checkout, :ensure_signup_complete
+  after_action :complete_order, only [:show]
 
   def show
   end
@@ -14,31 +15,6 @@ class CheckoutsController < ApplicationController
       end
       on(:invalid) { |forms| expose(object: object_with_errors) and render :show }
     end
-  end
-
-  def confirm_show
-    @billing_address = @order.addresses.billing.first.decorate
-    @shipping_address = @order.addresses.shipping.first.decorate
-    @shipping = @order.order_items.only_shippings.first
-    @payment = @order.payments.first.decorate
-    @order_items = @order.order_items.only_products.decorate
-  end
-
-  def confirm_update
-    @order.order_number = "R%.8d" % @order.id
-    @order.placed_date = Date.today
-    OrderMailer.order_complete(@order, current_user).deliver
-  end
-
-  def complete_show
-    @shipping_address = @order.addresses.shipping.first.decorate
-    @shipping = @order.order_items.only_shippings.first
-    @payment = @order.payments.first.decorate
-    @order_items = @order.order_items.only_products.decorate
-  end
-
-  def complete_update
-    session.delete(:order_id)
   end
 
   private
@@ -55,6 +31,11 @@ class CheckoutsController < ApplicationController
 
   def options
     { object: current_order, params: params }
+  end
+ 
+  def complete_order
+    return unless @order.confirm?
+    @order.complete_step
   end
   
   def next_state
