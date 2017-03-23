@@ -6,25 +6,18 @@ class ApplicationController < ActionController::Base
 
   def authenticate_active_admin_user!
    authenticate_user!
-   unless current_user.role?(:admin)
-    flash[:alert] = 'You are not authorized to access this resource!'
-    redirect_to root_path
-   end
+   return if current_user.role?(:admin)
+   flash[:alert] = 'You are not authorized to access this resource!'
+   redirect_to root_path
   end
 
   def current_order
-    if !session[:order_id].nil?
-      Order.find(session[:order_id])
-    else
-      Order.new
-    end
+    session[:order_id].nil? ? Order.new : Order.find(session[:order_id])
   end
 
   def ensure_signup_complete
     return if action_name == 'finish_signup'
-    if current_user && !current_user.email_verified?
-      redirect_to finish_signup_path(current_user)
-    end
+    redirect_to finish_signup_path(current_user) if current_user && !current_user.email_verified?
   end
 
   def set_locale
@@ -36,9 +29,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
-    def categories
-      @categories = Category.all.order(default_sort: :desc)
-    end
+  
+  def categories
+    @categories = Category.all.order(default_sort: :desc)
+  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:email, :password, :password_confirmation, :current_password) }
