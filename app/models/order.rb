@@ -6,7 +6,7 @@ class Order < ApplicationRecord
   has_many :payments, dependent: :destroy
   has_many :addresses, as: :addressable, dependent: :destroy
 
-  before_save :update_total_price
+  before_save :update_total_price!
 
   scope :not_placed, -> { where("state in ('cart', 'address', 'delivert', 'payment', 'confirm', 'complete')") }
   scope :processing, -> { where("state in ('in_waiting', 'in_progress', 'in_delivery')") }
@@ -28,18 +28,12 @@ class Order < ApplicationRecord
   def deliveries
     order_items.only_shippings
   end
+
+  def update_total_price!
+    total_price = order_items.collect { |order_item| order_item.valid? ? order_item.total_price : 0 }.sum
+  end
   
-  def next_state
-    return @order.prev_state if @order.prev_state == 'confirm' && @order.state != 'complete'
-    return 'complete' if @order.confirm?
-    @order.aasm.states(permitted: true).map(&:name).first.to_s
-  end
-
   private
-
-  def update_total_price
-    self[:total_price] = order_items.collect { |order_item| order_item.valid? ? (order_item.quantity * order_item.unit_price) : 0 }.sum
-  end
   
   def set_prev_state!
     assign_attributes(prev_state: aasm.from_state)
