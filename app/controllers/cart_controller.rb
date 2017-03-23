@@ -8,7 +8,7 @@ class CartController < ApplicationController
 
   def update
     UpdateOrderItems.call({ object: current_user, params: params }) do
-      on(:ok) {}
+      on(:ok) { |msg| flash[:success] = msg }
       on(:invalid) { |msg| flash[:error] = msg }
     end
     redirect_back(fallback_location: root_path)
