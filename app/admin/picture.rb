@@ -4,7 +4,6 @@ ActiveAdmin.register Picture do
 
   menu false
 
-
   controller do
     def destroy
       super do
@@ -12,6 +11,4 @@ ActiveAdmin.register Picture do
       end
     end
   end
-
-
 end
