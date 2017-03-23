@@ -1,6 +1,6 @@
 class ProductPresenter < Rectify::Presenter
-  attribute :product
-  attribute :new_review, ProductReviewForm, :default => ProductReviewForm.new
+  attribute :review_form, ProductReviewForm, :default => ProductReviewForm.new
+  attribute :product, Product, :default => Product.find(review_form.product_id]).decorate
   
   def user
     current_user || User.new
