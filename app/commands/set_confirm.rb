@@ -5,6 +5,7 @@ class SetConfirm < Rectify::Command
   
   def call
     return broadcast(:invalid, {}) unless place_order
+    delete_cart
     OrderMailer.order_complete(@object, current_user).deliver
     broadcast(:ok)
   end
@@ -18,4 +19,9 @@ class SetConfirm < Rectify::Command
   def new_order_number
     "R%.8d" % @object.id
   end
+  
+  def delete_cart
+    session.delete(:order_id)
+  end
+  
 end
