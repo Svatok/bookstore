@@ -70,8 +70,6 @@ class SorteredProducts < Rectify::Query
     current_page > total_pages
   end
 
-  private
-
   def sort_price_sql
     "INNER JOIN (SELECT a.* FROM prices as a
                                   WHERE EXISTS (SELECT 1 FROM prices as b
