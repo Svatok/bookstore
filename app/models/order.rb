@@ -1,5 +1,5 @@
 class Order < ApplicationRecord
-  include AASM
+  include OrderStateMachine
 
   belongs_to :user
   has_many :order_items, dependent: :destroy
@@ -12,57 +12,6 @@ class Order < ApplicationRecord
   scope :processing, -> { where("state in ('in_waiting', 'in_progress', 'in_delivery')") }
   scope :delivered, -> { where("state = 'delivered'") }
   scope :canceled, -> { where("state = 'canceled'") }
-
-  aasm column: :state do
-    state :cart, initial: true
-    state :address, :delivery, :payment, :confirm, :complete, :in_waiting,
-          :in_progress, :in_delivery, :delivered, :canceled
-
-    after_all_transitions :set_prev_state!
-
-    event :address_step do
-      transitions from: [:cart, :confirm], to: :address
-    end
-
-    event :delivery_step do
-      transitions from: [:address, :confirm], to: :delivery
-    end
-
-    event :payment_step do
-      transitions from: [:delivery, :confirm], to: :payment
-    end
-
-    event :confirm_step do
-      transitions from: [:address, :delivery, :payment], to: :confirm
-    end
-
-    event :complete_step do
-      transitions from: :confirm, to: :complete
-    end
-
-    event :in_waiting_step do
-      transitions from: :complete, to: :in_waiting
-    end
-
-    event :in_progress_step do
-      transitions from: :in_waiting, to: :in_progress
-    end
-
-    event :in_delivery_step do
-      transitions from: :in_progress, to: :in_delivery
-    end
-
-    event :delivered_step do
-      transitions from: :in_delivery, to: :delivered
-    end
-
-    event :canceled_step do
-      transitions from: [
-        :cart, :address, :delivery, :payment, :confirm, :complete,
-        :in_waiting, :in_progress, :in_delivery, :delivered
-      ], to: :canceled
-    end
-  end
 
   def coupon_sum
     coupon = order_items.only_coupons
