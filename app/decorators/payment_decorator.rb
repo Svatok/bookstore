@@ -4,5 +4,4 @@ class PaymentDecorator < Draper::Decorator
   def four_numbers_of_card
     '** ** **' + card_number.last(4)
   end
-
 end
