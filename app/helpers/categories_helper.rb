@@ -5,5 +5,4 @@ module CategoriesHelper
     category_name = category == 'all' ? 'All' : Category.find(category).name
     category_name + ' (' + products_count.to_s + ')'
   end
-
 end
