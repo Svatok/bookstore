@@ -10,7 +10,7 @@ class CheckoutsController < ApplicationController
   def update
     "Set#{@order.state.capitalize}".constantize.call(options) do
       on(:ok) { @order.send(@orde.next_state + '_step') and redirect_to checkouts_path }
-      on(:invalid) { |forms| expose(object: object_with_errors) and render :show }
+      on(:invalid) { |object_with_errors| expose(object: object_with_errors) and render :show }
     end
   end
 
