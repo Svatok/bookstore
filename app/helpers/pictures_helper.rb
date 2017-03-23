@@ -12,5 +12,4 @@ module PicturesHelper
     return unless user.present?
     user.pictures.avatar.first
   end
-
 end
