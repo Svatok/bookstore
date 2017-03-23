@@ -5,5 +5,4 @@ class UserDecorator < Draper::Decorator
     return '' unless object.addresses.present?
     object.addresses.first.first_name + ' ' + object.addresses.first.last_name
   end
-
 end
