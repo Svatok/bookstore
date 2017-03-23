@@ -10,5 +10,4 @@ module ProductsHelper
   def current_sort(sort)
     sort.present? ? SORTING[sort.to_sym] : SORTING[:newest]
   end
-
 end
