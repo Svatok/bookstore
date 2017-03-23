@@ -54,5 +54,11 @@ module OrderStateMachine
         ], to: :canceled
       end
     end
+    
+    def next_state
+      return prev_state if prev_state == 'confirm' && state != 'complete'
+      return 'complete' if confirm?
+      aasm.states(permitted: true).map(&:name).first.to_s
+    end
   end
 end
