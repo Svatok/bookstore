@@ -5,5 +5,4 @@ class OrderItemDecorator < Draper::Decorator
   def subtotal
     object.quantity * object.unit_price
   end
-
 end
