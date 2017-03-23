@@ -1,22 +1,22 @@
 .row.mb-20
   .col-sm-3
-    = render 'short_address', object: @shipping_address
+    = render 'short_address', object: presenter.address('shipping')
   .col-sm-3
-    = render 'short_address', object: @billing_address
+    = render 'short_address', object: presenter.address('billing')
   .col-sm-3
     %h3.general-subtitle Shipments
     %p.general-address
-      = @shipping.product.title
+      = presenter.shipping.product.title
       %a.general-edit{href: checkouts_path(params.permit(:edit).merge(:edit => 'delivery'))} edit
       %br
-      = @shipping.product.description
+      = presenter.shipping.product.description
   .col-sm-3
     %h3.general-subtitle Payment Information
     %p.general-address
-      = @payment.four_numbers_of_card
+      = presenter.payment.four_numbers_of_card
       %a.general-edit{href: checkouts_path(params.permit(:edit).merge(:edit => 'payment'))} edit
       %br
-      = @payment.mm_yy
+      = presenter.payment.mm_yy
 .visible-xs
   = render 'order_items/order_items_v_xs'
 .hidden-xs.divider-lg.pt-20
