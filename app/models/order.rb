@@ -64,18 +64,6 @@ class Order < ApplicationRecord
     end
   end
 
-  def set_prev_state!
-    assign_attributes(prev_state: aasm.from_state)
-  end
-
-  def total_price
-    order_items.collect { |order_item| order_item.valid? ? (order_item.quantity * order_item.unit_price) : 0 }.sum
-  end
-
-  def subtotal_price
-    total_price - coupon_sum - shipping_cost
-  end
-
   def coupon_sum
     coupon = order_items.only_coupons
     return 0 unless coupon.present?
@@ -91,10 +79,20 @@ class Order < ApplicationRecord
   def deliveries
     order_items.only_shippings
   end
+  
+  def next_state
+    return @order.prev_state if @order.prev_state == 'confirm' && @order.state != 'complete'
+    return 'complete' if @order.confirm?
+    @order.aasm.states(permitted: true).map(&:name).first.to_s
+  end
 
   private
 
-    def update_total_price
-      self[:total_price] = total_price
-    end
+  def update_total_price
+    self[:total_price] = order_items.collect { |order_item| order_item.valid? ? (order_item.quantity * order_item.unit_price) : 0 }.sum
+  end
+  
+  def set_prev_state!
+    assign_attributes(prev_state: aasm.from_state)
+  end
 end
