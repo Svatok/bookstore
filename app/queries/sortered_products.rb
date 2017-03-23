@@ -1,4 +1,6 @@
 class SorteredProducts < Rectify::Query
+  helper PaginationHelper
+  
   def initialize(params)
     @params = params
     @params[:sort] = 'newest' unless @params[:sort].present?
@@ -10,32 +12,6 @@ class SorteredProducts < Rectify::Query
   def query
     all.limit(@limit).offset(offset).decorate
   end
-
-  def current_page
-    @page
-  end
-
-  def total_pages
-    total = all.to_a.count
-    (total.to_f / @limit).ceil
-  end
-
-  def limit_value
-    @limit
-  end
-
-  def offset
-    (@page - 1) * @limit
-  end
-
-  def prev_page
-    current_page - 1 unless first_page? || out_of_range?
-  end
-
-  def next_page
-    current_page + 1 unless last_page? || out_of_range?
-  end
-
 
   private
     def all
@@ -56,18 +32,6 @@ class SorteredProducts < Rectify::Query
       else
         @products
       end
-  end
-
-  def first_page?
-    current_page == 1
-  end
-
-  def last_page?
-    current_page == total_pages
-  end
-
-  def out_of_range?
-    current_page > total_pages
   end
 
   def sort_price_sql
