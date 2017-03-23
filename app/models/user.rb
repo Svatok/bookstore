@@ -54,22 +54,9 @@ class User < ApplicationRecord
     if user.nil?
       email = auth.info.email
       user = User.where(:email => email).first if email.present?
-      if user.nil?
-        user = User.new(
-          email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
-          password: Devise.friendly_token[0,20]
-        )
-        user.skip_password_validation = true
-        user.skip_confirmation!
-        user.save!
-        user.pictures.create(remote_image_path_url: auth.info.image.gsub('http://', 'https://')) if auth.info.image.present?
-        user.addresses.create(user.address_params(auth.info.name)) if auth.info.name.present?
-      end
+      create_new_user if user.nil?
     end
-    if identity.user != user
-      identity.user = user
-      identity.save!
-    end
+    set_identity(identity)
     user
   end
 
@@ -77,17 +64,34 @@ class User < ApplicationRecord
     self.email && self.email !~ TEMP_EMAIL_REGEX
   end
 
+  private
+  
+  def create_new_user
+    user = User.new(
+      email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
+      password: Devise.friendly_token[0,20]
+    )
+    user.skip_password_validation = true
+    user.skip_confirmation!
+    user.save!
+    user.pictures.create(remote_image_path_url: auth.info.image.gsub('http://', 'https://')) if auth.info.image.present?
+    user.addresses.create(user.address_params(auth.info.name)) if auth.info.name.present?
+  end
+  
   def address_params(name)
     name = name.split(' ')
     first_name = name.first
     last_name = name.last.present? ? name.last : ''
     {first_name: first_name, last_name: last_name, address_type: 'billing'}
   end
-
-  private
+  
+  def set_identity(identity)
+    return if identity.user == user
+    identity.user = user
+    identity.save!
+  end
 
   def set_default_role
     self.role ||= 'none'
   end
-
 end
