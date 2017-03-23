@@ -9,10 +9,7 @@ class CheckoutsController < ApplicationController
 
   def update
     "Set#{@order.state.capitalize}".constantize.call(options) do
-      on(:ok) do
-        # send(@order.state + '_update!')
-        redirect_to checkouts_path
-      end
+      on(:ok) { @order.send(@orde.next_state + '_step') and redirect_to checkouts_path }
       on(:invalid) { |forms| expose(object: object_with_errors) and render :show }
     end
   end
@@ -22,8 +19,8 @@ class CheckoutsController < ApplicationController
   def prepare_checkout
     PrepareCheckout.call(options) do
       on(:ok) do |order, view_partial|
-        expose(order: order, view_partial: view_partial)
-        present "#{order.state.capitalize}Presenter".constantize.new(object: order)
+        expose(order: order, view_partial: view_partial, presenter: presenter)
+        present "#{presenter.capitalize}Presenter".constantize.new(object: order)
       end
       on(:invalid) { redirect_to root_path }
     end
@@ -34,14 +31,7 @@ class CheckoutsController < ApplicationController
   end
  
   def complete_order
-    return unless @order.confirm?
-    @order.complete_step
+    return unless @order.complete?
+    @order.in_waiting_step
   end
-  
-  def next_state
-    return @order.prev_state if @order.prev_state == 'confirm' && @order.state != 'complete'
-    return 'complete' if @order.confirm?
-    @order.aasm.states(permitted: true).map(&:name).first.to_s
-  end
-
 end
