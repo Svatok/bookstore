@@ -1,0 +1,55 @@
+// Place all the styles related to the Products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#img_container {
+  .img-responsive{
+    max-height: 380px;
+    margin: auto;
+  }
+}
+.height-preview {
+  max-height: 115px;
+}
+textarea{
+  min-height:150px;
+}
+.general-message-verified{
+  margin-bottom: 0px;
+}
+
+/* Rating Star Widgets Style */
+.rating-stars ul {
+  list-style-type:none;
+  padding:0;
+
+  -moz-user-select:none;
+  -webkit-user-select:none;
+}
+.rating-stars ul > li.star {
+  display:inline-block;
+
+}
+
+/* Idle State of the stars */
+.rating-stars ul > li.star > i.fa {
+  font-size:15px; /* Change the size of the stars */
+  color:#ccc; /* Color on idle state */
+  cursor: pointer;
+}
+
+/* Hover state of the stars */
+.rating-stars ul > li.star.hover > i.fa {
+  color:#C59C71;
+}
+
+/* Selected state of the stars */
+.rating-stars ul > li.star.selected > i.fa {
+  color:#C59C71;
+}
+.carusel_fixed_height {
+  height: 465px;
+}
+.product_fixed_height {
+  height: 115px;
+}
