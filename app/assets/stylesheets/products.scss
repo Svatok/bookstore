@@ -1,3 +1,6 @@
+// Place all the styles related to the Products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
 
 #img_container {
   .img-responsive{
@@ -43,4 +46,10 @@ textarea{
 /* Selected state of the stars */
 .rating-stars ul > li.star.selected > i.fa {
   color:#C59C71;
+}
+.carusel_fixed_height {
+  height: 465px;
+}
+.product_fixed_height {
+  height: 115px;
 }
