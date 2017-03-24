@@ -17,20 +17,21 @@
       .row
         .col-xs-12.col-md-4
           %p.h1.in-gold-500.mt-10= number_to_currency(presenter.product.price_value, unit: '€')
-        = form_for presenter.order_item do |f|
-          .col-xs-5.col-md-3
-            .input-group.general-position
-              %a.input-link{href: "#"}
-                %i.fa.fa-minus.line-height-40
-              = f.hidden_field :product_id, value: presenter.product.id
-              = f.text_field :quantity, type: "text", class: 'form-control quantity-input', min: 1, value: 1
-              %a.input-link{href: "#"}
-                %i.fa.fa-plus.line-height-40
+        = form_tag cart_path,  method: :put do |f|
+          = fields_for 'order_item', presenter.order_item do |field_item|
+            .col-xs-5.col-md-3
+              .input-group.general-position
+                %a.input-link{href: "#"}
+                  %i.fa.fa-minus.line-height-40
+                = field_item.hidden_field :product_id, value: presenter.product.id
+                = field_item.text_field :quantity, type: "text", class: 'form-control quantity-input', min: 1, value: 1
+                %a.input-link{href: "#"}
+                  %i.fa.fa-plus.line-height-40
           .col-xs-7.col-md-5
-            = f.submit "Add to Cart", class: 'btn btn-default pull-right general-position'
+            = submit_tag "Add to Cart", class: 'btn btn-default pull-right general-position'
       .card
         %p Description
-        %p.in-grey-600.small.line-height-2
+        %p.in-grey-600.small.line-height-2.shorten-description
           = presenter.product.description
       .card
         .clearfix
