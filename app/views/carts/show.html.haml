@@ -1,10 +1,11 @@
 %main.container.general-main-wrap
   %h1.general-title-margin Cart
   .visible-xs
-    = form_tag update_cart_path,  method: :put do |field|
+    = form_tag cart_path,  method: :put do |field|
       - @order_items.each  do |order_item|
         .general-cart-item.divider-lg-bottom.mb-30
-          %a.close.general-cart-close{'aria-label': "Close", href: order_item_path(order_item.id), 'data-method': 'delete'}
+          %a.close.general-cart-close{'aria-label': "Close", 'data-method': 'put',
+            href: cart_path(delete: 'true', product: order_item.product_id)}
             %span{'aria-hidden': "true"} &times;
           .general-img-wrap-table
             %a{href: product_path(order_item.product_id)}
@@ -20,7 +21,7 @@
               %td.vertical-middle
                 %span.in-grey-600 Quantity
               %td
-                = fields_for 'order_items[]', order_item do |field_item|
+                = fields_for 'order_items[]', order_item.product_id do |field_item|
                   .input-group
                     %a.input-link{href: "#"}
                       %i.fa.fa-minus.line-height-40
@@ -64,7 +65,7 @@
               %a.btn.btn-default.mb-20.visible-xs-inline-block{href: checkouts_path} Checkout
       %a.btn.btn-default.mb-20.hidden-xs.center-block.checkout-btn{href: checkouts_path} Checkout
   .hidden-xs
-    = form_tag update_cart_path,  method: :put do |field|
+    = form_tag cart_path,  method: :put do |field|
       %table.table.table-hover
         %tr.no-hover
           %th.col-pic.pl-0
@@ -88,7 +89,7 @@
             %td
               %span.font-16.in-gold-500= number_to_currency(order_item.unit_price, unit: '€')
             %td
-              = fields_for 'order_items[]', order_item do |field_item|
+              = fields_for 'order_items[]', order_item.product_id do |field_item|
                 .input-group
                   %a.input-link{href: "#"}
                     %i.fa.fa-minus.line-height-40
@@ -98,7 +99,8 @@
             %td
               %span.font-16.in-gold-500= number_to_currency(order_item.subtotal, unit: '€')
             %td
-              %a.close.general-cart-close{'aria-label': "Close", href: order_item_path(order_item.id), 'data-method': 'delete'}
+              %a.close.general-cart-close{'aria-label': "Close", 'data-method': 'put',
+                href: cart_path(delete: 'true', product: order_item.product_id)}
                 %span{'aria-hidden': "true"} &times;
       .general-order-wrap
         .row

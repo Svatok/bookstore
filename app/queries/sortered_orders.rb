@@ -1,5 +1,5 @@
 class SorteredOrders < Rectify::Query
-  helper PaginationHelper
+  include PaginationHelper
 
   def initialize(orders, params)
     @params = params
@@ -11,5 +11,10 @@ class SorteredOrders < Rectify::Query
 
   def query
     @orders.where(state: @params[:sort]).limit(@limit).offset(offset)
+  end
+
+  def total_pages
+    total = query.to_a.size
+    (total.to_f / @limit).ceil
   end
 end

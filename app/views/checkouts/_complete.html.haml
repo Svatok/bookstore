@@ -6,12 +6,12 @@
     .visible-xs
       %p.general-order-number.mb-0= 'Order #' + @order.order_number
       %p.general-address.mb-30= @order.placed_date.strftime("%B %d, %Y")
-    = render 'short_address', object: @shipping_address
+    = render 'short_address', object: presenter.address('shipping')
   .col-sm-6.hidden-xs.text-right
     %p.general-order-number.mb-0= 'Order #' + @order.order_number
     %p.general-address.mb-30= @order.placed_date.strftime("%B %d, %Y")
 .visible-xs
-  = render 'order_items/order_items_v_xs'
+  = render 'order_items/order_items_v_xs', objects: presenter.order_items
 .hidden-xs.divider-lg.pt-20
   %table.table.table-hover
     %thead
@@ -26,4 +26,4 @@
         %th
           %span.in-grey-600 Total
     %tbody
-      = render 'order_items/order_items_h_xs'
+      = render 'order_items/order_items_h_xs', objects: presenter.order_items

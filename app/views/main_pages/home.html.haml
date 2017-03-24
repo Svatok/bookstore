@@ -17,7 +17,7 @@
                 %p.lead= product.description
                 %p.in-grey-600.small= product.all_authors
                 .general-align.pt-20
-                  %a.btn.btn-primary{href: order_items_path('order_item[product_id]': product.id, 'order_item[quantity]': 1)} Buy Now
+                  %a.btn.btn-primary{href: cart_path('order_item[product_id]': product.id, 'order_item[quantity]': 1), 'data-method': 'put'} Buy Now
     %a.left.carousel-control{href: "#slider", role: "button", 'data-slide': "prev"}
       %span.icon-prev{'aria-hidden': "true"}
       %span.sr-only Previous
@@ -42,7 +42,7 @@
                 .general-thumb-link-wrap
                   %a.thumb-hover-link{href: product_path(product)}
                     %i.fa.fa-eye.thumb-icon{'aria-hidden': "true"}
-                  %a.thumb-hover-link{href: order_items_path('order_item[product_id]': product.id, 'order_item[quantity]': 1)}
+                  %a.thumb-hover-link{href: cart_path('order_item[product_id]': product.id, 'order_item[quantity]': 1), 'data-method': 'put'}
                     %i.fa.fa-shopping-cart.thumb-icon
           .mb-35
             .clearfix

@@ -1,7 +1,7 @@
 .mb-80
-  %h3.in-gold-500.mb-25= "Reviews (#{@reviews.count})"
+  %h3.in-gold-500.mb-25= "Reviews (#{presenter.reviews.count})"
   %ul.media-list
-    - @reviews.each do |review|
+    - presenter.reviews.each do |review|
       %li.media.card
         .media-left
           = avatar_tag(review.user_id, review.reviewer_name, 'img-circle.logo-size.media-object')

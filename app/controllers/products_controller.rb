@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   helper ProductsHelper
+  include Rectify::ControllerHelpers
 
   def index
     @all_sort_params = ProductsHelper::SORTING
@@ -8,7 +9,6 @@ class ProductsController < ApplicationController
   end
 
   def show
-    present ProductPresenter.new(product: Product.find(params[:id]).decorate)
+    present ProductPresenter.new(product_id: params[:id])
   end
-
 end

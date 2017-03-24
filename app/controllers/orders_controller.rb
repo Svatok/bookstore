@@ -8,7 +8,6 @@ class OrdersController < ApplicationController
     @all_sort_params = OrdersHelper::SORTING
     @params = sort_params
     @orders = SorteredOrders.new(current_user.orders, params)
-    @order_item = current_order.order_items.new
   end
 
   def show
@@ -18,11 +17,7 @@ class OrdersController < ApplicationController
 
   private
 
-#     def order_items_params
-#       params.permit(:order_items => [:quantity])
-#     end
-
-    def sort_params
-      params.permit(:sort)
-    end
+  def sort_params
+    params.permit(:sort)
+  end
 end

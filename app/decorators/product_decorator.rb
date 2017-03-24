@@ -2,14 +2,8 @@ class ProductDecorator < Draper::Decorator
   delegate_all
 
   def all_authors
-#     authors_names = ''
-    return authors_names unless object.authors.present?
-    object.authors.collect {|author| author.first_name + ' ' + author.last_name }.join(', ')
-#     object.authors.each_with_index do |author, i|
-#       authors_names += ', ' if i.nonzero?
-#       authors_names += author.first_name + ' ' + author.last_name
-#     end
-#     authors_names
+    return '' unless object.authors.present?
+    object.authors.collect { |author| author.first_name + ' ' + author.last_name }.join(', ')
   end
 
   def dimensions
@@ -37,5 +31,4 @@ class ProductDecorator < Draper::Decorator
   def product_pictures(count = 15)
     object.pictures.present? ? object.pictures.product_imgs(count) : Picture.no_image
   end
-
 end

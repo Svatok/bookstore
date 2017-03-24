@@ -4,10 +4,10 @@ class ApplicationController < ActionController::Base
   helper_method :current_order
 
   def authenticate_active_admin_user!
-   authenticate_user!
-   return if current_user.role?(:admin)
-   flash[:alert] = 'You are not authorized to access this resource!'
-   redirect_to root_path
+    authenticate_user!
+    return if current_user.role?(:admin)
+    flash[:alert] = 'You are not authorized to access this resource!'
+    redirect_to root_path
   end
 
   def current_order
@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
-  
+
   def categories
     @categories = Category.all.order(default_sort: :desc)
   end

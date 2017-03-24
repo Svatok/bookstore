@@ -13,7 +13,7 @@ class Product < ApplicationRecord
   scope :coupons, -> { where(product_type: 'coupon') }
   scope :shippings, -> { where(product_type: 'shipping', status: 'active') }
   scope :select_product_type, -> status { where status: status }
-  scope :in_stock, ->{ main.joins(in_stock_query) }
+  scope :in_stock, -> { main.joins(in_stock_query) }
   scope :lattest_products, ->(products_count) { order(created_at: :desc).limit(products_count) }
   scope :best_sellers, -> { joins(:orders).group('order_items.product_id', 'products.id')
                                             .order('SUM(order_items.quantity) desc') }
@@ -22,11 +22,11 @@ class Product < ApplicationRecord
   def self.ransackable_scopes(auth_object = nil)
     [:select_product_type, :main, :coupons, :shippings, :with_category]
   end
-  
+
   private
-  
-  def in_stock_query
-     "INNER JOIN (SELECT a.* FROM stocks as a
+
+  def self.in_stock_query
+    "INNER JOIN (SELECT a.* FROM stocks as a
                              WHERE EXISTS (SELECT 1 FROM stocks as b
                                                     WHERE a.product_id = b.product_id
                                                       AND b.date_start <= '#{Date.today}'

@@ -6,23 +6,23 @@
     .col-sm-6
       .product-gallery
         .mb-20#img_container
-          %img.img-responsive{src: @product.product_pictures(1).first.image_path}
+          %img.img-responsive{src: presenter.product.product_pictures(1).first.image_path}
         .images.clearfix
-          - @product.product_pictures.each do |picture|
+          - presenter.product.product_pictures.each do |picture|
             %a.img-link{href: "#"}
               %img.width-full.height-preview{src: picture.image_path}
     .col-sm-6
-      %h1.mt-res-0= @product.title
-      %p.in-grey-600.small= @product.all_authors
+      %h1.mt-res-0= presenter.product.title
+      %p.in-grey-600.small= presenter.product.all_authors
       .row
         .col-xs-12.col-md-4
-          %p.h1.in-gold-500.mt-10= number_to_currency(@product.price_value, unit: '€')
-        = form_for @order_item do |f|
+          %p.h1.in-gold-500.mt-10= number_to_currency(presenter.product.price_value, unit: '€')
+        = form_for presenter.order_item do |f|
           .col-xs-5.col-md-3
             .input-group.general-position
               %a.input-link{href: "#"}
                 %i.fa.fa-minus.line-height-40
-              = f.hidden_field :product_id, value: @product.id
+              = f.hidden_field :product_id, value: presenter.product.id
               = f.text_field :quantity, type: "text", class: 'form-control quantity-input', min: 1, value: 1
               %a.input-link{href: "#"}
                 %i.fa.fa-plus.line-height-40
@@ -31,19 +31,19 @@
       .card
         %p Description
         %p.in-grey-600.small.line-height-2
-          = @product.description
+          = presenter.product.description
       .card
         .clearfix
-          %p.general-item-info.pull-right= @product.property_value('Year of publication')
+          %p.general-item-info.pull-right= presenter.product.property_value('Year of publication')
 
           %p.break-word Year of publication
       .card
         .clearfix
-          %p.general-item-info.pull-right= @product.dimensions
+          %p.general-item-info.pull-right= presenter.product.dimensions
           %p.break-word Dimensions
       .card
         .clearfix
-          %p.general-item-info.pull-right= @product.property_value('Materials')
+          %p.general-item-info.pull-right= presenter.product.property_value('Materials')
           %p.break-word Materials
   = render 'reviews/show_review'
   = render 'reviews/form_review'

@@ -3,12 +3,12 @@
   %p.in-grey-600.small.mb-10.visible-xs Sort by
   .dropdown.general-order-dropdown.mb-20
     %a.dropdown-toggle.dropdown-btn.width-100{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
-      = current_sort(params[:sort])
+      = params[:sort].present? ? @all_sort_params[params[:sort].to_sym] : @all_sort_params[:in_waiting]
       %i.fa.fa-angle-down.dropdown-icon
     %ul.dropdown-menu
       - @all_sort_params.each do |sort, title|
         %li
-          %a{href: orders_path(@params.merge(:sort => sort))}= title
+          %a{href: orders_path(@params.merge(sort: sort))}= title
   .visible-xs
     - @orders.each do |order|
       .general-cart-item

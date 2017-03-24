@@ -4,19 +4,20 @@ class SetAddress < Rectify::Command
     @object = options[:object]
     set_address_forms
   end
-  
+
   def call
     @address_forms.each do |address_type, address_form|
       next unless needs_to_be_updated?(address_type)
       return broadcast(:invalid, @address_forms) unless address_form.valid?
       set_address(address_type, address_form)
     end
-    broadcast(:ok)
+    broadcast(:ok, @object)
   end
 
   private
 
   def set_address_forms
+    @address_forms = {}
     @params['address_forms'].each do |address_type, params|
       @address_forms[address_type.to_sym] = UserAddressForm.from_params(address_params(params))
     end
@@ -32,9 +33,10 @@ class SetAddress < Rectify::Command
   def use_billing?
     @params['use_billing'] == 'on' && @address_forms[:billing].present?
   end
-  
+
   def needs_to_be_updated?(address_type)
-    !@params['only_address_type'].present? && @params['only_address_type'] == address_type
+    return true unless @params['only_address_type'].present?
+    @params['only_address_type'] == address_type.to_s
   end
 
   def set_address(address_type, address_form)

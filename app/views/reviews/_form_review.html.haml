@@ -1,4 +1,4 @@
-= form_for(@review_form ) do |f|
+= form_for(presenter.review_form ) do |f|
   .hidden-xs.hidden-sm
     .row
       .col-md-8
@@ -7,7 +7,7 @@
     .col-md-8.mb-40
       .visible-xs.visible-sm
         %h3.general-subtitle.mt-0 Write a Review
-      .form-group.mb-20{:class => ("has-error" if @review_form.errors.messages.include?(:rate) )}
+      .form-group.mb-20{:class => ("has-error" if presenter.review_form.errors.messages.include?(:rate) )}
         .mb-10.in-grey-600 Score
         .mb-20
         .rating-stars
@@ -23,15 +23,15 @@
             %li.star{'title': 'WOW!!!', 'data-value': '5'}
               %i.fa.fa-star.fa-fw
             = f.hidden_field :rate, id: 'rate_value'
-        = f.hidden_field :product_id, value: @product.id
-        = f.hidden_field :user_id, value: @user.id
-        %span.help-block= @review_form.errors.full_messages_for(:rate).first
-      .form-group.mb-20{:class => ("has-error" if @review_form.errors.messages.include?(:reviewer_name) )}
+        = f.hidden_field :product_id, value: presenter.product.id
+        = f.hidden_field :user_id, value: presenter.user.id
+        %span.help-block= presenter.review_form.errors.full_messages_for(:rate).first
+      .form-group.mb-20{:class => ("has-error" if presenter.review_form.errors.messages.include?(:reviewer_name) )}
         %label.control-label.font-weight-light.in-grey-600{for: :reviewer_name} Name
-        = f.text_field :reviewer_name, type: "text", class: 'form-control', value: full_name(@user)
-        %span.help-block= @review_form.errors.full_messages_for(:reviewer_name).first
-      .form-group{:class => ("has-error" if @review_form.errors.messages.include?(:review_text) )}
+        = f.text_field :reviewer_name, type: "text", class: 'form-control', value: full_name(presenter.user)
+        %span.help-block= presenter.review_form.errors.full_messages_for(:reviewer_name).first
+      .form-group{:class => ("has-error" if presenter.review_form.errors.messages.include?(:review_text) )}
         %label.control-label.font-weight-light.in-grey-600{for: :review_text} Review
         = f.text_area :review_text, class: 'form-control'
-        %span.help-block= @review_form.errors.full_messages_for(:review_text).first
+        %span.help-block= presenter.review_form.errors.full_messages_for(:review_text).first
       = f.submit "Post", class: 'btn pull-right'

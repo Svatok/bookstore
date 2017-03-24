@@ -1,4 +1,4 @@
-class CartController < ApplicationController
+class CartsController < ApplicationController
 
   def show
     @order = current_order.decorate
@@ -7,7 +7,7 @@ class CartController < ApplicationController
   end
 
   def update
-    UpdateOrderItems.call({ object: current_user, params: params }) do
+    UpdateOrderItems.call({ object: current_order, params: params }) do
       on(:ok) { flash[:success] = 'Your cart has been updated!' }
       on(:invalid) { flash[:error] = 'Your cart not updated!' }
     end

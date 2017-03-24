@@ -2,47 +2,47 @@ class UpdateOrderItems < Rectify::Command
   def initialize(options)
     @order = options[:object]
     @params = options[:params]
-    set_order_items
   end
 
   def call
-    coupon_add if @params[:coupon][:code].present?
+    coupon_add if @params[:coupon].present?
     return if @params[:coupon_only].present?
-    @params[:delete].present? delete_order_items : change_order_items
+    result = @params['delete'].present? ? delete_order_items : change_order_items
+    return broadcast(:invalid) unless result
     session[:order_id] = @order.id unless session_present?
     broadcast(:ok)
   end
-  
+
   private
-  
+
+  def delete_order_items
+    order_item = @order.order_items.find_by(product_id: @params['product'])
+    return unless order_item.present?
+    order_item.destroy
+  end
+
+  def change_order_items
+    set_order_items
+    @order_items.each do |product_id, order_item_params|
+      order_item = @order.order_items.find_or_initialize_by(product_id: product_id)
+      return false unless order_item.update_attributes(quantity: order_item_params[:quantity])
+    end
+  end
+
   def set_order_items
+    @order_items = {}
     return @order_items = @params[:order_items] if @params[:order_items].present?
     @params[:order_item][:quantity] = all_quantity_in_cart(@params[:order_item][:product_id]).to_s
     @order_items[@params[:order_item][:product_id]] = @params[:order_item]
   end
-  
+
   def all_quantity_in_cart(product_id)
     quantity_in_cart = in_cart?(product_id) ? @order.order_items.find_by(product_id: product_id).quantity : 0
-    all_quantity = params[product_id][:quantity].to_i + quantity_in_cart
+    @params[:order_item][:quantity].to_i + quantity_in_cart
   end
 
   def in_cart?(product_id)
     @order.order_items.find_by(product_id: product_id).present?
-  end
-  
-  def delete_order_items
-    order_item = @order.order_items.find(@order_items.first[:product_id])
-    return unless order_item.present?
-    order_item.destroy
-  end
-  
-  def change_order_items
-    @order_items.each do |product_id, order_item_params|
-      order_item = @order.order_items.find_or_initialize_by(product_id: product_id)
-      unless order_item.update_attributes(quantity: order_item_params[:quantity])
-        broadcast(:invalid) 
-      end
-    end
   end
 
   def coupon_add
@@ -57,9 +57,8 @@ class UpdateOrderItems < Rectify::Command
     return unless coupon.present?
     @order.order_items.find(coupon.first.id).destroy
   end
-  
+
   def session_present?
     session[:order_id] == @order.id
   end
 end
-  

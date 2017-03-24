@@ -3,7 +3,7 @@ module OrderStateMachine
 
   included do
     include AASM
-    
+
     aasm column: :state do
       state :cart, initial: true
       state :address, :delivery, :payment, :confirm, :complete, :in_waiting,
@@ -54,7 +54,7 @@ module OrderStateMachine
         ], to: :canceled
       end
     end
-    
+
     def next_state
       return prev_state if prev_state == 'confirm' && state != 'complete'
       return 'complete' if confirm?

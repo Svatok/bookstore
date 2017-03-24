@@ -1,6 +1,6 @@
 class SorteredProducts < Rectify::Query
-  helper PaginationHelper
-  
+  include PaginationHelper
+
   def initialize(params)
     @params = params
     @params[:sort] = 'newest' unless @params[:sort].present?
@@ -11,6 +11,11 @@ class SorteredProducts < Rectify::Query
 
   def query
     all.limit(@limit).offset(offset).decorate
+  end
+
+  def total_pages
+    total = all.to_a.size
+    (total.to_f / @limit).ceil
   end
 
   private

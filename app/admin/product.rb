@@ -1,5 +1,6 @@
 ActiveAdmin.register Product do
 
+  menu priority: 1
   permit_params :id, :title, :description, :category_id, :product_type, :status
   decorate_with ProductDecorator
 

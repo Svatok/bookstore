@@ -5,16 +5,18 @@ class PrepareCheckout < Rectify::Command
   end
 
   def call
-    view_partial = @order.state
-    return broadcast(:invalid) unless lookup_context.exists?(view_partial, ["checkouts"], true)
     initialize_new_order if new_valid_order?
     @order.send(@params['edit'] + '_step!') if editing_data?
-    broadcast(:ok, @order.decorate, view_partial, presenter)
+    @view_partial = @order.state
+    place_order if @view_partial == 'complete'
+    return broadcast(:invalid) unless lookup_context.exists?(@view_partial, ["checkouts"], true)
+    broadcast(:ok, @order.decorate, @view_partial, presenter)
   end
 
   private
 
   def new_valid_order?
+    return false unless @order.total_price.present?
     @order.cart? && @order.total_price > 0
   end
 
@@ -26,9 +28,14 @@ class PrepareCheckout < Rectify::Command
   def editing_data?
     @params['edit'].present? && @order.aasm.states.map(&:name).include?(@params['edit'].to_sym)
   end
-  
+
   def presenter
-    return 'FullOrder' if @order.confirm? || @order.complete?
-    @order.state
+    return 'full_order' if @view_partial == 'confirm' || @view_partial == 'complete'
+    @view_partial
+  end
+
+  def place_order
+    @order.in_waiting_step!
+    session.delete(:order_id)
   end
 end

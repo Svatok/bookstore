@@ -2,14 +2,13 @@ class SetPayment < Rectify::Command
   def initialize(options)
     @params = options[:params]
     @object = options[:object]
-    @payment_forms = {}
   end
-  
+
   def call
     payment_form = PaymentForm.from_params(permit_params)
-    return set_payment(payment_form) and broadcast(:ok) if payment_form.valid?
-    @payment_forms[:main] = payment_form
-    broadcast(:invalid, @payment_forms)
+    return broadcast(:invalid, payment_form) unless payment_form.valid?
+    set_payment(payment_form)
+    broadcast(:ok, @object)
   end
 
   private

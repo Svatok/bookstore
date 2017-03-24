@@ -16,11 +16,11 @@
               %h3.general-subtitle.mt-0 Shipping Address
         .row
           .col-md-5.mb-40
-            = render 'addresses/forms', object: presenter.address_form('billing')
+            = render 'addresses/forms', object: presenter.address_form('billing'), address_type: 'billing'
             .text-center.general-text-align
               %button.btn{name: "only_address_type", value: "billing"} Save
           .col-md-5.col-md-offset-1.mb-25
-            = render 'addresses/forms', object: presenter.address_form('shipping')
+            = render 'addresses/forms', object: presenter.address_form('shipping'), address_type: 'shipping'
             .text-center.general-text-align
               %button.btn{name: "only_address_type", value: "shipping"} Save
     #privacy.tab-pane.fade{role: "tabpanel"}

@@ -20,7 +20,7 @@ class UserAddressForm < Rectify::Form
 
   def check_phone_code
     country = Country.find_by_id(country_id)
-    return if phone =~ /\A\+#{country.phone_number}/
+    return if country.present? && phone =~ /\A\+#{country.phone_number}/
     errors.add(:phone, 'country code is invalid.')
   end
 end

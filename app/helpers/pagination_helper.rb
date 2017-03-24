@@ -1,11 +1,10 @@
 module PaginationHelper
-
   def current_page
     @page
   end
 
   def total_pages
-    total = all.to_a.count
+    total = all.to_a.size
     (total.to_f / @limit).ceil
   end
 
@@ -24,7 +23,7 @@ module PaginationHelper
   def next_page
     current_page + 1 unless last_page? || out_of_range?
   end
-  
+
   def first_page?
     current_page == 1
   end
@@ -36,5 +35,4 @@ module PaginationHelper
   def out_of_range?
     current_page > total_pages
   end
-
 end
