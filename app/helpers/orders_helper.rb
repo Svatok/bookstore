@@ -6,7 +6,6 @@ module OrdersHelper
             }
 
   def current_sort(sort)
-    binding.pry
     sort.present? ? SORTING[sort.to_sym] : SORTING[:in_waiting]
   end
 end
