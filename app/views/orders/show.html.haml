@@ -2,23 +2,23 @@
   %h1.general-title-margin= 'Order ' + @order.order_number
   .row.mb-20
     .col-sm-3
-      = render 'checkouts/short_address', object: @shipping_address
+      = render 'checkouts/short_address', object: presenter.address('shipping')
     .col-sm-3
-      = render 'checkouts/short_address', object: @billing_address
+      = render 'checkouts/short_address', object: presenter.address('billing')
     .col-sm-3
       %h3.general-subtitle Shipments
       %p.general-address
-        = @shipping.product.title
+        = presenter.shipping.product.title
         %br
-        = @shipping.product.description
+        = presenter.shipping.product.description
     .col-sm-3
       %h3.general-subtitle Payment Information
       %p.general-address
-        = @payment.four_numbers_of_card
+        = presenter.payment.four_numbers_of_card
         %br
-        = @payment.mm_yy
+        = presenter.payment.mm_yy
   .visible-xs
-    = render 'order_items/order_items_v_xs'
+    = render 'order_items/order_items_v_xs', objects: presenter.order_items
   .hidden-xs.divider-lg.pt-20
     %table.table.table-hover
       %thead
@@ -33,7 +33,7 @@
           %th
             %span.in-grey-600 Total
       %tbody
-        = render 'order_items/order_items_h_xs'
+        = render 'order_items/order_items_h_xs', objects: presenter.order_items
   .text-center.general-text-right
     %p.in-gold-500.font-18 Order Summary
     %table.general-summary-table.general-summary-table-right.general-text-right
