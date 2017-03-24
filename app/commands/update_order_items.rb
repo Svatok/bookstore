@@ -6,7 +6,7 @@ class UpdateOrderItems < Rectify::Command
 
   def call
     coupon_add if @params[:coupon].present?
-    return if @params[:coupon_only].present?
+    return if @params[:coupon_only].present? || cart_empty?
     result = @params['delete'].present? ? delete_order_items : change_order_items
     return broadcast(:invalid) unless result
     session[:order_id] = @order.id unless session_present?
@@ -14,6 +14,10 @@ class UpdateOrderItems < Rectify::Command
   end
 
   private
+  
+  def cart_empty?
+    !@params[:order_item].present? && !@params[:order_items].present?
+  end
 
   def delete_order_items
     order_item = @order.order_items.find_by(product_id: @params['product'])
