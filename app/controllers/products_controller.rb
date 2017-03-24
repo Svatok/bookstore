@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   helper ProductsHelper
+  helper PicturesHelper
   include Rectify::ControllerHelpers
 
   def index
