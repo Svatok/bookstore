@@ -1,4 +1,6 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'bookstore@example.com'
+  include SendGrid
+
+  default from: 'bookstore@svatok-bookstore-svatok.c9users.io'
   layout 'mailer'
 end
