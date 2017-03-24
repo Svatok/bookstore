@@ -14,7 +14,7 @@
             .col-sm-7
               .mb-60
                 %h1= product.title
-                %p.lead= product.description
+                %p.lead.shorten-description= product.description
                 %p.in-grey-600.small= product.all_authors
                 .general-align.pt-20
                   %a.btn.btn-primary{href: cart_path('order_item[product_id]': product.id, 'order_item[quantity]': 1), 'data-method': 'put'} Buy Now
@@ -47,6 +47,6 @@
           .mb-35
             .clearfix
               %p.pull-right.font-16.in-gold-500= number_to_currency(product.price_value, :unit=>'€')
-              %p.general-title.mr-55= product.title
+              %p.general-title.mr-55.product_fixed_height= product.title
             %span.divider-sm
             %p.in-grey-600.small= product.all_authors
