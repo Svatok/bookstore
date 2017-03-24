@@ -29,5 +29,5 @@
     %span.help-block= object.errors.full_messages_for(:country_id).first
   .form-group{:class => ("has-error" if object.errors.messages.include?(:phone) )}
     %label.control-label.font-weight-light{for: :phone} Phone
-    = f.text_field :phone, type: "text", placeholder: "Example +355 66 123 4567", class: 'form-control'
+    = f.text_field :phone, type: "text", placeholder: "Example +380671124567", class: 'form-control'
     %span.help-block= object.errors.full_messages_for(:phone).first
