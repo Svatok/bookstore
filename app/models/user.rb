@@ -31,42 +31,32 @@ class User < ApplicationRecord
     return false if skip_password_validation
     !persisted? || !password.nil? || !password_confirmation.nil?
   end
-
-  def update
-    if params[:user][:current_password].blank?
-      params[:user].delete("password")
-      params[:user].delete("password_confirmation")
-    end
-
-    @user = User.find(current_user.id)
-    if @user.update_attributes(params[:user])
-      set_flash_message :notice, :updated
-      sign_in @user, :bypass => true
-      redirect_to after_update_path_for(@user)
-    else
-      render "edit"
-    end
-  end
-
+  
   def self.find_for_oauth(auth, signed_in_resource = nil)
     identity = Identity.find_for_oauth(auth)
     user = signed_in_resource ? signed_in_resource : identity.user
     if user.nil?
       email = auth.info.email
       user = User.where(:email => email).first if email.present?
-      create_new_user if user.nil?
+      user = create_new_user(email, auth) if user.nil?
     end
-    set_identity(identity)
+    set_identity(identity, user)
     user
   end
-
+  
   def email_verified?
     self.email && self.email !~ TEMP_EMAIL_REGEX
   end
 
   private
+
+  def self.set_identity(identity, user)
+    return if identity.user == user.id
+    identity.user = user
+    identity.save!
+  end
   
-  def create_new_user
+  def self.create_new_user(email, auth)
     user = User.new(
       email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
       password: Devise.friendly_token[0,20]
@@ -75,20 +65,15 @@ class User < ApplicationRecord
     user.skip_confirmation!
     user.save!
     user.pictures.create(remote_image_path_url: auth.info.image.gsub('http://', 'https://')) if auth.info.image.present?
-    user.addresses.create(user.address_params(auth.info.name)) if auth.info.name.present?
+    user.addresses.create(address_params(auth.info.name)) if auth.info.name.present?
+    user
   end
   
-  def address_params(name)
+  def self.address_params(name)
     name = name.split(' ')
     first_name = name.first
     last_name = name.last.present? ? name.last : ''
     {first_name: first_name, last_name: last_name, address_type: 'billing'}
-  end
-  
-  def set_identity(identity)
-    return if identity.user == user
-    identity.user = user
-    identity.save!
   end
 
   def set_default_role
