@@ -36,6 +36,9 @@
                   %a.collapse-link{href: orders_path} Orders
                 %li
                   %a.collapse-link{href: edit_user_registration_path} Settings
+                - if current_user.role?(:admin)
+                  %li
+                    %a.collapse-link{href: admin_root_path} Admin Panel
             %li
               %a{href: destroy_user_session_path, method: :delete} Log out
           - else
@@ -61,6 +64,9 @@
                   %a{href: orders_path} Orders
                 %li
                   %a{href: edit_user_registration_path} Settings
+                - if current_user.role?(:admin)
+                  %li
+                    %a{href: admin_root_path} Admin Panel
                 %li.divider{role: "separator"}
                 %li
                   %a{href: destroy_user_session_path, method: :delete} Log out

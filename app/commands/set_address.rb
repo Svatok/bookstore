@@ -2,15 +2,17 @@ class SetAddress < Rectify::Command
   def initialize(options)
     @params = options[:params]
     @object = options[:object]
+    @errors = false
     set_address_forms
   end
 
   def call
     @address_forms.each do |address_type, address_form|
       next unless needs_to_be_updated?(address_type)
-      return broadcast(:invalid, @address_forms) unless address_form.valid?
+      @errors = true unless address_form.valid?
       set_address(address_type, address_form)
     end
+    return broadcast(:invalid, @address_forms) if @errors
     broadcast(:ok, @object)
   end
 

@@ -2,19 +2,20 @@ class UpdateOrderItems < Rectify::Command
   def initialize(options)
     @order = options[:object]
     @params = options[:params]
+    @coupon_msg = {}
   end
 
   def call
-    coupon_add if @params[:coupon].present?
+    coupon_add if @params[:coupon].present? && @params[:coupon][:code] != ''
     return if @params[:coupon_only].present? || cart_empty?
     result = @params['delete'].present? ? delete_order_items : change_order_items
     return broadcast(:invalid) unless result
     session[:order_id] = @order.id unless session_present?
-    broadcast(:ok)
+    broadcast(:ok, @coupon_msg)
   end
 
   private
-  
+
   def cart_empty?
     !@params[:order_item].present? && !@params[:order_items].present?
   end
@@ -51,7 +52,7 @@ class UpdateOrderItems < Rectify::Command
 
   def coupon_add
     coupon = Product.coupons.find_by(title: @params[:coupon][:code], status: 'active')
-    return unless coupon.present?
+    return @coupon_msg[:error] = 'Coupon is not valid or not active!' unless coupon.present?
     previous_coupon_delete
     @order.order_items.create(product_id: coupon.id, quantity: 1)
   end

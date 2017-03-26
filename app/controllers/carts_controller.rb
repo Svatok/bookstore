@@ -8,7 +8,9 @@ class CartsController < ApplicationController
 
   def update
     UpdateOrderItems.call({ object: current_order, params: params }) do
-      on(:ok) { flash[:success] = 'Your cart has been updated!' }
+      on(:ok) do |coupon_msg|
+        coupon_msg.present? ? flash[:error] = coupon_msg[:error] : flash[:success] = 'Your cart was updated!'
+      end
       on(:invalid) { flash[:error] = 'Your cart not updated!' }
     end
     redirect_back(fallback_location: root_path)
