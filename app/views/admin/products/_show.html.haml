@@ -1,0 +1,27 @@
+.row
+  .col-sm-6
+    .product-gallery
+      .mb-20#img_container
+        %img.img-responsive{src: @product.product_pictures(1).first.image_path}
+      %p
+      .images.clearfix
+        - @product.product_pictures.each do |picture|
+          %a.img-link{href: "#"}
+            %img.width-full.height-preview{src: picture.image_path}
+  .col-sm-6
+    %h1.mt-res-0.row-bordered= @product.title
+    .card.row-bordered
+      %h4 Authors:
+      %p.in-grey-600.small= @product.all_authors
+    .card.row-bordered
+      %p.h1.in-gold-500.mt-10= number_to_currency(@product.price_value, unit: '€')
+    .card.row-bordered
+      %h4 Description:
+      %p.in-grey-600.small.line-height-2
+        = @product.description
+    %h4 Characteristics:
+    - @product.characteristics.each do |characteristic|
+      .card
+        .clearfix
+          %p.general-item-info.pull-right= characteristic.value
+          %p.break-word= characteristic.property.name.capitalize + ':'

@@ -1,0 +1,15 @@
+- objects.each  do |order_item|
+  %tr
+    %td
+      .general-img-wrap-table
+        %a{href: product_path(order_item.product_id)}
+          %img.cart-img-shadow.pull-left.width-full{src: order_item.product.product_pictures(1).first.image_path}
+    %td
+      %p.general-title= order_item.product.title
+      %p.in-grey-600.font-weight-light= truncate(order_item.product.description, length: 200)
+    %td
+      %span.font-16.in-gold-500= number_to_currency(order_item.unit_price, unit: '€')
+    %td
+      %span.ml-30=order_item.quantity
+    %td
+      %span.font-16.in-gold-500= number_to_currency(order_item.subtotal, unit: '€')

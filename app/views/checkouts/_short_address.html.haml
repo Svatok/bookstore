@@ -1,0 +1,12 @@
+%h3.general-subtitle= object.address_type.capitalize + " Address"
+%p.general-address
+  = object.address_name
+  = link_to "edit", checkouts_path(edit: 'address'), class: 'general-edit' if @view_partial == 'confirm'
+  %br
+  = object[:address]
+  %br
+  = object.city_and_zip
+  %br
+  = object.country.name
+  %br
+  = object.phone_number

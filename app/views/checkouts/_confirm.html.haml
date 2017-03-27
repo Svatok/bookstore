@@ -1,0 +1,36 @@
+.row.mb-20
+  .col-sm-3
+    = render 'short_address', object: presenter.address('shipping')
+  .col-sm-3
+    = render 'short_address', object: presenter.address('billing')
+  .col-sm-3
+    %h3.general-subtitle Shipments
+    %p.general-address
+      = presenter.shipping.product.title
+      %a.general-edit{href: checkouts_path(edit: 'delivery')} edit
+      %br
+      = presenter.shipping.product.description
+  .col-sm-3
+    %h3.general-subtitle Payment Information
+    %p.general-address
+      = presenter.payment.four_numbers_of_card
+      %a.general-edit{href: checkouts_path(edit: 'payment')} edit
+      %br
+      = presenter.payment.mm_yy
+.visible-xs
+  = render 'order_items/order_items_v_xs', objects: presenter.order_items
+.hidden-xs.divider-lg.pt-20
+  %table.table.table-hover
+    %thead
+      %tr
+        %th
+          %span.in-grey-600 Book
+        %th.col-method
+        %th
+          %span.in-grey-600 Price
+        %th
+          %span.in-grey-600 Quantity
+        %th
+          %span.in-grey-600 Total
+    %tbody
+      = render 'order_items/order_items_h_xs', objects: presenter.order_items

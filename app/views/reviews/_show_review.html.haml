@@ -1,0 +1,18 @@
+.mb-80
+  %h3.in-gold-500.mb-25= "Reviews (#{presenter.reviews.count})"
+  %ul.media-list
+    - presenter.reviews.each do |review|
+      %li.media.card
+        .media-left
+          = avatar_tag(review.user_id, review.reviewer_name, 'img-circle.logo-size.media-object')
+        .media-body
+          %div
+            %p.general-message-date.hidden-xs= review.date_of_create
+            %h4.media-heading.max-240.general-message-name
+            .in-gold-500.media-left
+              %span.general-message-verified= review.verification
+              = review.reviewer_name
+          .mb-15
+            - 5.times.collect do |i|
+              %i.fa.fa-star.rate-star{:class => ('rate-empty' if i >= review.rate)}
+          %p= review.review_text

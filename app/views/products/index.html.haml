@@ -1,0 +1,65 @@
+%main.container
+  %h1.general-title-margin Сatalog
+  .hidden-xs.clearfix
+    .pull-right
+      .dropdown
+        %a.dropdown-toggle.dropdown-btn.width-240{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
+          = current_sort(params[:sort])
+          %i.fa.fa-angle-down.dropdown-icon
+        %ul.dropdown-menu
+          - @all_sort_params.each do |sort, title|
+            %li
+              %a{href: products_path(params.permit(:sort, :category).merge(sort: sort))}= title
+    %ul.list-inline.pt-10.mb-25.mr-240
+      %li.mr-35
+        %a.filter-link{href: products_path(params.permit(:sort))}
+          All
+          %span.badge.general-badge= Product.in_stock.count
+      - @categories.each do |category|
+        %li.mr-35
+          %a.filter-link{href: products_path(params.permit(:sort, :category).merge(category: category))}
+            = category.name
+            %span.badge.general-badge= Product.with_category(category).count
+  .mb-40.visible-xs
+    %p.in-grey-600.small.mb-10 Filter by category
+    .dropdown.mb-20
+      %a.dropdown-toggle.dropdown-btn.width-100{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
+        = params[:category].nil? ? category_with_count : category_with_count(params[:category])
+        %i.fa.fa-angle-down.dropdown-icon
+      %ul.dropdown-menu
+        %li
+          %a{href: products_path}= category_with_count
+        - @categories.each do |category|
+          %li
+            %a{href: products_path(params.permit(:sort, :category).merge(category: category))}= category_with_count(category)
+    %p.in-grey-600.small.mb-10 Sort by
+    .dropdown
+      %a.dropdown-toggle.dropdown-btn.width-100{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
+        = current_sort(params[:sort])
+        %i.fa.fa-angle-down.dropdown-icon
+      %ul.dropdown-menu
+        - @all_sort_params.each do |sort, title|
+          %li
+            %a{href: products_path(params.permit(:sort, :category).merge(sort: sort))}= title
+  .mb-120
+    - @products.each_slice(4) do |products_row|
+      .row.mb-25
+        - products_row.each do |product|
+          .col-xs-6.col-sm-3
+            .general-thumb-wrap
+              .thumbnail.general-thumbnail
+                %img.img-shadow.general-thumbnail-img{src: "#{product.product_pictures(1).first.image_path}"}
+                .thumb-hover
+                  .general-thumb-link-wrap
+                    %a.thumb-hover-link{href: product_path(product)}
+                      %i.fa.fa-eye.thumb-icon{'aria-hidden': "true"}
+                    %a.thumb-hover-link{href: cart_path('order_item[product_id]': product.id, 'order_item[quantity]': 1), 'data-method': 'put'}
+                      %i.fa.fa-shopping-cart.thumb-icon
+            .general-thumb-info
+              %p.general-title.product_fixed_height= product.title
+              %p.font-16.in-gold-500= number_to_currency(product.price_value, unit: '€')
+              %span.divider-sm
+              %p.in-grey-600.small= product.all_authors
+    .text-center
+      = link_to_prev_page @products, 'Prev Page', class: 'btn btn-primary'
+      = link_to_next_page @products, 'Next Page', class: 'btn btn-primary'

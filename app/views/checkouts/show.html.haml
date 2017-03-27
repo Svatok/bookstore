@@ -1,0 +1,30 @@
+%main.container
+  %h1.general-title-margin Checkout
+  %ul.steps.list-inline
+    %li.step{class: ("active" if @order.address?)}
+      %span.step-number 1
+      %span.step-text.hidden-xs Address
+    %li.step-divider
+    %li.step{class: ("active" if @order.delivery?)}
+      %span.step-number 2
+      %span.step-text.hidden-xs Delivery
+    %li.step-divider
+    %li.step{class: ("active" if @order.payment?)}
+      %span.step-number 3
+      %span.step-text.hidden-xs Payment
+    %li.step-divider
+    %li.step{class: ("active" if @order.confirm?)}
+      %span.step-number 4
+      %span.step-text.hidden-xs Confirm
+    %li.step-divider
+    %li.step{class: ("active" if @order.complete?)}
+      %span.step-number 5
+      %span.step-text.hidden-xs Complete
+  = form_tag checkouts_path, class: 'res-mb-100', method: :put do |field|
+    = render @view_partial
+    %div{class: ( (@order.complete? || @order.confirm?) ? "text-center general-text-right" : 'general-text-align mb-60') }
+      %p.in-gold-500.font-18 Order Summary
+      %table.general-summary-table{:class => ("general-summary-table-right general-text-right" if @order.complete? || @order.confirm?)}
+        = render 'orders/order_total_panel'
+      %button.btn.center-block.mb-20.visible-xs{name: "form_visible", value: "v_xs"}=  @order.in_waiting? ? 'Back to Store' : 'Save and Continue'
+      %button.btn.center-block.mb-20.hidden-xs{name: "form_visible", value: "h_xs"}=  @order.in_waiting? ? 'Back to Store' : 'Save and Continue'

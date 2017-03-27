@@ -1,0 +1,29 @@
+.text-center.mb-40
+  %h3.general-subtitle Thank You for your Order!
+  %p.font-weight-light= 'An order confirmation has been has been sent to ' + current_user.email
+.row.mb-20
+  .col-sm-6
+    .visible-xs
+      %p.general-order-number.mb-0= 'Order #' + @order.order_number
+      %p.general-address.mb-30= @order.placed_date.strftime("%B %d, %Y")
+    = render 'short_address', object: presenter.address('shipping')
+  .col-sm-6.hidden-xs.text-right
+    %p.general-order-number.mb-0= 'Order #' + @order.order_number
+    %p.general-address.mb-30= @order.placed_date.strftime("%B %d, %Y")
+.visible-xs
+  = render 'order_items/order_items_v_xs', objects: presenter.order_items
+.hidden-xs.divider-lg.pt-20
+  %table.table.table-hover
+    %thead
+      %tr
+        %th
+          %span.in-grey-600 Book
+        %th.col-method
+        %th
+          %span.in-grey-600 Price
+        %th
+          %span.in-grey-600 Quantity
+        %th
+          %span.in-grey-600 Total
+    %tbody
+      = render 'order_items/order_items_h_xs', objects: presenter.order_items

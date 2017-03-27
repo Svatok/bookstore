@@ -1,0 +1,20 @@
+%tr
+  %td
+    %p.font-16 Subtotal:
+  %td
+    %p.font-16= number_to_currency(@order.subtotal_price, unit: '€')
+%tr
+  %td
+    %p.font-16 Coupon:
+  %td
+    %p.font-16= number_to_currency(@order.discount, unit: '€')
+%tr
+  %td
+    %p.font-16 Shipping:
+  %td
+    %p.font-16= number_to_currency(@order.shipping_cost, unit: '€')
+%tr
+  %td
+    %strong.font-18 Order Total:
+  %td
+    %strong.font-18= number_to_currency(@order.total_price, unit: '€')

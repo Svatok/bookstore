@@ -1,0 +1,23 @@
+%h3.general-subtitle Credit Card
+= fields_for presenter.current_payment_form do |f|
+  .max-600.mb-80
+    .form-group{:class => ("has-error" if presenter.current_payment_form.errors.messages.include?(:card_number) )}
+      %label.control-label.font-weight-light{for: :card_number} Card Number
+      = f.text_field :card_number, type: "number", placeholder: "Card Number", class: 'form-control'
+      %span.help-block= presenter.current_payment_form.errors.full_messages_for(:card_number).first
+    .row
+      .col-sm-6
+        .form-group{:class => ("has-error" if presenter.current_payment_form.errors.messages.include?(:name_on_card) )}
+          %label.control-label.font-weight-light{for: :name_on_card} Name on Card
+          = f.text_field :name_on_card, type: "text", placeholder: "Name on Card", class: 'form-control'
+          %span.help-block= presenter.current_payment_form.errors.full_messages_for(:name_on_card).first
+      .col-sm-3
+        .form-group{:class => ("has-error" if presenter.current_payment_form.errors.messages.include?(:mm_yy) )}
+          %label.control-label.font-weight-light{for: :mm_yy} MM / YY
+          = f.text_field :mm_yy, type: "text", placeholder: "MM / YY", class: 'form-control'
+          %span.help-block= presenter.current_payment_form.errors.full_messages_for(:mm_yy).first
+      .col-sm-3
+        .form-group.relative{:class => ("has-error" if presenter.current_payment_form.errors.messages.include?(:cvv) )}
+          %label.control-label.font-weight-light{for: :cvv} CVV
+          = f.password_field :cvv, type: "password", placeholder: "CVV", class: 'form-control'
+          %span.help-block= presenter.current_payment_form.errors.full_messages_for(:cvv).first

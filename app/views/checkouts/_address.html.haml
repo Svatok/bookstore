@@ -1,0 +1,18 @@
+.hidden-xs.hidden-sm
+  .row
+    .col-md-5
+      %h3.general-subtitle Billing Address
+      %p.general-info-text all fields are required
+    .col-md-5.col-md-offset-1
+      %h3.general-subtitle Shipping Address
+.row
+  .col-md-5.mb-40
+    = render 'addresses/forms', object: presenter.address_form('billing'), address_type: 'billing'
+  .col-md-5.col-md-offset-1.mb-60.shipping-form
+    = render 'addresses/forms', object: presenter.address_form('shipping'), address_type: 'shipping'
+    .form-group.checkbox
+      %label.font-weight-light.pl-0
+        %input.checkbox-input.billing-use{type: "checkbox", hidden: "true", name: 'use_billing', checked: presenter.use_billing?}
+        %span.checkbox-icon
+          %i.fa.fa-check
+        %span.checkbox-text Use Billing Adress
