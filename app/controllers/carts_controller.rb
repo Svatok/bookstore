@@ -9,6 +9,7 @@ class CartsController < ApplicationController
   def update
     UpdateOrderItems.call({ object: current_order, params: params }) do
       on(:ok) do |coupon_msg|
+        current_order.update_total_price!
         coupon_msg.present? ? flash[:error] = coupon_msg[:error] : flash[:success] = 'Your cart was updated!'
       end
       on(:invalid) { flash[:error] = 'Your cart not updated!' }
