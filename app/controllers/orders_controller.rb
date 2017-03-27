@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   include Rectify::ControllerHelpers
   helper OrdersHelper
+  load_and_authorize_resource only: [:index, :show]
 
   before_action :coupon_add, only: [:update_cart]
   before_action :authenticate_user!, only: [:index, :show]
