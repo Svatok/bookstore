@@ -17,7 +17,7 @@ class UpdateOrderItems < Rectify::Command
   private
 
   def cart_empty?
-    !@params[:order_item].present? && !@params[:order_items].present?
+    !@params[:order_item].present? && !@params[:order_items].present? && !@params['delete'].present?
   end
 
   def delete_order_items
