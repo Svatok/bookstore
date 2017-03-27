@@ -6,7 +6,7 @@
         .general-cart-item.divider-lg-bottom.mb-30
           %a.close.general-cart-close{'aria-label': "Close", 'data-method': 'put',
             href: cart_path(delete: 'true', product: order_item.product_id)}
-            %span{'aria-hidden': "true"} &times;
+          %span{'aria-hidden': "true"} &times;
           .general-img-wrap-table
             %a{href: product_path(order_item.product_id)}
               %img.cart-img-shadow.width-full{src: order_item.product.product_pictures(1).first.image_path}
@@ -99,8 +99,8 @@
             %td
               %span.font-16.in-gold-500= number_to_currency(order_item.subtotal, unit: '€')
             %td
-              %a.close.general-cart-close{'aria-label': "Close", 'data-method': 'put',
-                href: cart_path(delete: 'true', product: order_item.product_id)}
+              %a.close.general-cart-close{href: cart_path(delete: 'true', product: order_item.product_id),
+                'aria-label': "Close", 'data-method': 'put'}
                 %span{'aria-hidden': "true"} &times;
       .general-order-wrap
         .row
