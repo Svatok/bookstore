@@ -8,6 +8,7 @@ class SetDelivery < Rectify::Command
     order_shipping = current_order_shipping || @object.order_items.new(quantity: 1)
     if selected_shipping.present?
       order_shipping.update_attributes(product: selected_shipping)
+      @object.update_total_price!
       return broadcast(:ok, @object)
     end
     order_shipping.errors.add(:product_id, 'Choose delivery!')
