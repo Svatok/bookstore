@@ -3,6 +3,10 @@ class ApplicationController < ActionController::Base
   before_action :set_locale, :categories
   helper_method :current_order
 
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to main_app.root_url, alert: exception.message
+  end
+  
   def authenticate_active_admin_user!
     authenticate_user!
     return if current_user.role?(:admin)
