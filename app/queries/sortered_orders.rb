@@ -10,7 +10,7 @@ class SorteredOrders < Rectify::Query
   end
 
   def query
-    @orders.where(state: @params[:sort]).limit(@limit).offset(offset)
+    @orders.where(state: @params[:sort]).order(created_at: :desc).limit(@limit).offset(offset)
   end
 
   def total_pages
