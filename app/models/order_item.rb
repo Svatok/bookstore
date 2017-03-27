@@ -5,8 +5,6 @@ class OrderItem < ApplicationRecord
   validates :quantity, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validate :product_present, :order_present
   before_save :finalize, :set_inactive_for_coupon
-  after_save :update_order
-  after_destroy :update_order
   before_destroy :set_active_for_coupon
   scope :only_products, -> { joins(:product).merge(Product.main) }
   scope :only_shippings, -> { joins(:product).merge(Product.shippings) }
@@ -36,9 +34,5 @@ class OrderItem < ApplicationRecord
 
   def set_active_for_coupon
     product.update_attributes(status: 'active') if product.product_type == 'coupon'
-  end
-
-  def update_order
-    order.update_total_price!
   end
 end
