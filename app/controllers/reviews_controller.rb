@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
   include Rectify::ControllerHelpers
+  load_and_authorize_resource only: [:create]
   
   def create
     review_form = ProductReviewForm.from_params(params)
