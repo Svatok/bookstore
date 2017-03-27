@@ -1,5 +1,6 @@
 class CheckoutsController < ApplicationController
   include Rectify::ControllerHelpers
+  authorize_resource class: false
 
   before_action :authenticate_user!, :prepare_checkout, :ensure_signup_complete
   after_action :complete_order, only: [:show]
