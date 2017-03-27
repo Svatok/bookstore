@@ -2,6 +2,7 @@ class ProductsController < ApplicationController
   helper ProductsHelper
   helper PicturesHelper
   include Rectify::ControllerHelpers
+  load_and_authorize_resource only: [:index, :show]
 
   def index
     @all_sort_params = ProductsHelper::SORTING
