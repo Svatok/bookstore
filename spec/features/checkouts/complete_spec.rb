@@ -21,13 +21,13 @@ RSpec.feature 'Checkout order complete' do
       expect(page).to have_content 'An order confirmation has been has been sent'
     end
     scenario 'must present short shipping address' do
-      expect(page).to have_content(order.addresses.shipping.first.first_name)
-      expect(page).to have_content(order.addresses.shipping.first.last_name)
-      expect(page).to have_content(order.addresses.shipping.first.address)
-      expect(page).to have_content(order.addresses.shipping.first.city)
-      expect(page).to have_content(order.addresses.shipping.first.country.name)
-      expect(page).to have_content(order.addresses.shipping.first.zip)
-      expect(page).to have_content(order.addresses.shipping.first.phone)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.first_name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.last_name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.address)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.city)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.country.name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.zip)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.phone)
     end
     scenario 'must present placed order informat' do
       expect(page).to have_content order.order_number

@@ -14,40 +14,14 @@ class SorteredProducts < Rectify::Query
   end
 
   def total_pages
-    total = all.to_a.size
-    (total.to_f / @limit).ceil
+    all.to_a.size / @limit
   end
 
   private
-    def all
-      @products = @products.where(category: @params[:category]) if @params[:category].present?
-      case @params[:sort]
-      when 'newest'
-        @products = @products.order(created_at: :desc)
-      when 'popular'
-        @products = @products.best_sellers
-      when 'price_asc'
-        @products = @products.joins(sort_price_sql).order('p.value ASC')
-      when 'price_desc'
-        @products = @products.joins(sort_price_sql).order('p.value DESC')
-      when 'title_asc'
-        @products = @products.order(title: :asc)
-      when 'title_desc'
-        @products = @products.order(title: :desc)
-      else
-        @products
-      end
-  end
 
-  def sort_price_sql
-    "INNER JOIN (SELECT a.* FROM prices as a
-                                  WHERE EXISTS (SELECT 1 FROM prices as b
-                                                  WHERE a.priceable_id = b.priceable_id
-                                                    AND a.priceable_type = b.priceable_type
-                                                    AND b.priceable_type = 'Product'
-                                                    AND b.date_start <= '#{Date.today}'
-                                                  HAVING MAX(b.date_start) = a.date_start)
-                                ) as p
-                                ON products.id = p.priceable_id"
+  def all
+    @products = @products.where(category: @params[:category]) if @params[:category].present?
+    @products = @products.send_public(@params[:sort]) if @products.respond_to?(@params[:sort])
+    @products
   end
 end

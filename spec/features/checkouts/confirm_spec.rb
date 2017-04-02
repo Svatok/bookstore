@@ -18,22 +18,22 @@ RSpec.feature 'Checkout order confirm' do
 
   context 'order confirm content' do
     scenario 'must present short billing address' do
-      expect(page).to have_content(order.addresses.billing.first.first_name)
-      expect(page).to have_content(order.addresses.billing.first.last_name)
-      expect(page).to have_content(order.addresses.billing.first.address)
-      expect(page).to have_content(order.addresses.billing.first.city)
-      expect(page).to have_content(order.addresses.billing.first.country.name)
-      expect(page).to have_content(order.addresses.billing.first.zip)
-      expect(page).to have_content(order.addresses.billing.first.phone)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.first_name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.last_name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.address)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.city)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.country.name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.zip)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.phone)
     end
     scenario 'must present short shipping address' do
-      expect(page).to have_content(order.addresses.shipping.first.first_name)
-      expect(page).to have_content(order.addresses.shipping.first.last_name)
-      expect(page).to have_content(order.addresses.shipping.first.address)
-      expect(page).to have_content(order.addresses.shipping.first.city)
-      expect(page).to have_content(order.addresses.shipping.first.country.name)
-      expect(page).to have_content(order.addresses.shipping.first.zip)
-      expect(page).to have_content(order.addresses.shipping.first.phone)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.first_name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.last_name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.address)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.city)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.country.name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.zip)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first.phone)
     end
     scenario 'must present short shipment information' do
       expect(page).to have_content(order.order_items.only_shippings.first.product.title)

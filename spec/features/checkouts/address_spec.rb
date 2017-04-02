@@ -22,14 +22,14 @@ RSpec.feature 'Checkout order address' do
       expect(page).to have_content('Shipping Method')
     end
     scenario 'shipping addres filled by checkbox Use Billing Address' do
-      user.addresses.shipping.first.destroy
+      user.addresses.address_with_type('shipping').first.destroy
       visit checkouts_path
       find(".checkbox-icon").click
       click_button 'Save and Continue'
       expect(page).to have_content('Shipping Method')
     end
     scenario 'billing form not filled' do
-      user.addresses.billing.first.destroy
+      user.addresses.address_with_type('billing').first.destroy
       visit checkouts_path
       click_button 'Save and Continue'
       expect(page).to have_content("First name can't be blank")
@@ -40,7 +40,7 @@ RSpec.feature 'Checkout order address' do
       expect(page).to have_content("Phone can't be blank")
     end
     scenario 'shipping form not filled' do
-      user.addresses.shipping.first.destroy
+      user.addresses.address_with_type('shipping').first.destroy
       visit checkouts_path
       click_button 'Save and Continue'
       expect(page).to have_content("First name can't be blank")

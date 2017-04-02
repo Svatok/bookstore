@@ -57,7 +57,7 @@ module CustomHelper
         option = option[1]
       end
 
-      if selected==check.to_s.strip
+      if selected == check.to_s.strip
         html << "<option value='#{value}' selected>#{option}</option>"
       else
         html << "<option value='#{value}'>#{option}</option>"

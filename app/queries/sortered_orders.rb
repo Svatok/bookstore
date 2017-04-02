@@ -14,7 +14,6 @@ class SorteredOrders < Rectify::Query
   end
 
   def total_pages
-    total = query.to_a.size
-    (total.to_f / @limit).ceil
+    query.to_a.size / @limit
   end
 end

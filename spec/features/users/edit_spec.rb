@@ -24,7 +24,7 @@ RSpec.feature 'Edit user information' do
       expect(page).to have_content('Address has been updated.')
     end
     scenario 'billing form not filled' do
-      user.addresses.billing.first.destroy
+      user.addresses.address_with_type('billing').first.destroy
       visit edit_user_registration_path
       find("button[name='billing']").click
       expect(page).to have_content("First name can't be blank")

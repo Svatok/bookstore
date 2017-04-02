@@ -18,13 +18,13 @@ RSpec.feature 'Order show' do
 
   context 'order content' do
     scenario 'must present short billing address' do
-      expect(page).to have_content(order.addresses.billing.first.first_name)
-      expect(page).to have_content(order.addresses.billing.first.last_name)
-      expect(page).to have_content(order.addresses.billing.first.address)
-      expect(page).to have_content(order.addresses.billing.first.city)
-      expect(page).to have_content(order.addresses.billing.first.country.name)
-      expect(page).to have_content(order.addresses.billing.first.zip)
-      expect(page).to have_content(order.addresses.billing.first.phone)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.first_name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.last_name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.address)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.city)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.country.name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.zip)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first.phone)
     end
     scenario 'must present short shipping address' do
       expect(page).to have_content(order.addresses.shipping.first.first_name)
