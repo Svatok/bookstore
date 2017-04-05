@@ -1,5 +1,5 @@
 %main.container
-  %h1.general-title-margin Сatalog
+  %h1.general-title-margin= t('.catalog')
   .hidden-xs.clearfix
     .pull-right
       .dropdown
@@ -21,7 +21,7 @@
             = category.name
             %span.badge.general-badge= Product.with_category(category).count
   .mb-40.visible-xs
-    %p.in-grey-600.small.mb-10 Filter by category
+    %p.in-grey-600.small.mb-10= t('.filter_by_category')
     .dropdown.mb-20
       %a.dropdown-toggle.dropdown-btn.width-100{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
         = params[:category].nil? ? category_with_count : category_with_count(params[:category])
@@ -32,7 +32,7 @@
         - @categories.each do |category|
           %li
             %a{href: products_path(params.permit(:sort, :category).merge(category: category))}= category_with_count(category)
-    %p.in-grey-600.small.mb-10 Sort by
+    %p.in-grey-600.small.mb-10= t('.sort_by')
     .dropdown
       %a.dropdown-toggle.dropdown-btn.width-100{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
         = current_sort(params[:sort])
@@ -57,9 +57,9 @@
                       %i.fa.fa-shopping-cart.thumb-icon
             .general-thumb-info
               %p.general-title.product_fixed_height= product.title
-              %p.font-16.in-gold-500= number_to_currency(product.price_value, unit: '€')
+              %p.font-16.in-gold-500= number_to_currency(product.price_value)
               %span.divider-sm
               %p.in-grey-600.small= product.all_authors
     .text-center
-      = link_to_prev_page @products, 'Prev Page', class: 'btn btn-primary'
-      = link_to_next_page @products, 'Next Page', class: 'btn btn-primary'
+      = link_to_prev_page @products, t(:prev_page), class: 'btn btn-primary'
+      = link_to_next_page @products, t(:next_page), class: 'btn btn-primary'

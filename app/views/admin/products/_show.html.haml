@@ -11,15 +11,15 @@
   .col-sm-6
     %h1.mt-res-0.row-bordered= @product.title
     .card.row-bordered
-      %h4 Authors:
+      %h4= t('.authors')
       %p.in-grey-600.small= @product.all_authors
     .card.row-bordered
       %p.h1.in-gold-500.mt-10= number_to_currency(@product.price_value, unit: '€')
     .card.row-bordered
-      %h4 Description:
+      %h4= t('.description')
       %p.in-grey-600.small.line-height-2
         = @product.description
-    %h4 Characteristics:
+    %h4= t('.characteristics')
     - @product.characteristics.each do |characteristic|
       .card
         .clearfix

@@ -1,38 +1,38 @@
 %body
   %table
     %tr
-      %td{ colspan: "3" }= "Dear customer, #{@user.decorate.full_name}!"
+      %td{ colspan: "3" }= t('.dear_customer') + ", #{@user.decorate.full_name}!"
     %tr
       %td{ align: "center", colspan: "3", style: "padding: 25px 0px; font-size: 17px; line-height: 24px; font-size: 18px; text-align: center" }
-        = "Order #{@order.order_number}"
+        = t('.order') + " #{@order.order_number}"
   %table{ border: "1", style: "border: 4px double black; width: 100%; text-align: center" }
     %tr
-      %th Product
-      %th Price
-      %th Quantity
-      %th Subtotal
+      %th= t('.product')
+      %th= t('.price')
+      %th= t('.quantity')
+      %th= t('.subtotal')
     - @order_items.each do |order_item|
       %tr
         %td= order_item.product.title
-        %td= number_to_currency(order_item.unit_price, unit: '€')
+        %td= number_to_currency(order_item.unit_price)
         %td= order_item.quantity
-        %td= number_to_currency(order_item.subtotal, unit: '€')
+        %td= number_to_currency(order_item.subtotal)
   %p
   %table{ style: "width: 300px" }
     %tr
-      %td Order Summary
+      %td= t('.order_summary')
       %td
     %tr
-      %td Subtotal
-      %td= number_to_currency(@order.subtotal_price, unit: '€')
+      %td= t('.subtotal')
+      %td= number_to_currency(@order.subtotal_price)
     %tr
-      %td Coupon
-      %td= number_to_currency(@order.discount, unit: '€')
+      %td= t('.coupon')
+      %td= number_to_currency(@order.discount)
     %tr
-      %td Shipping
-      %td= number_to_currency(@order.shipping_cost, unit: '€')
+      %td= t('.shipping')
+      %td= number_to_currency(@order.shipping_cost)
     %tr
       %td
-        %b Order Total:
+        %b= t('.order_total')
       %td
-        %b= number_to_currency(@order.total_price, unit: '€')
+        %b= number_to_currency(@order.total_price)

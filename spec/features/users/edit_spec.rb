@@ -16,17 +16,17 @@ RSpec.feature 'Edit user information' do
 
   context 'address information content' do
     scenario 'billing form filled by present billing address' do
-      find("button[name='billing']").click
+      find("button[value='billing']").click
       expect(page).to have_content('Address has been updated.')
     end
     scenario 'shipping form filled by present shipping address' do
-      find("button[name='shipping']").click
+      find("button[value='shipping']").click
       expect(page).to have_content('Address has been updated.')
     end
     scenario 'billing form not filled' do
-      user.addresses.address_with_type('billing').first.destroy
+      user.addresses.address_with_type('billing').destroy
       visit edit_user_registration_path
-      find("button[name='billing']").click
+      find("button[value='billing']").click
       expect(page).to have_content("First name can't be blank")
       expect(page).to have_content("Last name can't be blank")
       expect(page).to have_content("Address can't be blank")
@@ -35,9 +35,9 @@ RSpec.feature 'Edit user information' do
       expect(page).to have_content("Phone can't be blank")
     end
     scenario 'shipping form not filled' do
-      user.addresses.shipping.first.destroy
+      user.addresses.address_with_type('shipping').destroy
       visit edit_user_registration_path
-      find("button[name='shipping']").click
+      find("button[value='shipping']").click
       expect(page).to have_content("First name can't be blank")
       expect(page).to have_content("Last name can't be blank")
       expect(page).to have_content("Address can't be blank")

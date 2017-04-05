@@ -1,0 +1,10 @@
+.card.row-bordered
+  %h4= t('.authors')
+  = field.select :authors, options_for_select(Author.all.map{ |a| [a.first_name + '' + a.last_name, a.id] }), {}, {class: 'form-control hidden', name: "authors_base" }
+  - authors.each do |author|
+    %p.in-grey-600.small
+      = author.first_name + ' ' +author.last_name
+      %a{href: admin_product_path(@product,params.permit(:author).merge(author: author.id)), 'data-method': 'delete'}= t(:remove)
+  .input_fields_wrapss
+    %button.add_field_button= t('.add_author')
+  %p.small

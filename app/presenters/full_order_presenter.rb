@@ -2,7 +2,7 @@ class FullOrderPresenter < Rectify::Presenter
   attribute :object
 
   def address(address_type)
-    object.addresses.send(address_type).first.decorate
+    object.addresses.address_with_type(address_type).decorate
   end
 
   def shipping

@@ -17,10 +17,10 @@ RSpec.feature 'Orders page' do
 
   context 'orders content' do
     scenario 'must present title of orders page' do
-      expect(page).to have_content 'My Orders'
+      expect(page).to have_content I18n.t('orders.index.my_orders')
     end
     scenario 'must present order items' do
-      expect(page).to have_selector(".general-order-number", count: 3)
+      expect(page).to have_selector('.general-order-number', count: 3)
       user.orders.each do |order|
         expect(page).to have_content(order.order_number)
       end

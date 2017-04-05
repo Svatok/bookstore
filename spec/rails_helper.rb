@@ -14,6 +14,8 @@ require 'rectify/rspec'
 require 'capybara/email/rspec'
 require 'capybara/email'
 require 'rack_session_access/capybara'
+require 'yaml'
+require 'i18n'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -34,12 +36,15 @@ require 'rack_session_access/capybara'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+I18n.backend.store_translations(:en,
+ YAML.load_file(File.open('./config/locales/en.yml'))['en']
+)
 
 RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-
+  config.include I18n
   config.use_transactional_fixtures = false
 
   config.before(:suite) do

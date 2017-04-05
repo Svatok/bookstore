@@ -1,5 +1,5 @@
 .mb-80
-  %h3.in-gold-500.mb-25= "Reviews (#{presenter.reviews.count})"
+  %h3.in-gold-500.mb-25= t('.reviews') + " (#{presenter.reviews.count})"
   %ul.media-list
     - presenter.reviews.each do |review|
       %li.media.card
@@ -14,5 +14,5 @@
               = review.reviewer_name
           .mb-15
             - 5.times.collect do |i|
-              %i.fa.fa-star.rate-star{:class => ('rate-empty' if i >= review.rate)}
+              %i.fa.fa-star.rate-star{class: ('rate-empty' if i >= review.rate)}
           %p= review.review_text

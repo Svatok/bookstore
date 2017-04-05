@@ -5,20 +5,20 @@ RSpec.feature 'Menu panel' do
   before { visit root_path }
 
   scenario 'Home link must present' do
-    expect(page).to have_content 'Home'
+    expect(page).to have_content I18n.t('layouts.header.home')
   end
   scenario 'must present working Shop link' do
-    first('a', text: 'Shop').click
+    first('a', text: I18n.t('layouts.header.shop')).click
     expect(page).to have_current_path('/products')
   end
 
   context 'guest visit' do
     scenario 'must present working Log In link' do
-      first('a', text: 'Log in').click
+      first('a', text: I18n.t('layouts.header.log_in')).click
       expect(page).to have_current_path('/users/login')
     end
     scenario 'must present working Sign Up link' do
-      first('a', text: 'Sign up').click
+      first('a', text: I18n.t('layouts.header.sign_up')).click
       expect(page).to have_current_path('/users/sign_up')
     end
   end
@@ -34,22 +34,22 @@ RSpec.feature 'Menu panel' do
     end
 
     scenario 'link to My account must present' do
-      expect(page).to have_content 'My account'
+      expect(page).to have_content I18n.t('layouts.header.my_account')
     end
     scenario 'must present working link Orders' do
-      click_link 'My account'
-      first('a', text: 'Orders').click
+      click_link I18n.t('layouts.header.my_account')
+      first('a', text: I18n.t('layouts.header.orders')).click
       expect(page).to have_current_path('/orders')
     end
     scenario 'must present working link Settings' do
-      click_link 'My account'
-      first('a', text: 'Settings').click
+      click_link I18n.t('layouts.header.my_account')
+      first('a', text: I18n.t('layouts.header.settings')).click
       expect(page).to have_current_path('/users/edit')
     end
     scenario 'must present working link Log out' do
-      click_link 'My account'
-      first('a', text: 'Log out').click
-      expect(page).to have_content('Log in')
+      click_link I18n.t('layouts.header.my_account')
+      first('a', text: I18n.t('layouts.header.log_out')).click
+      expect(page).to have_content(I18n.t('layouts.header.log_in'))
     end
   end
 
@@ -69,5 +69,4 @@ RSpec.feature 'Menu panel' do
       expect(page).to have_selector('.shop-quantity', text: order.order_items.count.to_s)
     end
   end
-
 end

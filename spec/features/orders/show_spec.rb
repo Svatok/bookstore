@@ -18,22 +18,22 @@ RSpec.feature 'Order show' do
 
   context 'order content' do
     scenario 'must present short billing address' do
-      expect(page).to have_content(order.addresses.address_with_type('billing').first.first_name)
-      expect(page).to have_content(order.addresses.address_with_type('billing').first.last_name)
-      expect(page).to have_content(order.addresses.address_with_type('billing').first.address)
-      expect(page).to have_content(order.addresses.address_with_type('billing').first.city)
-      expect(page).to have_content(order.addresses.address_with_type('billing').first.country.name)
-      expect(page).to have_content(order.addresses.address_with_type('billing').first.zip)
-      expect(page).to have_content(order.addresses.address_with_type('billing').first.phone)
+      expect(page).to have_content(order.addresses.address_with_type('billing').first_name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').last_name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').address)
+      expect(page).to have_content(order.addresses.address_with_type('billing').city)
+      expect(page).to have_content(order.addresses.address_with_type('billing').country.name)
+      expect(page).to have_content(order.addresses.address_with_type('billing').zip)
+      expect(page).to have_content(order.addresses.address_with_type('billing').phone)
     end
     scenario 'must present short shipping address' do
-      expect(page).to have_content(order.addresses.shipping.first.first_name)
-      expect(page).to have_content(order.addresses.shipping.first.last_name)
-      expect(page).to have_content(order.addresses.shipping.first.address)
-      expect(page).to have_content(order.addresses.shipping.first.city)
-      expect(page).to have_content(order.addresses.shipping.first.country.name)
-      expect(page).to have_content(order.addresses.shipping.first.zip)
-      expect(page).to have_content(order.addresses.shipping.first.phone)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first_name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').last_name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').address)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').city)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').country.name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').zip)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').phone)
     end
     scenario 'must present short shipment information' do
       expect(page).to have_content(order.order_items.only_shippings.first.product.title)
@@ -44,14 +44,14 @@ RSpec.feature 'Order show' do
       expect(page).to have_content(order.payments.first.card_number.last(4))
     end
     scenario 'must present order items' do
-      expect(page).to have_selector(".general-title", count:2)
+      expect(page).to have_selector('.general-title', count: 2)
       order.order_items.only_products.each do |order_item|
         expect(page).to have_content(order_item.product.title)
       end
     end
     scenario 'must present coupon price' do
       coupon_price = order.order_items.only_coupons.first.product.prices.actual.first.value
-      expect(first('.general-summary-table')).to have_content((coupon_price*-1).to_s)
+      expect(first('.general-summary-table')).to have_content((coupon_price * -1).to_s)
     end
     scenario 'must present shipping price' do
       shipping_price = order.order_items.only_shippings.first.product.prices.actual.first.value

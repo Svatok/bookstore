@@ -5,7 +5,7 @@ RSpec.feature 'Sign up new user' do
   before { visit '/users/sign_up' }
 
     scenario 'Sign UP title' do
-      expect(page).to have_content('Sign Up')
+      expect(page).to have_content(I18n.t('devise.registrations.new.sign_up'))
     end
 
     context 'success registration' do
@@ -14,7 +14,7 @@ RSpec.feature 'Sign up new user' do
         fill_in 'user_email', with: 'test@test.com'
         fill_in 'user_password', with: 'TestPassword2017'
         fill_in 'user_password_confirmation', with: 'TestPassword2017'
-        click_button 'Sign Up'
+        click_button I18n.t('devise.registrations.new.sign_up')
         @user = User.find_by(email: 'test@test.com')
       end
       scenario 'message' do
@@ -27,7 +27,7 @@ RSpec.feature 'Sign up new user' do
     end
 
     scenario 'Sign UP form not filled' do
-      click_button 'Sign Up'
+      click_button I18n.t('devise.registrations.new.sign_up')
       expect(page).to have_content("Email can't be blank")
       expect(page).to have_content("Password can't be blank")
     end

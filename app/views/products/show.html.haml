@@ -1,7 +1,7 @@
 %main.container
   %a.general-back-link{href: url_for(:back)}
     %i.fa.fa-long-arrow-left.mr-15
-    Back to results
+    = t('.back_to_results')
   .row
     .col-sm-6
       .product-gallery
@@ -16,7 +16,7 @@
       %p.in-grey-600.small= presenter.product.all_authors
       .row
         .col-xs-12.col-md-4
-          %p.h1.in-gold-500.mt-10= number_to_currency(presenter.product.price_value, unit: '€')
+          %p.h1.in-gold-500.mt-10= number_to_currency(presenter.product.price_value)
         = form_tag cart_path,  method: :put do |f|
           = fields_for 'order_item', presenter.order_item do |field_item|
             .col-xs-5.col-md-3
@@ -28,23 +28,23 @@
                 %a.input-link{href: "#"}
                   %i.fa.fa-plus.line-height-40
           .col-xs-7.col-md-5
-            = submit_tag "Add to Cart", class: 'btn btn-default pull-right general-position'
+            = submit_tag t('.add_to_cart'), class: 'btn btn-default pull-right general-position'
       .card
-        %p Description
+        %p= t('.description')
         %p.in-grey-600.small.line-height-2.shorten-description
           = presenter.product.description
       .card
         .clearfix
           %p.general-item-info.pull-right= presenter.product.property_value('Year of publication')
 
-          %p.break-word Year of publication
+          %p.break-word= t('.publication_year')
       .card
         .clearfix
           %p.general-item-info.pull-right= presenter.product.dimensions
-          %p.break-word Dimensions
+          %p.break-word= t('.dimensions')
       .card
         .clearfix
           %p.general-item-info.pull-right= presenter.product.property_value('Materials')
-          %p.break-word Materials
+          %p.break-word= t('.materials')
   = render 'reviews/show_review'
   = render 'reviews/form_review'

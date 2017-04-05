@@ -18,22 +18,22 @@ RSpec.feature 'Checkout order complete' do
 
   context 'order complete content' do
     scenario 'must present message about sending letter' do
-      expect(page).to have_content 'An order confirmation has been has been sent'
+      expect(page).to have_content I18n.t('checkouts.complete.order_confirmation')
     end
     scenario 'must present short shipping address' do
-      expect(page).to have_content(order.addresses.address_with_type('shipping').first.first_name)
-      expect(page).to have_content(order.addresses.address_with_type('shipping').first.last_name)
-      expect(page).to have_content(order.addresses.address_with_type('shipping').first.address)
-      expect(page).to have_content(order.addresses.address_with_type('shipping').first.city)
-      expect(page).to have_content(order.addresses.address_with_type('shipping').first.country.name)
-      expect(page).to have_content(order.addresses.address_with_type('shipping').first.zip)
-      expect(page).to have_content(order.addresses.address_with_type('shipping').first.phone)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').first_name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').last_name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').address)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').city)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').country.name)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').zip)
+      expect(page).to have_content(order.addresses.address_with_type('shipping').phone)
     end
     scenario 'must present placed order informat' do
       expect(page).to have_content order.order_number
     end
     scenario 'must present order items' do
-      expect(page).to have_selector(".general-title", count:2)
+      expect(page).to have_selector('.general-title', count:2)
       order.order_items.only_products.each do |order_item|
         expect(page).to have_content(order_item.product.title)
       end

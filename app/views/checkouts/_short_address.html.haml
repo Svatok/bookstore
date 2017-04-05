@@ -1,7 +1,7 @@
-%h3.general-subtitle= object.address_type.capitalize + " Address"
+%h3.general-subtitle= object.address_type.capitalize + ' ' + t('.address')
 %p.general-address
   = object.address_name
-  = link_to "edit", checkouts_path(edit: 'address'), class: 'general-edit' if @view_partial == 'confirm'
+  = link_to t('.edit'), checkouts_path(edit: 'address'), class: 'general-edit' if @view_partial == 'confirm'
   %br
   = object[:address]
   %br

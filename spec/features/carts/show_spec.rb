@@ -23,12 +23,12 @@ RSpec.feature 'Cart' do
     end
     scenario 'update with coupon' do
       fill_in 'coupon_code', with: coupon.title
-      click_button 'Update cart'
+      click_button I18n.t('carts.show.update_cart')
       expect(first('.general-summary-table')).to have_content((coupon.price_value * -1).to_s)
     end
     scenario 'update with add quantity of order item' do
       fill_in 'order_items_' + @cart.order_items.first.id.to_s + '_quantity', with: '3'
-      click_button 'Update cart'
+      click_button I18n.t('carts.show.update_cart')
       expect(first('.general-summary-table')).to have_content(@cart.total_price.to_s)
     end
     scenario 'delete order item' do
@@ -38,7 +38,7 @@ RSpec.feature 'Cart' do
   end
 
   scenario 'go to checkout' do
-    click_link 'Checkout'
+    click_link I18n.t('carts.show.checkout')
     expect(page).to have_current_path('/checkouts')
   end
 end

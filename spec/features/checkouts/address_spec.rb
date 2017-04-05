@@ -18,20 +18,20 @@ RSpec.feature 'Checkout order address' do
 
   context 'address information content' do
     scenario 'adress forms filled by present user addresses' do
-      click_button 'Save and Continue'
-      expect(page).to have_content('Shipping Method')
+      click_button I18n.t('checkouts.show.save_and_continue')
+      expect(page).to have_content(I18n.t('checkouts.delivery.shipping_method'))
     end
     scenario 'shipping addres filled by checkbox Use Billing Address' do
-      user.addresses.address_with_type('shipping').first.destroy
+      user.addresses.address_with_type('shipping').destroy
       visit checkouts_path
-      find(".checkbox-icon").click
-      click_button 'Save and Continue'
-      expect(page).to have_content('Shipping Method')
+      find('.checkbox-icon').click
+      click_button I18n.t('checkouts.show.save_and_continue')
+      expect(page).to have_content(I18n.t('checkouts.delivery.shipping_method'))
     end
     scenario 'billing form not filled' do
-      user.addresses.address_with_type('billing').first.destroy
+      user.addresses.address_with_type('billing').destroy
       visit checkouts_path
-      click_button 'Save and Continue'
+      click_button I18n.t('checkouts.show.save_and_continue')
       expect(page).to have_content("First name can't be blank")
       expect(page).to have_content("Last name can't be blank")
       expect(page).to have_content("Address can't be blank")
@@ -40,9 +40,9 @@ RSpec.feature 'Checkout order address' do
       expect(page).to have_content("Phone can't be blank")
     end
     scenario 'shipping form not filled' do
-      user.addresses.address_with_type('shipping').first.destroy
+      user.addresses.address_with_type('shipping').destroy
       visit checkouts_path
-      click_button 'Save and Continue'
+      click_button I18n.t('checkouts.show.save_and_continue')
       expect(page).to have_content("First name can't be blank")
       expect(page).to have_content("Last name can't be blank")
       expect(page).to have_content("Address can't be blank")
@@ -51,5 +51,4 @@ RSpec.feature 'Checkout order address' do
       expect(page).to have_content("Phone can't be blank")
     end
   end
-
 end

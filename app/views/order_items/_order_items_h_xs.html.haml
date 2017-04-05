@@ -8,8 +8,8 @@
       %p.general-title= order_item.product.title
       %p.in-grey-600.font-weight-light= truncate(order_item.product.description, length: 200)
     %td
-      %span.font-16.in-gold-500= number_to_currency(order_item.unit_price, unit: '€')
+      %span.font-16.in-gold-500= number_to_currency(order_item.unit_price)
     %td
       %span.ml-30=order_item.quantity
     %td
-      %span.font-16.in-gold-500= number_to_currency(order_item.subtotal, unit: '€')
+      %span.font-16.in-gold-500= number_to_currency(order_item.subtotal)

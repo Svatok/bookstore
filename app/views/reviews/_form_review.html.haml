@@ -2,13 +2,13 @@
   .hidden-xs.hidden-sm
     .row
       .col-md-8
-        %h4.general-subtitle.mb-20 Write a Review
+        %h4.general-subtitle.mb-20= t('.write_review')
   .row
     .col-md-8.mb-40
       .visible-xs.visible-sm
-        %h3.general-subtitle.mt-0 Write a Review
-      .form-group.mb-20{:class => ("has-error" if presenter.review_form.errors.messages.include?(:rate) )}
-        .mb-10.in-grey-600 Score
+        %h3.general-subtitle.mt-0= t('.write_review')
+      .form-group.mb-20{class: ("has-error" if presenter.review_form.errors.messages.include?(:rate) )}
+        .mb-10.in-grey-600= t('.score')
         .mb-20
         .rating-stars
           %ul#stars
@@ -27,11 +27,11 @@
         = f.hidden_field :user_id, value: presenter.user.id
         %span.help-block= presenter.review_form.errors.full_messages_for(:rate).first
       .form-group.mb-20{:class => ("has-error" if presenter.review_form.errors.messages.include?(:reviewer_name) )}
-        %label.control-label.font-weight-light.in-grey-600{for: :reviewer_name} Name
+        %label.control-label.font-weight-light.in-grey-600{for: :reviewer_name}= t('.name')
         = f.text_field :reviewer_name, type: "text", class: 'form-control', value: full_name(presenter.user)
         %span.help-block= presenter.review_form.errors.full_messages_for(:reviewer_name).first
       .form-group{:class => ("has-error" if presenter.review_form.errors.messages.include?(:review_text) )}
-        %label.control-label.font-weight-light.in-grey-600{for: :review_text} Review
+        %label.control-label.font-weight-light.in-grey-600{for: :review_text}= t('.review')
         = f.text_area :review_text, class: 'form-control'
         %span.help-block= presenter.review_form.errors.full_messages_for(:review_text).first
-      = f.submit "Post", class: 'btn pull-right'
+      = f.submit t('.post'), class: 'btn pull-right'

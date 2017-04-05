@@ -21,7 +21,7 @@ class SorteredProducts < Rectify::Query
 
   def all
     @products = @products.where(category: @params[:category]) if @params[:category].present?
-    @products = @products.send_public(@params[:sort]) if @products.respond_to?(@params[:sort])
+    @products = @products.send(@params[:sort]) if @products.respond_to?(@params[:sort])
     @products
   end
 end

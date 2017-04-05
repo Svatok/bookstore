@@ -1,23 +1,231 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  next_page: 'Next Page'
+  prev_page: 'Prev Page'
+  layouts:
+    header:
+      home: 'Home'
+      shop: 'Shop'
+      my_account: 'My Account'
+      orders: 'Orders'
+      settings: 'Settings'
+      admin_panel: 'Admin Panel'
+      log_out: 'Log Out'
+      log_in: 'Log In'
+      sign_up: 'Sign Up'
+    footer:
+      home: 'Home'
+      shop: 'Shop'
+      orders: 'Orders'
+      settings: 'Settings'
+  main_pages:
+    home:
+      welcome: 'Welcome to our amazing Bookstore!'
+      home_msg: 'We pore through hundreds of new books each month and select the five best we can find to share with our members.'
+      get_started: 'Get Started'
+      best_sellers: Best Sellers
+      buy_now: 'Buy Now'
+  products:
+    index:
+      catalog: 'Catalog'
+      filter_by_category: 'Filter by Category'
+      sort_by: 'Sort by'
+    show:
+      back_to_results: 'Back to results'
+      add_to_cart: 'Add to Cart'
+      description: 'Description'
+      publication_year: 'Year of publication'
+      dimensions: 'Dimensions'
+      materials: 'Materials'
+  reviews:
+    show_review:
+      reviews: 'Reviews'
+    form_review:
+      write_review: 'Write a Review'
+      score: 'Score'
+      name: 'Name'
+      review: 'Review'
+      post: 'Post'
+  carts:
+    show:
+      cart: 'Cart'
+      price: 'Price'
+      quantity: 'Quantity'
+      subtotal: 'SubTotal'
+      enter_coupon: 'Enter Your Coupon Code'
+      apply_coupon: 'Apply Coupon'
+      update_cart: 'Update Cart'
+      order_summary: 'Order Summary'
+      coupon: 'Coupon'
+      order_total: 'Order Total'
+      product: 'Product'
+      checkout: 'Checkout'
+  checkouts:
+    show:
+      checkout: 'Checkout'
+      address: 'Address'
+      delivery: 'Delivery'
+      payment: 'Payment'
+      confirm: 'Confirm'
+      complete: 'Complete'
+      order_summary: 'Order Summary'
+      back_to_store: 'Back to Store'
+      save_and_continue: 'Save and Continue'
+    address:
+      billing_address: 'Billing Address'
+      shipping_address: 'Shipping Address'
+      all_required: 'all fields are required'
+      use_billing_address: 'Use Billing Address'
+    delivery:
+      shipping_method: 'Shipping Method'
+      method: 'Method'
+      days: 'Days'
+      price: 'Price'
+    payment:
+      credit_card: 'Credit Card'
+      card_number: 'Card Number'
+      card_name: 'Name on Card'
+      mm_yy: 'MM / YY'
+      cvv: 'CVV'
+    confirm:
+      shipments: 'Shipments'
+      edit: 'edit'
+      payment_information: 'Payment Information'
+      book: 'Book'
+      price: 'Price'
+      quantity: 'Quantity'
+      total: 'Total'
+    complete:
+      order_confirmation: 'An order confirmation has been has been sent to'
+      place_order: 'Thank You for your Order!'
+      order: 'Order'
+      book: 'Book'
+      price: 'Price'
+      quantity: 'Quantity'
+      total: 'Total'
+    short_address:
+      edit: 'edit'
+      address: 'Address'
+  orders:
+    index:
+      my_orders: 'My Orders'
+      sort_by: 'Sort By'
+    show:
+      shipments: 'Shipments'
+      payment_information: 'Payment Information'
+      order: 'Order'
+      book: 'Book'
+      price: 'Price'
+      quantity: 'Quantity'
+      total: 'Total'
+      order_summary: 'Order Summary'
+    order_total_panel:
+      subtotal: 'SubTotal'
+      coupon: 'Coupon'
+      shipping: 'Shipping'
+      order_total: 'Order Total'
+    order:
+      number: 'Number'
+      completed_at: 'Completed at'
+      status: 'Status'
+      total: 'Total'
+    orders_table:
+      number: 'Number'
+      completed_at: 'Completed at'
+      status: 'Status'
+      total: 'Total'
+  order_mailer:
+    order_complete:
+      dear_customer: 'Dear Customer'
+      order: 'Order'
+      product: 'Product'
+      price: 'Price'
+      quantity: 'Quantity'
+      subtotal: 'SubTotal'
+      order_summary: 'Order Summary'
+      coupon: 'Coupon'
+      shipping: 'Shipping'
+      order_total: 'Order Total'
+  admin:
+    products:
+      form:
+        product_save_error: 'prohibited this product from being saved:'
+        title: 'Title'
+        category: 'Category'
+        type: 'Type'
+        status: 'Status'
+        price: 'Price'
+        stock: 'Stock'
+        description: 'Description'
+        save_product: 'Save Product'
+      authors:
+        authors: 'Authors'
+        add_author: 'Add Author'
+      characteristics:
+        characteristics: 'Characteristics'
+        add_characteristic: 'Add Characteristic'
+      show:
+        authors: 'Authors'
+        description: 'Description'
+        characteristics: 'Characteristics'
+  devise:
+    registrations:
+      new:
+        sign_up: 'Sign Up'
+        enter_email: 'Enter Email'
+        password: 'Password'
+        confirm_password: 'Confirm Password'
+        have_account: 'Have an Account?'
+        log_in: 'Log In'
+      finish_signup:
+        finish_confirm: 'Please confirm your email address. No spam.'
+        email_example: 'Example: email@me.com'
+        continue: 'Continue'
+      edit:
+        settings: 'Settings'
+        address: 'Address'
+        privacy: 'Privacy'
+        billing_address: 'Billing Address'
+        shipping_address: 'Shipping Address'
+        email: 'Email'
+        enter_email: 'Enter Email'
+        enter_your_email: 'Enter your email'
+        save_button: 'Save'
+        password: 'Password'
+        old_password: 'Old Password'
+        new_password: 'New Password'
+        confirm_password: 'Confirm Password'
+        remove_account: 'Remove Account'
+        sure: 'Are you sure?'
+        understand: 'I understand that all data will be lost'
+    sessions:
+      new:
+        log_in: 'Log In'
+        or: 'or'
+        enter_email: 'Enter Email'
+        password: 'Password'
+        remember_me: 'Remember me'
+        forgot_password: 'Forgot your password?'
+        dont_have_account: 'Don’t have an Account?'
+        sign_up: 'Sign Up'
+    passwords:
+      edit:
+        set_password: 'Set new password'
+        type_password: 'Type a new Password'
+        confirm_password: 'Confirm Password'
+        change: 'Change'
+      new:
+        forgot_password: 'Forgot your password?'
+        forgot_password_msg: "We'll email you instructions on how to reset it"
+        enter_your_email: 'Enter your email'
+        email_instructions: 'Email Instructions'
+        cancel: 'Cancel'
+  addresses:
+    forms:
+      address: 'Address'
+      first_name: 'First Name'
+      last_name: 'Last Name'
+      city: 'City'
+      zip: 'Zip'
+      country: 'Country'
+      phone: 'Phone'
+      phone_example: 'Example +380671124567'

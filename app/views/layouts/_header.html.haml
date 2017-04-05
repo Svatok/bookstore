@@ -21,57 +21,57 @@
           %span{'aria-hidden': "true"} &times;
         %ul.nav.navbar-nav
           %li
-            %a{type: "button", 'data-toggle': "collapse", href: "#menu", 'aria-expanded': "false", 'aria-controls': "menu"} Home
+            %a{type: "button", 'data-toggle': "collapse", href: "#menu", 'aria-expanded': "false", 'aria-controls': "menu"}= t('.home')
             %ul#menu.collapse.list-unstyled.pl-30.mb-10{'aria-expanded': "false"}
               - @categories.each do |category|
                 %li
                   %a.collapse-link{href: root_path(:category => category)}= category.name
           %li
-            %a{href: products_path} Shop
+            %a{href: products_path}= t('.shop')
           - if signed_in?
             %li
-              %a{type: "button", 'data-toggle': "collapse", href: "#menu_account", 'aria-expanded': "false", 'aria-controls': "menu"} My account
+              %a{type: "button", 'data-toggle': "collapse", href: "#menu_account", 'aria-expanded': "false", 'aria-controls': "menu"}= t('.my_account')
               %ul#menu_account.collapse.list-unstyled.pl-30.mb-10{'aria-expanded': "false"}
                 %li
-                  %a.collapse-link{href: orders_path} Orders
+                  %a.collapse-link{href: orders_path}= t('.orders')
                 %li
-                  %a.collapse-link{href: edit_user_registration_path} Settings
+                  %a.collapse-link{href: edit_user_registration_path}= t(:settings)
                 - if current_user.role?(:admin)
                   %li
-                    %a.collapse-link{href: admin_root_path} Admin Panel
+                    %a.collapse-link{href: admin_root_path}= t('.admin_panel')
             %li
-              %a{href: destroy_user_session_path, method: :delete} Log out
+              %a{href: destroy_user_session_path, method: :delete}= t('.log_out')
           - else
             %li
-              %a{href: new_user_session_path} Log in
+              %a{href: new_user_session_path}= t('.log_in')
             %li
-              %a{href: new_user_registration_path} Sign up
+              %a{href: new_user_registration_path}= t('.sign_up')
       .hidden-xs
         %ul.nav.navbar-nav
           %li
-            %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"} Home
+            %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}= t('.home')
             %ul.dropdown-menu
               - @categories.each do |category|
                 %li
                   %a{href: root_path(:category => category)}= category.name
           %li.dropdown
-            %a{href: products_path} Shop
+            %a{href: products_path}= t('.shop')
           - if signed_in?
             %li.dropdown
-              %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"} My account
+              %a.dropdown-toggle{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}= t('.my_account')
               %ul.dropdown-menu
                 %li
-                  %a{href: orders_path} Orders
+                  %a{href: orders_path}= t('.orders')
                 %li
-                  %a{href: edit_user_registration_path} Settings
+                  %a{href: edit_user_registration_path}= t('.settings')
                 - if current_user.role?(:admin)
                   %li
-                    %a{href: admin_root_path} Admin Panel
+                    %a{href: admin_root_path}= t('.admin_panel')
                 %li.divider{role: "separator"}
                 %li
-                  %a{href: destroy_user_session_path, method: :delete} Log out
+                  %a{href: destroy_user_session_path, method: :delete}= t('.log_out')
           - else
             %li
-              %a{href: new_user_session_path} Log in
+              %a{href: new_user_session_path}= t('.log_in')
             %li
-              %a{href: new_user_registration_path} Sign up
+              %a{href: new_user_registration_path}= t('.sign_up')

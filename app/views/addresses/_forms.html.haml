@@ -1,33 +1,18 @@
 = fields_for "address_forms[#{address_type}]", object do |f|
   .visible-xs.visible-sm
-    %h3.general-subtitle.mt-0= address_type.capitalize + " Address"
+    %h3.general-subtitle.mt-0= address_type.capitalize + ' ' + t('.address')
   .form-group
     = f.hidden_field :address_type, value: "#{address_type}"
-  .form-group{:class => ("has-error" if object.errors.messages.include?(:first_name) )}
-    %label.control-label.font-weight-light{for: :first_name} First Name
-    = f.text_field :first_name, type: "text", placeholder: "First Name", class: 'form-control'
-    %span.help-block= object.errors.full_messages_for(:first_name).first
-  .form-group{:class => ("has-error" if object.errors.messages.include?(:last_name) )}
-    %label.control-label.font-weight-light{for: :last_name} Last Name
-    = f.text_field :last_name, type: "text", placeholder: "Last Name", class: 'form-control'
-    %span.help-block= object.errors.full_messages_for(:last_name).first
-  .form-group{:class => ("has-error" if object.errors.messages.include?(:address) )}
-    %label.control-label.font-weight-light{for: :address} Address
-    = f.text_field :address, type: "text", placeholder: "Address", class: 'form-control'
-    %span.help-block= object.errors.full_messages_for(:address).first
-  .form-group{:class => ("has-error" if object.errors.messages.include?(:city) )}
-    %label.control-label.font-weight-light{for: :city} City
-    = f.text_field :city, type: "text", placeholder: "City", class: 'form-control'
-    %span.help-block= object.errors.full_messages_for(:city).first
-  .form-group{:class => ("has-error" if object.errors.messages.include?(:zip) )}
-    %label.control-label.font-weight-light{for: :zip} Zip
-    = f.text_field :zip, type: "text", placeholder: "Zip", class: 'form-control'
-    %span.help-block= object.errors.full_messages_for(:zip).first
-  .form-group{:class => ("has-error" if object.errors.messages.include?(:country_id) )}
-    %label.control-label.font-weight-light{for: "сountry"} Country
-    = f.select :country_id, options_for_select(Country.all.map{ |c| [c.name, c.id] }), {}, { class: 'form-control', placeholder: "Select a country" }
+  - [:first_name, :last_name, :address, :city, :zip].each do |field_name|
+    .form-group{class: ("has-error" if object.errors.messages.include?(field_name) )}
+      %label.control-label.font-weight-light{for: field_name}= t('.' + field_name.to_s)
+      = f.text_field field_name, type: "text", placeholder: t('.' + field_name.to_s), class: 'form-control'
+      %span.help-block= object.errors.full_messages_for(field_name).first
+  .form-group{class: ("has-error" if object.errors.messages.include?(:country_id) )}
+    %label.control-label.font-weight-light{for: :country}= t('.country')
+    = f.select :country_id, options_for_select(Country.all.map{ |c| [c.name, c.id] }), {}, { class: 'form-control', placeholder: t(:select_country) }
     %span.help-block= object.errors.full_messages_for(:country_id).first
-  .form-group{:class => ("has-error" if object.errors.messages.include?(:phone) )}
-    %label.control-label.font-weight-light{for: :phone} Phone
-    = f.text_field :phone, type: "text", placeholder: "Example +380671124567", class: 'form-control'
+  .form-group{class: ("has-error" if object.errors.messages.include?(:phone) )}
+    %label.control-label.font-weight-light{for: :phone}= t('.phone')
+    = f.text_field :phone, type: "text", placeholder: t('.phone_example'), class: 'form-control'
     %span.help-block= object.errors.full_messages_for(:phone).first

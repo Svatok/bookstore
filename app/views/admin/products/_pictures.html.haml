@@ -1,0 +1,9 @@
+.product-gallery
+  .images.clearfix
+    - pictures.each do |picture|
+      %figure.pull-left.figure_margin
+        %a.img-link{href: "#"}
+          %img.width-full.height-preview{src: picture.image_path}
+        %figcaption
+          %a{href: admin_picture_path(picture.id), 'data-method': 'delete'}= t(:remove)
+= field.file_field :picture, name: "product_attachments[picture][]"

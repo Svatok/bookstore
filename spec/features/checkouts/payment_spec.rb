@@ -23,16 +23,15 @@ RSpec.feature 'Checkout order delivery' do
       fill_in 'payment_name_on_card', with: 'Test User'
       fill_in 'payment_mm_yy', with: '12/22'
       fill_in 'payment_cvv', with: '122'
-      click_button 'Save and Continue'
-      expect(page).to have_content("edit")
+      click_button I18n.t('checkouts.show.save_and_continue')
+      expect(page).to have_content(I18n.t('checkouts.confirm.edit'))
     end
     scenario 'when not filled show message with errors' do
-      click_button 'Save and Continue'
+      click_button I18n.t('checkouts.show.save_and_continue')
       expect(page).to have_content("Card number can't be blank")
       expect(page).to have_content("Name on card can't be blank")
       expect(page).to have_content("Mm yy can't be blank")
       expect(page).to have_content("Cvv can't be blank")
     end
   end
-
 end

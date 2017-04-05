@@ -29,15 +29,15 @@ RSpec.feature 'products/show:' do
       expect(page).to have_content(product.dimensions)
     end
     scenario 'add product to cart change total price of order' do
-      click_button 'Add to Cart'
-      expect(page).to have_content('Product has been added!')
+      click_button I18n.t('products.show.add_to_cart')
+      expect(page).to have_content('Your cart was updated!')
     end
   end
 
     context 'reviews content' do
 
       scenario 'must present count of reviews' do
-        expect(page).to have_content('Reviews (' + product.reviews.approved.count.to_s + ')')
+        expect(page).to have_content(I18n.t('reviews.show_review.reviews') + ' (' + product.reviews.approved.count.to_s + ')')
       end
       scenario 'must present all reviews' do
         reviews_on_page = find('ul.media-list').all('li')
@@ -47,20 +47,19 @@ RSpec.feature 'products/show:' do
 
     context 'working form for new review' do
       scenario 'create new review' do
-        first('input#rate_value', visible: false).set("5")
-        fill_in 'product_review_reviewer_name', with: "Test User"
-        fill_in 'product_review_review_text', with: "Test Review for Product"
-        expect { click_button 'Post' }.to change{product.reviews.count}.by(1)
+        first('input#rate_value', visible: false).set('5')
+        fill_in 'product_review_reviewer_name', with: 'Test User'
+        fill_in 'product_review_review_text', with: 'Test Review for Product'
+        expect { click_button I18n.t('reviews.form_review.post') }.to change{ product.reviews.count }.by(1)
       end
       scenario 'not valid product rate' do
-        first('input#rate_value', visible: false).set("")
-        fill_in 'product_review_reviewer_name', with: ""
-        fill_in 'product_review_review_text', with: ""
-        click_button 'Post'
+        first('input#rate_value', visible: false).set('')
+        fill_in 'product_review_reviewer_name', with: ''
+        fill_in 'product_review_review_text', with: ''
+        click_button I18n.t('reviews.form_review.post')
         expect(page).to have_content("Rate can't be blank")
         expect(page).to have_content("Reviewer name can't be blank")
         expect(page).to have_content("Review text can't be blank")
       end
     end
-
 end
