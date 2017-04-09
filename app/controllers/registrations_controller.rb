@@ -11,7 +11,7 @@ class RegistrationsController < Devise::RegistrationsController
   def finish_signup
     return @show_errors = true unless request.patch? && params[:user]
     @user = User.find(params[:id])
-    unless @user.update_attributes(email: params[:user][:email]) do
+    unless @user.update_attributes(email: params[:user][:email])
       return flash[:error] = 'Email not updated.'
     end
     @user.skip_reconfirmation!
