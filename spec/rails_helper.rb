@@ -16,6 +16,9 @@ require 'capybara/email'
 require 'rack_session_access/capybara'
 require 'yaml'
 require 'i18n'
+require 'wisper/rspec/matchers'
+require 'aasm/rspec'
+
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -45,6 +48,8 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.include I18n
+  config.include(Wisper::RSpec::BroadcastMatcher)
+
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
