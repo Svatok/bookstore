@@ -2,8 +2,11 @@ module PicturesHelper
 
   def avatar_tag(user_id, user_name, style)
     capture_haml do
-      haml_tag('span.' + style + '.logo-empty', user_name.first) unless user_avatar(user_id).present?
-      haml_tag('img.' + style, src: user_avatar(user_id).first.image_path) if user_avatar(user_id).present?
+      if user_avatar(user_id).present?
+        haml_tag('img.' + style, src: user_avatar(user_id).first.image_path)
+      else
+        haml_tag('span.' + style + '.logo-empty', user_name.first)
+      end
     end
   end
 
