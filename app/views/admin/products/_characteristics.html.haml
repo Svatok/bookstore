@@ -1,0 +1,15 @@
+%div
+  %h4= t('.characteristics')
+  = field.select :properties, options_for_select(Property.all.map{ |p| [p.name, p.id] }), {}, {class: 'form-control hidden', placeholder: "Select property", name: "properties_base" }
+  - characteristics.each do |characteristic|
+    = fields_for characteristic do |с|
+      .card
+        .clearfix
+          %p.general-item-info.pull-right
+            = field.text_field :value, type: "text", class: 'form-control', placeholder: "Value...", value: characteristic.value, name: "product[characteristics[#{characteristic.id}]][value]"
+          = field.hidden_field :id, value: "#{characteristic.property_id}", name: "product[characteristics[#{characteristic.id}]][property_id]"
+          %p.break-word
+            = characteristic.property.name.capitalize + ':'
+            %a{href: admin_characteristic_path(characteristic.id), 'data-method': 'delete'}= t(:remove)
+  .input_fields_wrap
+    %button.add_field_button= t('.add_characteristic')

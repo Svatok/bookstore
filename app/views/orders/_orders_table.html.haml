@@ -1,0 +1,23 @@
+%table.table.table-hover
+  %thead
+    %tr
+      %th
+        %span.in-grey-600= t('.number')
+      %th
+        %span.in-grey-600= t('.completed_at')
+      %th
+        %span.in-grey-600= t('.status')
+      %th
+        %span.in-grey-600= t('.total')
+  %tbody
+    - orders.each do |order|
+      %tr
+        %td
+          %a.general-order-number{href: order_path(order.id)}= order.order_number
+        %td
+          %span.in-grey-900.font-16.font-weight-light= order.updated_at.strftime('%Y-%m-%d')
+        %td
+          %span.font-16.font-weight-light{class: (order.state == 'delivered' ? 'text-success' : 'in-grey-900' )}=  @all_sort_params[order.state.to_sym]
+        %td
+          %strong.font-16= number_to_currency(order.total_price)
+  .text-center

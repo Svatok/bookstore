@@ -1,0 +1,46 @@
+- form_product_path = @product.id.present? ? admin_product_path(@product) : admin_products_path
+= form_tag form_product_path, { multipart: true, 'data-ajax': false, method: @product.id.present? ? :put : :post } do |form|
+  .row
+    - if @product_form.errors.full_messages.any?
+      %h2= pluralize(@product_form.errors.count, "error") + ' ' + t('.product_save_error')
+      %ul
+        - @product_form.errors.full_messages.each do |msg|
+          %li= msg
+      %p.small
+  .row
+    = fields_for 'product', @product_form do |f|
+      .row.mb-50
+        .col-sm-6
+          = render 'pictures', pictures: @product.pictures, field: f
+        .col-sm-6
+          .row-bordered
+            %h3.mt-res-0= t('.title')
+            = f.text_field :title, type: "text", class: 'form-control', placeholder: "Title...", value: @product.title
+            %p.in-grey-600.small
+            - if @product.product_type == 'product' || @product.product_type.nil?
+              %h4.mt-res-0= t('.category')
+              = f.select :category, options_for_select(Category.all.map{ |c| [c.name, c.id] } << '', selected: "#{@product.category_id}"), {}, {class: 'form-control'}
+            %h4.mt-res-0= t('.type')
+            = f.select :product_type, options_for_select(["product", "coupon", 'shipping'], selected: "#{@product.product_type}"), {}, {class: 'form-control', placeholder: "Select type" }
+            %h4.mt-res-0= t('.status')
+            = f.select :status, options_for_select(["active", "inactive"], selected: "#{@product.status}"), {}, {class: 'form-control'}
+            %p.in-grey-600.small
+          - if @product.product_type == 'product' || @product.product_type.nil?
+            = render 'authors', authors: @product.authors, field: f
+          .card.row-bordered
+            %p.h3.in-gold-500.mt-10= t('.price')
+            = f.text_field :price, type: "text", class: 'form-control', placeholder: "Price...", value: @product.price_value
+            - if @product.product_type == 'product' || @product.product_type.nil?
+              %p.h3.in-gold-500.mt-10= t('.stock')
+              = f.text_field :stock, type: "text", class: 'form-control', placeholder: "Stock...", value: @product.stock_value
+            %p.in-grey-600.small
+          .card.row-bordered
+            %h4= t('.description')
+            %p.in-grey-600.small
+              = f.text_area :description, type: "text", class: 'form-control', placeholder: "Description...", value: @product.description
+            %p.in-grey-600.small
+          - if @product.product_type == 'product' || @product.product_type.nil?
+            = render 'characteristics', characteristics: @product.characteristics, field: f
+      .row
+        %h1
+        %button.center-block.mb-20= t('.save_product')

@@ -1,0 +1,37 @@
+= form_for(presenter.review_form ) do |f|
+  .hidden-xs.hidden-sm
+    .row
+      .col-md-8
+        %h4.general-subtitle.mb-20= t('.write_review')
+  .row
+    .col-md-8.mb-40
+      .visible-xs.visible-sm
+        %h3.general-subtitle.mt-0= t('.write_review')
+      .form-group.mb-20{class: ("has-error" if presenter.review_form.errors.messages.include?(:rate) )}
+        .mb-10.in-grey-600= t('.score')
+        .mb-20
+        .rating-stars
+          %ul#stars
+            %li.star{'title': 'Poor', 'data-value': '1'}
+              %i.fa.fa-star.fa-fw
+            %li.star{'title': 'Fair', 'data-value': '2'}
+              %i.fa.fa-star.fa-fw
+            %li.star{'title': 'Good', 'data-value': '3'}
+              %i.fa.fa-star.fa-fw
+            %li.star{'title': 'Excellent', 'data-value': '4'}
+              %i.fa.fa-star.fa-fw
+            %li.star{'title': 'WOW!!!', 'data-value': '5'}
+              %i.fa.fa-star.fa-fw
+            = f.hidden_field :rate, id: 'rate_value'
+        = f.hidden_field :product_id, value: presenter.product.id
+        = f.hidden_field :user_id, value: presenter.user.id
+        %span.help-block= presenter.review_form.errors.full_messages_for(:rate).first
+      .form-group.mb-20{:class => ("has-error" if presenter.review_form.errors.messages.include?(:reviewer_name) )}
+        %label.control-label.font-weight-light.in-grey-600{for: :reviewer_name}= t('.name')
+        = f.text_field :reviewer_name, type: "text", class: 'form-control', value: full_name(presenter.user)
+        %span.help-block= presenter.review_form.errors.full_messages_for(:reviewer_name).first
+      .form-group{:class => ("has-error" if presenter.review_form.errors.messages.include?(:review_text) )}
+        %label.control-label.font-weight-light.in-grey-600{for: :review_text}= t('.review')
+        = f.text_area :review_text, class: 'form-control'
+        %span.help-block= presenter.review_form.errors.full_messages_for(:review_text).first
+      = f.submit t('.post'), class: 'btn pull-right'

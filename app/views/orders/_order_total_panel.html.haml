@@ -1,0 +1,20 @@
+%tr
+  %td
+    %p.font-16= t('.subtotal')
+  %td
+    %p.font-16= number_to_currency(@order.subtotal_price)
+%tr
+  %td
+    %p.font-16= t('.coupon')
+  %td
+    %p.font-16= number_to_currency(@order.discount)
+%tr
+  %td
+    %p.font-16= t('.shipping')
+  %td
+    %p.font-16= number_to_currency(@order.shipping_cost)
+%tr
+  %td
+    %strong.font-18= t('.order_total')
+  %td
+    %strong.font-18= number_to_currency(@order.total_price)

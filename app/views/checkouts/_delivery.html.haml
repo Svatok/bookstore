@@ -1,0 +1,56 @@
+%h3.general-subtitle= t('.shipping_method')
+- if presenter.current_order_shipping.errors[:product_id].present?
+  .alert.alert-error.alert-danger
+    %a.close{ 'data-dismiss': "alert"} ×
+    = presenter.current_order_shipping.errors['product_id'].first
+.visible-xs
+  = fields_for 'shippings_v_xs', presenter.available_shippings do |f|
+    - presenter.available_shippings.each do |shipping|
+      .general-cart-item.divider-lg-bottom
+        %table.table
+          %tr
+            %td.col-half
+              %span.in-grey-600= t('.method')
+            %td.col-half
+              .form-group.radio.mt-0.mb-0
+                %label.font-16.font-weight-light.pl-0
+                  = f.radio_button :product, "#{shipping.id}", checked: shipping.id == presenter.current_order_shipping.product_id,
+                    type: "radio", hidden: true, class: "radio-input"
+                  %span.radio-icon
+                  %span.radio-text= shipping.title
+          %tr
+            %td
+              %span.in-grey-600= t('.days')
+            %td
+              %span.font-16.font-weight-light= shipping.description
+          %tr
+            %td
+              %span.in-grey-600= t('.price')
+            %td
+              %span.font-16.in-gold-500= number_to_currency(shipping.price_value)
+    .mb-30
+.hidden-xs.mb-res-50
+  %table.table.table-hover
+    %thead
+      %tr
+        %th.col-method
+          %span.in-grey-600.ml-40= t('.method')
+        %th
+          %span.in-grey-600= t('.days')
+        %th
+          %span.in-grey-600= t('.price')
+    %tbody
+      = fields_for 'shippings_h_xs', presenter.available_shippings do |f|
+        - presenter.available_shippings.each do |shipping|
+          %tr
+            %td
+              .form-group.radio.mt-0.mb-0
+                %label.font-16.font-weight-light.pl-0
+                  = f.radio_button :product, "#{shipping.id}", checked: shipping.id == presenter.current_order_shipping.product_id,
+                    type: "radio", hidden: true, class: "radio-input"
+                  %span.radio-icon
+                  %span.radio-text= shipping.title
+            %td
+              %span= shipping.description
+            %td
+              %span.font-16.in-gold-500= number_to_currency(shipping.price_value)

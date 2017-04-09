@@ -1,0 +1,135 @@
+%main.container.general-main-wrap
+  %h1.general-title-margin= t('.cart')
+  .visible-xs
+    = form_tag cart_path,  method: :put do |field|
+      - @order_items.each  do |order_item|
+        .general-cart-item.divider-lg-bottom.mb-30
+          %a.close.general-cart-close{'aria-label': "Close", 'data-method': 'put',
+            href: cart_path(delete: 'true', product: order_item.product_id)}
+          %span{'aria-hidden': "true"} &times;
+          .general-img-wrap-table
+            %a{href: product_path(order_item.product_id)}
+              %img.cart-img-shadow.width-full{src: order_item.product.product_pictures(1).first.image_path}
+          %p.general-title= order_item.product.title
+          %table.table
+            %tr
+              %td
+                %span.in-grey-600= t('.price')
+              %td
+                %span.font-16.in-gold-500= number_to_currency(order_item.unit_price, unit: '€')
+            %tr
+              %td.vertical-middle
+                %span.in-grey-600= t('.quantity')
+              %td
+                = fields_for 'order_items[]', order_item.product_id do |field_item|
+                  .input-group
+                    %a.input-link{href: "#"}
+                      %i.fa.fa-minus.line-height-40
+                    = field_item.text_field :quantity, type: "text", class: 'form-control quantity-input', min: 1, value: "#{order_item.quantity}"
+                    %a.input-link{href: "#"}
+                      %i.fa.fa-plus.line-height-40
+            %tr
+              %td
+                %span.in-grey-600= t('.subtotal')
+              %td
+                %span.font-16.in-gold-500= number_to_currency(order_item.subtotal)
+      .general-order-wrap
+        .row
+          .col-sm-4
+            = fields_for @coupon do |coupon|
+              .input-group.general-input-group
+                %label.font-weight-light= t('.enter_coupon')
+                = coupon.text_field :code, type: "text", class: 'form-control mb-30', placeholder: t('.enter_coupon')
+                %div
+                  %button.btn.btn-primary.mr-5.mb-15.visible-xs-inline-block{name: "coupon_only", value: "true"}= t('.apply_coupon')
+                  %button.btn.btn-primary.mb-15.res-block.update-cart= t('.update_cart')
+          .col-sm-8
+            .res-mr-200.text-center.general-text-right
+              %p.in-gold-500.font-18= t('.order_summary')
+              %table.general-summary-table.general-summary-table-right.general-text-right
+                %tr
+                  %td
+                    %p.font-16= t('.subtotal')
+                  %td
+                    %p.font-16= number_to_currency(@order.subtotal_price)
+                %tr
+                  %td
+                    %p.font-16= t('.coupon')
+                  %td
+                    %p.font-16= number_to_currency(@order.discount, unit: '€')
+                %tr
+                  %td
+                    %strong.font-18= t('.order_total')
+                  %td
+                    %strong.font-18= number_to_currency(@order.total_price)
+              %a.btn.btn-default.mb-20.visible-xs-inline-block{href: checkouts_path}= t('.checkout')
+      %a.btn.btn-default.mb-20.hidden-xs.center-block.checkout-btn{href: checkouts_path}= t('.checkout')
+  .hidden-xs
+    = form_tag cart_path,  method: :put do |field|
+      %table.table.table-hover
+        %tr.no-hover
+          %th.col-pic.pl-0
+            %span.in-grey-600= t('.product')
+          %th.col-title
+          %th.col-price
+            %span.in-grey-600= t('.price')
+          %th.col-quantity
+            %span.in-grey-600= t('.quantity')
+          %th.col-total
+            %span.in-grey-600= t('.subtotal')
+          %th.col-close
+        - @order_items.each  do |order_item|
+          %tr
+            %td
+              .general-img-wrap-table
+                %a{href: product_path(order_item.product_id)}
+                  %img.cart-img-shadow.pull-left.width-full{src: order_item.product.product_pictures(1).first.image_path}
+            %td
+              %p.general-title= order_item.product.title
+            %td
+              %span.font-16.in-gold-500= number_to_currency(order_item.unit_price)
+            %td
+              = fields_for 'order_items[]', order_item.product_id do |field_item|
+                .input-group
+                  %a.input-link{href: "#"}
+                    %i.fa.fa-minus.line-height-40
+                  = field_item.text_field :quantity, type: "text", class: 'form-control quantity-input', min: 1, value: "#{order_item.quantity}"
+                  %a.input-link{href: "#"}
+                    %i.fa.fa-plus.line-height-40
+            %td
+              %span.font-16.in-gold-500= number_to_currency(order_item.subtotal)
+            %td
+              %a.close.general-cart-close{href: cart_path(delete: 'true', product: order_item.product_id),
+                'aria-label': "Close", 'data-method': 'put'}
+                %span{'aria-hidden': "true"} &times;
+      .general-order-wrap
+        .row
+          .col-sm-4
+            = fields_for @coupon do |coupon|
+              .input-group.general-input-group
+                %label.font-weight-light= t('.enter_coupon')
+                = coupon.text_field :code, type: "text", class: 'form-control mb-30', placeholder: t('.enter_coupon')
+                %div
+                  %button.btn.btn-primary.mr-5.mb-15.visible-xs-inline-block= t('.apply_coupon')
+                  %button.btn.btn-primary.mb-15.res-block.update-cart= t('.update_cart')
+          .col-sm-8
+            .res-mr-200.text-center.general-text-right
+              %p.in-gold-500.font-18= t('.order_summary')
+              %table.general-summary-table.general-summary-table-right.general-text-right
+                %tr
+                  %td
+                    %p.font-16= t('.subtotal')
+                  %td
+                    %p.font-16= number_to_currency(@order.subtotal_price)
+                %tr
+                  %td
+                    %p.font-16= t('.coupon')
+                  %td
+                    %p.font-16= number_to_currency(@order.discount)
+                %tr
+                  %td
+                    %strong.font-18= t('.order_total')
+                  %td
+                    %strong.font-18= number_to_currency(@order.total_price)
+              %a.btn.btn-default.mb-20.visible-xs-inline-block{href: checkouts_path}= t('.checkout')
+      %a.btn.btn-default.mb-20.hidden-xs.center-block.checkout-btn{href: checkouts_path}= t('.checkout')

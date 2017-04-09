@@ -1,0 +1,40 @@
+%main.container.general-main-wrap
+  %h1.general-title-margin= t('.order') + ' ' + @order.order_number
+  .row.mb-20
+    .col-sm-3
+      = render 'checkouts/short_address', object: presenter.address('shipping')
+    .col-sm-3
+      = render 'checkouts/short_address', object: presenter.address('billing')
+    .col-sm-3
+      %h3.general-subtitle= t('.shipments')
+      %p.general-address
+        = presenter.shipping.product.title
+        %br
+        = presenter.shipping.product.description
+    .col-sm-3
+      %h3.general-subtitle= t('.payment_information')
+      %p.general-address
+        = presenter.payment.four_numbers_of_card
+        %br
+        = presenter.payment.mm_yy
+  .visible-xs
+    = render 'order_items/order_items_v_xs', objects: presenter.order_items
+  .hidden-xs.divider-lg.pt-20
+    %table.table.table-hover
+      %thead
+        %tr
+          %th
+            %span.in-grey-600= t('.book')
+          %th.col-method
+          %th
+            %span.in-grey-600= t('.price')
+          %th
+            %span.in-grey-600= t('.quantity')
+          %th
+            %span.in-grey-600= t('.total')
+      %tbody
+        = render 'order_items/order_items_h_xs', objects: presenter.order_items
+  .text-center.general-text-right
+    %p.in-gold-500.font-18= t('.order_summary')
+    %table.general-summary-table.general-summary-table-right.general-text-right
+      = render 'orders/order_total_panel'

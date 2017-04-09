@@ -1,0 +1,22 @@
+.general-cart-item
+  %table.table
+    %tr
+      %td.col-half
+        %span.in-grey-600= t('.number')
+      %td.col-half
+        %a.general-order-number{href: order_path(order.id)}= order.order_number
+    %tr
+      %td
+        %span.in-grey-600= t('.completed_at')
+      %td
+        %span.in-grey-900.font-16.font-weight-light= order.updated_at.strftime('%Y-%m-%d')
+    %tr
+      %td
+        %span.in-grey-600= t('.status')
+      %td
+        %span.font-16.font-weight-light{class: (order.state == 'delivered' ? 'text-success' : 'in-grey-900' )}=  @all_sort_params[order.state.to_sym]
+    %tr
+      %td
+        %span.in-grey-600= t('.total')
+      %td
+        %strong.font-16= number_to_currency(order.total_price)

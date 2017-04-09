@@ -1,0 +1,18 @@
+= fields_for "address_forms[#{address_type}]", object do |f|
+  .visible-xs.visible-sm
+    %h3.general-subtitle.mt-0= address_type.capitalize + ' ' + t('.address')
+  .form-group
+    = f.hidden_field :address_type, value: "#{address_type}"
+  - [:first_name, :last_name, :address, :city, :zip].each do |field_name|
+    .form-group{class: ("has-error" if object.errors.messages.include?(field_name) )}
+      %label.control-label.font-weight-light{for: field_name}= t('.' + field_name.to_s)
+      = f.text_field field_name, type: "text", placeholder: t('.' + field_name.to_s), class: 'form-control'
+      %span.help-block= object.errors.full_messages_for(field_name).first
+  .form-group{class: ("has-error" if object.errors.messages.include?(:country_id) )}
+    %label.control-label.font-weight-light{for: :country}= t('.country')
+    = f.select :country_id, options_for_select(Country.all.map{ |c| [c.name, c.id] }), {}, { class: 'form-control', placeholder: t(:select_country) }
+    %span.help-block= object.errors.full_messages_for(:country_id).first
+  .form-group{class: ("has-error" if object.errors.messages.include?(:phone) )}
+    %label.control-label.font-weight-light{for: :phone}= t('.phone')
+    = f.text_field :phone, type: "text", placeholder: t('.phone_example'), class: 'form-control'
+    %span.help-block= object.errors.full_messages_for(:phone).first

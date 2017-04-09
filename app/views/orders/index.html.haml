@@ -1,0 +1,17 @@
+%main.container.general-main-wrap
+  %h1.mt-0.mb-25= t('.my_orders')
+  %p.in-grey-600.small.mb-10.visible-xs= t('.sort_by')
+  .dropdown.general-order-dropdown.mb-20
+    %a.dropdown-toggle.dropdown-btn.width-100{href: "#", 'data-toggle': "dropdown", role: "button", 'aria-haspopup': "true", 'aria-expanded': "false"}
+      = params[:sort].present? ? @all_sort_params[params[:sort].to_sym] : @all_sort_params[:in_waiting]
+      %i.fa.fa-angle-down.dropdown-icon
+    %ul.dropdown-menu
+      - @all_sort_params.each do |sort, title|
+        %li
+          %a{href: orders_path(@params.merge(sort: sort))}= title
+  .visible-xs
+    = render @orders
+  .hidden-xs.mb-res-50
+    = render 'orders_table', orders: @orders
+  = link_to_prev_page @orders, t(:prev_page), class: 'btn btn-primary'
+  = link_to_next_page @orders, t(:next_page), class: 'btn btn-primary'
