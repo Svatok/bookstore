@@ -47,4 +47,4 @@
           %p.general-item-info.pull-right= presenter.product.property_value('Materials')
           %p.break-word= t('.materials')
   = render 'reviews/show_review'
-  = render 'reviews/form_review'
+  = render 'reviews/form_review' if signed_in?

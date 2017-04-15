@@ -11,7 +11,9 @@ class RegistrationsController < Devise::RegistrationsController
   def finish_signup
     return @show_errors = true unless request.patch? && params[:user]
     @user = User.find(params[:id])
-    return flash[:error] = 'Email not updated.' unless @user.update_attributes(email: params[:user][:email])
+    unless @user.update_attributes(email: params[:user][:email])
+      return flash[:error] = 'Email not updated.'
+    end
     @user.skip_reconfirmation!
     bypass_sign_in resource, scope: resource_name
     flash[:success] = 'Your profile was successfully updated.'

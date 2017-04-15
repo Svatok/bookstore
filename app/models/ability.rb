@@ -2,14 +2,14 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-
     user ||= User.new
 
-    can :read, [Product]
-    can [:read,:create], Review
+    can :read, Product
+    can :read, Review
 
     if user.persisted?
       can :manage, User, id: user.id
+      can :create, Review
       can :read, Order, user_id: user.id
       can [:show, :update], :checkout
       can [:create, :read, :update, :destroy], OrderItem
@@ -18,5 +18,5 @@ class Ability
         can :manage, :all
       end
     end
-  end  
+  end
 end
