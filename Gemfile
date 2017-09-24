@@ -81,8 +81,8 @@ gem 'thor', '0.19.1'
 
 # other gems
 gem 'haml'
-gem 'activemodel-serializers-xml', git: 'https://github.com/rails/activemodel-serializers-xml'
-gem 'draper', github: 'audionerd/draper', branch: 'rails5'
+gem 'activemodel-serializers-xml'
+gem 'draper'
 gem 'seed_dump'
 gem 'rectify'
 gem 'kaminari'
