@@ -14,7 +14,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   before_create :set_default_role
-  devise :database_authenticatable, :registerable, :confirmable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   validates_format_of :email, without: TEMP_EMAIL_REGEX, on: :update
   validates :email, uniqueness: { case_sensitive: false },
@@ -22,7 +22,6 @@ class User < ApplicationRecord
                     length: { maximum: 63 },
                     presence: true
   validates :password, length: { minimum: 8 },
-                       format: { with: /\A(?=.*\d)(?=.*[A-Z])(?=.*[a-z])\w+{,8}\z/ },
                        presence: true, if: :password_required?
 
   def role?(r)
