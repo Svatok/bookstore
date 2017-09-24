@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       resources :addresses, only: [:create]
     end
 
-    ActiveAdmin.routes(self)
+    ActiveAdmin.routes(self) rescue ActiveAdmin::DatabaseHitDuringLoad
 
     resources :products do
       get 'page/:page', action: :index, on: :collection
