@@ -13,7 +13,7 @@ ActiveAdmin.register Product do
   index :as => ActiveAdmin::Views::IndexAsTable do
     selectable_column
     column :image do |product|
-      image_tag(product.product_pictures(1).first.image_path, width: '50')
+      image_tag(product.product_pictures(1).first.try(:image_path), width: '50')
     end
     column 'Category', :sortable => 'categories.name' do |product|
       product.category if product.category.present?
