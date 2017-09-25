@@ -77,6 +77,24 @@ namespace :deploy do
     end
   end
 
+  desc 'Resets DB without create/drop'
+  task :reset do
+    on primary :db do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'db:reset DISABLE_DATABASE_ENVIRONMENT_CHECK=1'
+        end
+      end
+    end
+  end
+
+  desc 'Copy initial pictures'
+  task :symlink_directories do
+    on roles :all do
+      execute :ln, '-s', "#{shared_path}/pictures/products/noimage.jpg", "#{release_path}/public/pictures/products/noimage.jpg"
+    end
+  end
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
@@ -88,6 +106,7 @@ namespace :deploy do
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
+  after  :restart,      :symlink_directories
 end
 
 # ps aux | grep puma    # Get puma pid

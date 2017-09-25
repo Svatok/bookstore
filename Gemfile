@@ -59,6 +59,7 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano3-puma',   require: false
   gem 'capistrano-database-yml', '~> 1.0.0'
+  gem 'capistrano-rails-collection'
 end
 
 group :test do

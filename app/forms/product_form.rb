@@ -35,26 +35,26 @@ class ProductForm < Rectify::Form
     add_characteristics
     add_pictures
   end
-  
+
   private
-  
+
   def validate_characteristics
     return unless characteristics.present?
     characteristics.each do |characteristic|
       errors.add(:characteristics, :invalid) unless characteristic['value'].present? && characteristic['property_id'].present?
     end
   end
-  
+
   def add_price
     current_price = @product.prices.present? ? @product.prices.actual.first.value : 0.0
-    @product.prices.create(value: price, date_start: Date.today.to_s) unless current_price == price.to_f    
+    @product.prices.create(value: price, date_start: Date.today.to_s) unless current_price == price.to_f
   end
 
   def add_stock
     current_stock = @product.stocks.present? ? @product.stocks.actual.first.value : 0
     @product.stocks.create(value: stock, date_start: Date.today.to_s) unless current_stock == stock.to_i
   end
-  
+
   def is_product?
     product_type == 'product'
   end
@@ -78,7 +78,7 @@ class ProductForm < Rectify::Form
   end
 
   def add_pictures
-    return unless product_attachments.present?
+    return @product.pictures.create unless product_attachments.present?
     product_attachments.each do |picture,value|
       @product.pictures.create(image_path: picture)
     end
