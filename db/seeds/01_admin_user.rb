@@ -1,7 +1,8 @@
 User.destroy_all
-User.create!(
+admin = User.create!(
     email: 'admin@example.com',
     password: 'password',
-    password_confirmation: 'password',
-    role: 'admin'
+    password_confirmation: 'password'
 )
+
+admin.add_role :admin

@@ -38,6 +38,7 @@ gem 'devise'
 gem 'activeadmin', '~> 1.0.0'
 gem 'inherited_resources'
 gem 'cancancan'
+gem 'rolify'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

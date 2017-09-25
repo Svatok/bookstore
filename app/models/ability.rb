@@ -13,7 +13,7 @@ class Ability
       can :read, Order, user_id: user.id
       can [:show, :update], :checkout
       can [:create, :read, :update, :destroy], OrderItem
-      if user.role?(:admin)
+      if user.has_role? :admin
         can :read, ActiveAdmin::Page, namespace_name: :admin
         can :manage, :all
       end

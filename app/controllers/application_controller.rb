@@ -6,10 +6,10 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to main_app.root_url, alert: exception.message
   end
-  
+
   def authenticate_active_admin_user!
     authenticate_user!
-    return if current_user.role?(:admin)
+    return if current_user.has_role?(:admin)
     flash[:alert] = 'You are not authorized to access this resource!'
     redirect_to root_path
   end

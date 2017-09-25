@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  rolify
   TEMP_EMAIL_PREFIX = 'change@me'
   TEMP_EMAIL_REGEX = /\Achange@me/
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
@@ -13,7 +14,7 @@ class User < ApplicationRecord
   attr_accessor :skip_password_validation
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  before_create :set_default_role
+  after_create :set_default_role
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
   validates_format_of :email, without: TEMP_EMAIL_REGEX, on: :update
@@ -23,10 +24,6 @@ class User < ApplicationRecord
                     presence: true
   validates :password, length: { minimum: 8 },
                        presence: true, if: :password_required?
-
-  def role?(r)
-    role.include? r.to_s
-  end
 
   def password_required?
     return false if skip_password_validation
@@ -78,6 +75,6 @@ class User < ApplicationRecord
   end
 
   def set_default_role
-    self.role ||= 'none'
+    add_role(:none) if roles.blank?
   end
 end

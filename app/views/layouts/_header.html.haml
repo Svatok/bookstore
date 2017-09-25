@@ -36,7 +36,7 @@
                   %a.collapse-link{href: orders_path}= t('.orders')
                 %li
                   %a.collapse-link{href: edit_user_registration_path}= t(:settings)
-                - if current_user.role?(:admin)
+                - if current_user.has_role? :admin
                   %li
                     %a.collapse-link{href: admin_root_path}= t('.admin_panel')
             %li
@@ -64,7 +64,7 @@
                   %a{href: orders_path}= t('.orders')
                 %li
                   %a{href: edit_user_registration_path}= t('.settings')
-                - if current_user.role?(:admin)
+                - if current_user.has_role? :admin
                   %li
                     %a{href: admin_root_path}= t('.admin_panel')
                 %li.divider{role: "separator"}
